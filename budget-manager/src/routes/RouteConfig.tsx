@@ -1,4 +1,3 @@
-
 import InitialPage from "../pages/initial"
 
 export const ROUTES = {
@@ -7,5 +6,5 @@ export const ROUTES = {
 
 export const  routeConfig = [
     {path:ROUTES.Home, element: <InitialPage/>},
-    
+
 ]
