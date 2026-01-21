@@ -9,7 +9,19 @@ import {
 } from "recharts";
 import Logo from "../images/logo.png";
 import { Link } from "react-router-dom";
-import { ChevronRight, LayoutGrid, Search, Bell, TrendingUp, TrendingDown, ArrowDownRight, ArrowUpRight } from "lucide-react";
+import {
+  ChevronRight,
+  LayoutGrid,
+  Search,
+  Bell,
+  TrendingUp,
+  TrendingDown,
+  ArrowDownRight,
+  ArrowUpRight,
+  Wallet,
+  GraduationCap,
+  Palmtree,
+} from "lucide-react";
 
 const InitialPage = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -23,6 +35,8 @@ const InitialPage = () => {
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
       </div>
@@ -74,7 +88,7 @@ const InitialPage = () => {
         </div>
       </section>
 
-      <section className="relative px-12 pb-32">
+      <section className="relative px-12">
         <div className="max-w-[1200px] mx-auto">
           <div className="relative rounded-[32px] p-[2px] bg-gradient-to-b from-purple-500/50 to-purple-500/20">
             <div className="absolute inset-0 bg-gradient-to-b from-purple-500/40 via-purple-500/20 to-transparent rounded-[32px] blur-2xl"></div>
@@ -263,7 +277,7 @@ const InitialPage = () => {
                     <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-5 rounded-2xl border border-purple-500/20">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 bg-purple-500/30 rounded-xl flex items-center justify-center">
-                          <TrendingUp className="w-5 h-5 text-purple-400"/>
+                          <TrendingUp className="w-5 h-5 text-purple-400" />
                         </div>
                         <div>
                           <div className="text-[13px] text-gray-400">
@@ -274,13 +288,16 @@ const InitialPage = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="text-[12px] text-green-400 flex align-center"><ArrowUpRight/>+5.2%</div>
+                      <div className="text-[12px] text-green-400 flex align-center">
+                        <ArrowUpRight />
+                        +5.2%
+                      </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-cyan-600/20 to-cyan-800/10 p-5 rounded-2xl border border-cyan-500/20">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 bg-cyan-500/30 rounded-xl flex items-center justify-center">
-                          <TrendingDown className="w-5 h-5 text-cyan-400"/>
+                          <TrendingDown className="w-5 h-5 text-cyan-400" />
                         </div>
                         <div>
                           <div className="text-[13px] text-gray-400">
@@ -291,7 +308,9 @@ const InitialPage = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="text-[12px] text-red-400 flex"><ArrowDownRight/> -2.4%</div>
+                      <div className="text-[12px] text-red-400 flex">
+                        <ArrowDownRight /> -2.4%
+                      </div>
                     </div>
                   </div>
 
@@ -375,6 +394,176 @@ const InitialPage = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative px-12 py-32">
+        <div className="max-w-7xl mx-auto text-center mb-20">
+          <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
+            Powerful Features to Elevate
+            <br />
+            Your Financial
+          </h2>
+          <p className="text-[17px] text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            All the tools you need to manage your money—smart, simple,
+            <br />
+            and seamless.
+          </p>
+        </div>
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 mb-32">
+          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] p-8 rounded-3xl border border-white/10">
+            <h3 className="text-[28px] font-bold mb-3">
+              Comprehensive Financial Overview
+            </h3>
+            <p className="text-gray-400 text-[15px] mb-8 leading-relaxed">
+              View your total balance, income, and expenses at a glance to stay
+              on top of your finances.
+            </p>
+
+            <div className="space-y-6">
+              <div className="bg-[#0a0a14] p-6 rounded-2xl border border-white/5">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <div className="text-[13px] text-gray-500 mb-2">
+                      My Balance
+                    </div>
+                    <div className="text-[42px] font-bold">$66,000.00</div>
+                    <div className="text-[13px] text-gray-500">
+                      Your Balance in Month
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <button className="bg-purple-600 hover:bg-purple-700 px-6 py-2.5 rounded-xl text-[14px] font-medium transition-colors">
+                      Add Transaction
+                    </button>
+                    <select className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[13px] focus:outline-none">
+                      <option>This Month</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="text-[14px] text-green-400 flex items-center gap-1">
+                  <ArrowUpRight className="w-4 h-4" />
+                  45.2%
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <div className="text-[13px] text-gray-500">Income</div>
+                  </div>
+                  <div className="text-[28px] font-bold mb-1">$44,000.00</div>
+                  <div className="text-[13px] text-green-400 flex items-center gap-1">
+                    <ArrowUpRight className="w-3 h-3" />
+                    45.2%
+                  </div>
+                </div>
+
+                <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center">
+                      <TrendingDown className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <div className="text-[13px] text-gray-500">Expends</div>
+                  </div>
+                  <div className="text-[28px] font-bold mb-1">$22,000.00</div>
+                  <div className="text-[13px] text-red-400 flex items-center gap-1">
+                    <ArrowDownRight className="w-3 h-3" />
+                    36.1%
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] p-8 rounded-3xl border border-white/10">
+            <h3 className="text-[28px] font-bold mb-3">Smart Saving Plan</h3>
+            <p className="text-gray-400 text-[15px] mb-8 leading-relaxed">
+              Create, manage, and achieve your savings goals with a plan
+              tailored to your needs.
+            </p>
+
+            <div className="space-y-4">
+              <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center text-[20px]">
+                    <Wallet/>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[15px] font-medium mb-1">
+                      Financial Saving
+                    </div>
+                    <div className="flex items-center justify-between text-[13px]">
+                      <span className="text-gray-400">
+                        $8,000.00-$20,000.00
+                      </span>
+                      <span className="text-purple-400 font-semibold">50%</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-purple-600 to-purple-500 h-full rounded-full"
+                    style={{ width: "50%" }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center text-[20px]">
+                    <GraduationCap/>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[15px] font-medium mb-1">
+                      Educational Plan
+                    </div>
+                    <div className="flex items-center justify-between text-[13px]">
+                      <span className="text-gray-400">
+                        $8,000.00-$20,000.00
+                      </span>
+                      <span className="text-pink-400 font-semibold">32%</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-pink-600 to-pink-500 h-full rounded-full"
+                    style={{ width: "32%" }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center text-[20px]">
+                    <Palmtree/>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[15px] font-medium mb-1">
+                      Retirement Plan
+                    </div>
+                    <div className="flex items-center justify-between text-[13px]">
+                      <span className="text-gray-400">
+                        $8,000.00-$20,000.00
+                      </span>
+                      <span className="text-amber-400 font-semibold">18%</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-amber-600 to-amber-500 h-full rounded-full"
+                    style={{ width: "18%" }}
+                  ></div>
                 </div>
               </div>
             </div>
