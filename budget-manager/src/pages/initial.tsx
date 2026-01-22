@@ -21,6 +21,11 @@ import {
   Wallet,
   GraduationCap,
   Palmtree,
+  CreditCard,
+  Zap,
+  ShoppingBag,
+  Calendar
+
 } from "lucide-react";
 
 const InitialPage = () => {
@@ -401,8 +406,8 @@ const InitialPage = () => {
         </div>
       </section>
 
-      <section className="relative px-12 py-32">
-        <div className="max-w-7xl mx-auto text-center mb-20">
+      <section className="relative px-12 py-16">
+        <div className="max-w-7xl mx-auto text-center mb-12">
           <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
             Powerful Features to Elevate
             <br />
@@ -415,7 +420,7 @@ const InitialPage = () => {
           </p>
         </div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 mb-32">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-gradient-to-br from-white/5 to-white/[0.02] p-8 rounded-3xl border border-white/10">
             <h3 className="text-[28px] font-bold mb-3">
               Comprehensive Financial Overview
@@ -495,7 +500,7 @@ const InitialPage = () => {
               <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center text-[20px]">
-                    <Wallet/>
+                    <Wallet />
                   </div>
                   <div className="flex-1">
                     <div className="text-[15px] font-medium mb-1">
@@ -520,7 +525,7 @@ const InitialPage = () => {
               <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center text-[20px]">
-                    <GraduationCap/>
+                    <GraduationCap />
                   </div>
                   <div className="flex-1">
                     <div className="text-[15px] font-medium mb-1">
@@ -545,7 +550,7 @@ const InitialPage = () => {
               <div className="bg-[#0a0a14] p-5 rounded-2xl border border-white/5">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center text-[20px]">
-                    <Palmtree/>
+                    <Palmtree />
                   </div>
                   <div className="flex-1">
                     <div className="text-[15px] font-medium mb-1">
@@ -564,6 +569,223 @@ const InitialPage = () => {
                     className="bg-gradient-to-r from-amber-600 to-amber-500 h-full rounded-full"
                     style={{ width: "18%" }}
                   ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] p-8 rounded-3xl border border-white/10">
+            <h3 className="text-[28px] font-bold mb-3">
+              Smart Expense & Income Analytics
+            </h3>
+            <p className="text-gray-400 text-[15px] mb-8 leading-relaxed">
+              Monitor, analyze, and optimize your income and expenses with
+              real-time data.
+            </p>
+
+            <div className="bg-[#0a0a14] p-6 rounded-2xl border border-white/5">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Zap className="w-5 h-5 text-yellow-400" />
+                    <span className="text-[13px] font-semibold text-yellow-400">
+                      Fast And Responsif
+                    </span>
+                  </div>
+                  <div className="text-[15px] font-medium mb-2">
+                    Cash Flow
+                  </div>
+                  <div className="flex items-center gap-4 text-[13px]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-purple-500 rounded-sm"></div>
+                      <span className="text-gray-400">Income</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-cyan-500 rounded-sm"></div>
+                      <span className="text-gray-400">Expends</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <select className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[12px] focus:outline-none mb-2">
+                    <option>This Year</option>
+                    <option>This Month</option>
+                    <option>This Week</option>
+                  </select>
+                  <button className="text-gray-500 hover:text-gray-400">
+                    <span className="text-[20px]">•••</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative mb-4">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[32px] font-bold">$324,495</span>
+                  <span className="text-[14px] text-green-400 flex items-center gap-1">
+                    <ArrowUpRight className="w-3 h-3" />
+                    5.3%
+                  </span>
+                </div>
+                <div className="text-[12px] text-gray-500 mb-1">Jan 2024</div>
+              </div>
+
+              <ResponsiveContainer width="100%" height={140}>
+                <LineChart
+                  data={[
+                    { income: 100, expense: 80 },
+                    { income: 180, expense: 140 },
+                    { income: 120, expense: 100 },
+                    { income: 220, expense: 180 },
+                    { income: 160, expense: 130 },
+                    { income: 280, expense: 220 },
+                    { income: 200, expense: 170 },
+                    { income: 320, expense: 260 },
+                    { income: 240, expense: 200 },
+                    { income: 360, expense: 290 },
+                  ]}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#1a1a2e"
+                    vertical={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="income"
+                    stroke="#6366F1"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="expense"
+                    stroke="#06B6D4"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+
+              <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-white/5">
+                <div className="text-center">
+                  <div className="text-[11px] text-gray-500 mb-1">$0</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[11px] text-gray-500 mb-1">$200</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-[11px] text-gray-500 mb-1">$400</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] p-8 rounded-3xl border border-white/10">
+            <h3 className="text-[28px] font-bold mb-3">
+              Automated Budgeting & Forecasting
+            </h3>
+            <p className="text-gray-400 text-[15px] mb-8 leading-relaxed">
+              Set budgets automatically and get financial predictions for
+              better money management.
+            </p>
+
+            <div className="bg-[#0a0a14] p-6 rounded-2xl border border-white/5">
+              <div className="flex items-center justify-between mb-6">
+                <h4 className="text-[17px] font-semibold">
+                  Recent Transaction
+                </h4>
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-[13px] w-40 focus:outline-none focus:border-purple-500/50 placeholder-gray-600"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="grid grid-cols-4 gap-4 text-[12px] text-gray-500 pb-3 border-b border-white/5">
+                  <div>Merchant Name</div>
+                  <div>Category</div>
+                  <div>Date</div>
+                  <div className="text-right">Amount</div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4 py-3 border-b border-white/5 items-center hover:bg-white/5 transition-colors rounded-lg px-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <span className="text-[13px] font-medium">
+                      iCloud Monthly
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span className="text-[13px] text-gray-400">Premium</span>
+                  </div>
+                  <div className="text-[13px] text-gray-400">08 Des 2024</div>
+                  <div className="text-[13px] font-semibold text-red-400 text-right">
+                    -$12.99
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4 py-3 border-b border-white/5 items-center hover:bg-white/5 transition-colors rounded-lg px-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center">
+                      <ShoppingBag className="w-4 h-4 text-pink-400" />
+                    </div>
+                    <span className="text-[13px] font-medium">Shopping</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                    <span className="text-[13px] text-gray-400">
+                      Shopping
+                    </span>
+                  </div>
+                  <div className="text-[13px] text-gray-400">07 Des 2024</div>
+                  <div className="text-[13px] font-semibold text-red-400 text-right">
+                    -$156.00
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4 py-3 border-b border-white/5 items-center hover:bg-white/5 transition-colors rounded-lg px-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <span className="text-[13px] font-medium">
+                      Subscription
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
+                    <span className="text-[13px] text-gray-400">
+                      Services
+                    </span>
+                  </div>
+                  <div className="text-[13px] text-gray-400">06 Des 2024</div>
+                  <div className="text-[13px] font-semibold text-red-400 text-right">
+                    -$29.99
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4 py-3 items-center hover:bg-white/5 transition-colors rounded-lg px-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-4 h-4 text-green-400" />
+                    </div>
+                    <span className="text-[13px] font-medium">Salary</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-[13px] text-gray-400">Income</span>
+                  </div>
+                  <div className="text-[13px] text-gray-400">01 Des 2024</div>
+                  <div className="text-[13px] font-semibold text-green-400 text-right">
+                    +$5,500.00
+                  </div>
                 </div>
               </div>
             </div>
