@@ -24,8 +24,7 @@ import {
   CreditCard,
   Zap,
   ShoppingBag,
-  Calendar
-
+  Calendar,
 } from "lucide-react";
 
 const InitialPage = () => {
@@ -45,7 +44,6 @@ const InitialPage = () => {
         <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
       </div>
-
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           scrolled ? "bg-[#050510]/80 backdrop-blur-lg" : ""
@@ -71,7 +69,6 @@ const InitialPage = () => {
           </div>
         </div>
       </nav>
-
       <section className="relative pt-40 pb-16 px-12">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-[72px] font-bold mb-5 leading-[1.1] tracking-tight">
@@ -92,7 +89,6 @@ const InitialPage = () => {
           </button>
         </div>
       </section>
-
       <section className="relative px-12">
         <div className="max-w-[1200px] mx-auto">
           <div className="relative rounded-[32px] p-[2px] bg-gradient-to-b from-purple-500/50 to-purple-500/20">
@@ -405,7 +401,6 @@ const InitialPage = () => {
           </div>
         </div>
       </section>
-
       <section className="relative px-12 py-16">
         <div className="max-w-7xl mx-auto text-center mb-12">
           <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
@@ -592,9 +587,7 @@ const InitialPage = () => {
                       Fast And Responsif
                     </span>
                   </div>
-                  <div className="text-[15px] font-medium mb-2">
-                    Cash Flow
-                  </div>
+                  <div className="text-[15px] font-medium mb-2">Cash Flow</div>
                   <div className="flex items-center gap-4 text-[13px]">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-purple-500 rounded-sm"></div>
@@ -685,8 +678,8 @@ const InitialPage = () => {
               Automated Budgeting & Forecasting
             </h3>
             <p className="text-gray-400 text-[15px] mb-8 leading-relaxed">
-              Set budgets automatically and get financial predictions for
-              better money management.
+              Set budgets automatically and get financial predictions for better
+              money management.
             </p>
 
             <div className="bg-[#0a0a14] p-6 rounded-2xl border border-white/5">
@@ -740,9 +733,7 @@ const InitialPage = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <span className="text-[13px] text-gray-400">
-                      Shopping
-                    </span>
+                    <span className="text-[13px] text-gray-400">Shopping</span>
                   </div>
                   <div className="text-[13px] text-gray-400">07 Des 2024</div>
                   <div className="text-[13px] font-semibold text-red-400 text-right">
@@ -761,9 +752,7 @@ const InitialPage = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
-                    <span className="text-[13px] text-gray-400">
-                      Services
-                    </span>
+                    <span className="text-[13px] text-gray-400">Services</span>
                   </div>
                   <div className="text-[13px] text-gray-400">06 Des 2024</div>
                   <div className="text-[13px] font-semibold text-red-400 text-right">
@@ -788,6 +777,245 @@ const InitialPage = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="relative pt-10 pb-20 px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h1 className="text-[68px] font-bold mb-6 leading-[1.05] tracking-tight">
+                A Smarter Way to
+                <br />
+                Manage Your Money
+              </h1>
+
+              <p className="text-[17px] text-gray-400 mb-10 leading-relaxed max-w-lg">
+                Built for professionals and businesses, Daryan provides
+                seamless, secure, and intuitive financial management.
+              </p>
+
+              <button className="bg-white text-slate-900 px-8 py-3.5 rounded-full text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105 inline-flex items-center gap-2">
+                Try it Free
+                <ChevronRight />
+              </button>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-3xl blur-3xl"></div>
+              <div className="relative bg-[#0a0a14]/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+                    <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-[15px] font-medium mb-1">
+                        Smart Financial Insights
+                      </div>
+                      <div className="text-[13px] text-gray-400">
+                        Real-time analytics and predictions
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-500" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+                    <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                      <Wallet className="w-6 h-6 text-blue-400" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-[15px] font-medium mb-1">
+                        Personalized Financial Goals
+                      </div>
+                      <div className="text-[13px] text-gray-400">
+                        Track and achieve your objectives
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-500" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-4 bg-purple-500/10 rounded-xl border border-purple-500/30 hover:bg-purple-500/20 transition-all cursor-pointer">
+                    <div className="w-12 h-12 bg-purple-500/30 rounded-lg flex items-center justify-center">
+                      <ShoppingBag className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-[15px] font-medium mb-1">
+                        Smart Expense Splitting
+                      </div>
+                      <div className="text-[13px] text-gray-300">
+                        Easily split bills with friends, family, or colleagues,
+                        ensuring fair contributions and clear tracking of shared
+                        expenses—no more confusion, manual calculations, or
+                        missed payments.
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-purple-400" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer">
+                    <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                      <Zap className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-[15px] font-medium mb-1">
+                        Automated Budgeting & Forecasting
+                      </div>
+                      <div className="text-[13px] text-gray-400">
+                        Set smart budgets automatically
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-500" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative px-12 py-20">
+        <div className="max-w-7xl mx-auto text-center mb-16">
+          <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
+            Flexible Plans for Every Need
+          </h2>
+          <p className="text-[17px] text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Choose a plan that fits your financial goals – whether you're an
+            <br />
+            individual or a business.
+          </p>
+        </div>
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="relative bg-gradient-to-b from-white/5 to-white/[0.02] rounded-3xl border border-white/10 p-8 hover:border-white/20 transition-all">
+            <div className="text-center mb-8">
+              <div className="text-[15px] text-gray-400 mb-2">Free Plan</div>
+              <div className="text-[24px] font-semibold mb-2">
+                For Individual
+              </div>
+              <div className="flex items-baseline justify-center gap-1 mb-3">
+                <span className="text-[48px] font-bold">$0</span>
+                <span className="text-[15px] text-gray-400">per month</span>
+              </div>
+              <p className="text-[14px] text-gray-400 mb-8">
+                Basic tools to manage your money
+                <br />
+                at no cost.
+              </p>
+              <button className="w-full bg-purple-600 hover:bg-purple-700 py-3.5 rounded-full text-[15px] font-semibold transition-all">
+                Get Started
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                "Real-time balance tracking",
+                "Basic cash flow insights",
+                "Expense categorization",
+                "Community support",
+                "Up to 2 linked bank accounts",
+              ].map((feature, i) => (
+                <div key={i} className="flex items-center gap-3 text-[14px]">
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-600 flex items-center justify-center flex-shrink-0">
+                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                  </div>
+                  <span className="text-gray-300">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="absolute -inset-[2px] bg-gradient-to-b from-purple-500 to-blue-600 rounded-3xl blur-sm"></div>
+            <div className="relative bg-[#0a0a14] rounded-3xl p-8">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <div className="bg-purple-600 text-white px-6 py-1.5 rounded-full text-[13px] font-semibold">
+                  Popular Plan
+                </div>
+              </div>
+
+              <div className="text-center mb-8 mt-4">
+                <div className="text-[15px] text-gray-400 mb-2">Pro Plan</div>
+                <div className="text-[24px] font-semibold mb-2">
+                  For Freelancers
+                </div>
+                <div className="flex items-baseline justify-center gap-1 mb-3">
+                  <span className="text-[48px] font-bold">$15</span>
+                  <span className="text-[15px] text-gray-400">per month</span>
+                </div>
+                <p className="text-[14px] text-gray-400 mb-8">
+                  Advanced insights and automation
+                  <br />
+                  for power users.
+                </p>
+                <button className="w-full bg-purple-600 hover:bg-purple-700 py-3.5 rounded-full text-[15px] font-semibold transition-all">
+                  Get Started
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {[
+                  "Everything in Free Plan, plus:",
+                  "AI - powered financial insights",
+                  "Unlimited linked bank accounts",
+                  "Advanced budgeting tools",
+                  "Multi-device sync (Desktop & Mobile)",
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center gap-3 text-[14px]">
+                    <div className="w-5 h-5 rounded-full border-2 border-purple-500 flex items-center justify-center flex-shrink-0">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    </div>
+                    <span
+                      className={i === 0 ? "text-gray-400" : "text-gray-300"}
+                    >
+                      {feature}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="relative bg-gradient-to-b from-white/5 to-white/[0.02] rounded-3xl border border-white/10 p-8 hover:border-white/20 transition-all">
+            <div className="text-center mb-8">
+              <div className="text-[15px] text-gray-400 mb-2">
+                Enterprise Plan
+              </div>
+              <div className="text-[24px] font-semibold mb-2">
+                For Businesses
+              </div>
+              <div className="flex items-baseline justify-center gap-1 mb-3">
+                <span className="text-[48px] font-bold">$35</span>
+                <span className="text-[15px] text-gray-400">per month</span>
+              </div>
+              <p className="text-[14px] text-gray-400 mb-8">
+                Tailored solutions for
+                <br />
+                businesses.
+              </p>
+              <button className="w-full bg-purple-600 hover:bg-purple-700 py-3.5 rounded-full text-[15px] font-semibold transition-all">
+                Get Started
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                "Everything in Pro Plan, plus:",
+                "Team financial management",
+                "Advanced security & role-based access",
+                "Dedicated account manager",
+                "Custom reporting & analytics",
+              ].map((feature, i) => (
+                <div key={i} className="flex items-center gap-3 text-[14px]">
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-600 flex items-center justify-center flex-shrink-0">
+                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                  </div>
+                  <span className={i === 0 ? "text-gray-400" : "text-gray-300"}>
+                    {feature}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
