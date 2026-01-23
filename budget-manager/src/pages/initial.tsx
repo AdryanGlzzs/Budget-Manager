@@ -874,7 +874,6 @@ const InitialPage = () => {
           </div>
         </div>
       </section>
-
       <section className="relative px-12 py-20">
         <div className="max-w-7xl mx-auto text-center mb-16">
           <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
@@ -1016,6 +1015,115 @@ const InitialPage = () => {
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <section className="flex justify-center items-center px-12 py-20">
+          <div className="max-w-7xl mx-auto flex items-center flex-row gap-30">
+            <div>
+              <h2 className="text-[56px] font-bold leading-15 w-90">
+                Real Stories, Real Results
+              </h2>
+              <p className="text-[17px] text-gray-400 mt-5 leading-relaxed">
+                See how Drayan is transforming the
+                <br />
+                way people manage their finances.
+              </p>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <div className="flex gap-6 overflow-hidden flex-1">
+                <div className="bg-[#0a0a14] rounded-3xl p-6 border border-white/10 min-w-[200px]">
+                  <div className="text-[64px] text-gray-600 leading-none mb-4">
+                    "
+                  </div>
+                  <p className="text-[15px] text-gray-300 leading-relaxed mb-8">
+                    As a business owner, managing finances was overwhelming.
+                    Daryan's reporting and analytics helped me optimize my
+                    spending and grow my profits.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full"></div>
+                    <div>
+                      <div className="text-[15px] font-semibold">David Lee</div>
+                      <div className="text-[13px] text-gray-500">
+                        Startup Founder
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#0a0a14] rounded-3xl p-8 border border-white/10 min-w-[200px]">
+                  <div className="text-[64px] text-gray-600 leading-none mb-4">
+                    "
+                  </div>
+                  <p className="text-[15px] text-gray-300 leading-relaxed mb-8">
+                    I love how Moneta automatically categorizes my expenses. The
+                    interface is user-friendly, and it gives me complete control
+                    over my finances.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full"></div>
+                    <div>
+                      <div className="text-[15px] font-semibold">
+                        Sophia Martinez
+                      </div>
+                      <div className="text-[13px] text-gray-500">
+                        Marketing Consultant
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#0a0a14] rounded-3xl p-8 border border-white/10 min-w-[200px]">
+                  <div className="text-[64px] text-gray-600 leading-none mb-4">
+                    "
+                  </div>
+                  <p className="text-[15px] text-gray-300 leading-relaxed mb-8">
+                    I've tried multiple apps before, but Moneta is by far the
+                    best. The savings plan and budget tracking features keep me
+                    on top of my goals.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full"></div>
+                    <div>
+                      <div className="text-[15px] font-semibold">
+                        Michael Johnson
+                      </div>
+                      <div className="text-[13px] text-gray-500">
+                        Startup Founder
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section className="relative px-12 py-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="relative overflow-hidden rounded-3xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-900/50 via-purple-600/30 to-blue-900/50"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-gradient-to-r from-purple-600 to-transparent blur-3xl opacity-60"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-blue-600 to-transparent blur-3xl opacity-60"></div>
+
+            <div className="relative z-10 text-center py-20 px-12">
+              <h2 className="text-[52px] font-bold mb-6 leading-[1.1] tracking-tight">
+                Take Charge of Your
+                <br />
+                Finances Today!
+              </h2>
+              <p className="text-[16px] text-gray-300 mb-10 max-w-2xl mx-auto">
+                Join thousands of users who trust Drayan for smarter money
+                <br />
+                management.
+              </p>
+              <button className="bg-white text-slate-900 px-10 py-4 rounded-full text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/30 transition-all transform hover:scale-105">
+                Get Started
+              </button>
             </div>
           </div>
         </div>
