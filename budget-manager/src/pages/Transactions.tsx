@@ -17,10 +17,10 @@ import {
   Smartphone,
   ChevronDown,
 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/sidebar";
+import Header from "../components/Header";
 
 const Transactions = () => {
-  // Static state values for UI rendering
   const selectedFilter = "All";
   const selectedCategory = "All Categories";
 
@@ -139,7 +139,6 @@ const Transactions = () => {
 
   const filterOptions = ["All", "Income", "Expenses", "Pending"];
 
-  // Use all transactions directly since we are removing filtering logic
   const filteredTransactions = transactions;
 
   const totalIncome = transactions
@@ -159,45 +158,14 @@ const Transactions = () => {
       </div>
 
       <div className="relative z-10">
-        <header className="border-b border-white/10 bg-[#050510]/80 backdrop-blur-xl sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-8 py-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                <img src={Logo} className="w-32" alt="Daryan Logo" />
-                <div className="h-8 w-px bg-white/10"></div>
-                <div>
-                  <div className="text-[13px] text-gray-500">Welcome back,</div>
-                  <div className="text-[17px] font-semibold">Adryan Gomes</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                  <input
-                    type="text"
-                    placeholder="Search transactions..."
-                    className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-[14px] w-72 focus:outline-none focus:border-purple-500/50 placeholder-gray-600 backdrop-blur-sm hover:bg-white/10 transition-all"
-                  />
-                </div>
-
-                <div className="relative">
-                  <Bell className="w-5 h-5 text-gray-400 hover:text-purple-400 transition-colors cursor-pointer" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full shadow-lg shadow-purple-500/50"></div>
-                </div>
-
-                <div className="flex items-center gap-3 pl-4 border-l border-white/10">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center font-semibold">
-                    AG
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+        <div>
+          <Header />
+        </div>
 
         <div className="flex">
-          <Sidebar currentPage="transactions" />
+          <div className="pr-60">
+            <Sidebar currentPage="/transactions" />
+          </div>
 
           <main className="flex-1 p-8 max-w-[1400px]">
             <div className="mb-8">

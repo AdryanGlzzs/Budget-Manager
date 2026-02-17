@@ -24,7 +24,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Sidebar from "../components/sidebar";
-import Header from '../components/Header'
+import Header from "../components/Header";
 
 const Dashboard = () => {
   const cashFlowData = [
@@ -132,12 +132,14 @@ const Dashboard = () => {
       </div>
 
       <div>
-        <Header/>
+        <Header />
       </div>
 
       <div className="relative z-10">
         <div className="flex">
-          <Sidebar currentPage="/dashboard" />
+          <div className="pr-60">
+            <Sidebar currentPage="/dashboard"/>
+          </div>
 
           <main className="flex-1 p-8 max-w-[1400px]">
             <section className="mb-8">

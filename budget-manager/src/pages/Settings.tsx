@@ -14,7 +14,8 @@ import {
   Check,
   Download,
 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/sidebar";
+import Header from "../components/Header";
 
 const Settings = () => {
   const activeTab = "profile";
@@ -45,47 +46,15 @@ const Settings = () => {
       </div>
 
       <div className="relative z-10">
-        <header className="border-b border-white/10 bg-[#050510]/80 backdrop-blur-xl sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-8 py-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                <img src={Logo} className="w-32" alt="Daryan Logo" />
-                <div className="h-8 w-px bg-white/10"></div>
-                <div>
-                  <div className="text-[13px] text-gray-500">Welcome back,</div>
-                  <div className="text-[17px] font-semibold">Adryan Gomes</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                  <input
-                    type="text"
-                    placeholder="Search settings..."
-                    className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-[14px] w-72 focus:outline-none focus:border-purple-500/50 placeholder-gray-600 backdrop-blur-sm hover:bg-white/10 transition-all"
-                  />
-                </div>
-
-                <div className="relative">
-                  <Bell className="w-5 h-5 text-gray-400 hover:text-purple-400 transition-colors cursor-pointer" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full shadow-lg shadow-purple-500/50"></div>
-                </div>
-
-                <div className="flex items-center gap-3 pl-4 border-l border-white/10">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center font-semibold">
-                    AG
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
+        <div>
+          <Header />
+        </div>
         <div className="flex">
-          <Sidebar currentPage="settings" />
+          <div className="pr-60">
+            <Sidebar currentPage="settings" />
+          </div>
 
-          <main className="flex-1 p-8 max-w-[1400px]">
+          <main className="flex-1 p-8 max-w-[1400px] mt-20">
             <div className="mb-8">
               <h1 className="text-[42px] font-bold mb-3">Settings</h1>
               <p className="text-[16px] text-gray-400">
@@ -117,10 +86,8 @@ const Settings = () => {
               </div>
             </div>
 
-            {/* Profile Tab */}
             {activeTab === "profile" && (
               <div className="space-y-6">
-                {/* Profile Picture */}
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                   <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -140,7 +107,7 @@ const Settings = () => {
 
                       <div>
                         <div className="text-[16px] font-medium mb-2">
-                          Adryan Gomes
+                          Adryan Glzzs
                         </div>
                         <div className="text-[14px] text-gray-400 mb-4">
                           Pro Plan Member
@@ -236,7 +203,6 @@ const Settings = () => {
 
             {activeTab === "security" && (
               <div className="space-y-6">
-                {/* Change Password */}
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                   <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm">

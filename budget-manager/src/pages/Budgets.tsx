@@ -1,7 +1,4 @@
-import Logo from "../images/logo.png";
 import {
-  Search,
-  Bell,
   Plus,
   Target,
   TrendingUp,
@@ -11,13 +8,12 @@ import {
   Zap,
   Home,
   Smartphone,
-  Calendar,
   AlertCircle,
-  ChevronRight,
   Edit,
   Trash2,
 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/sidebar";
+import Header from "../components/Header";
 
 const Budgets = () => {
   const budgets = [
@@ -100,7 +96,6 @@ const Budgets = () => {
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
-      {/* Background Gradient Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
@@ -108,51 +103,17 @@ const Budgets = () => {
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="relative z-10">
-        {/* Header */}
-        <header className="border-b border-white/10 bg-[#050510]/80 backdrop-blur-xl sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-8 py-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                <img src={Logo} className="w-32" alt="Daryan Logo" />
-                <div className="h-8 w-px bg-white/10"></div>
-                <div>
-                  <div className="text-[13px] text-gray-500">Welcome back,</div>
-                  <div className="text-[17px] font-semibold">Adryan Gomes</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                  <input
-                    type="text"
-                    placeholder="Search budgets..."
-                    className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-[14px] w-72 focus:outline-none focus:border-purple-500/50 placeholder-gray-600 backdrop-blur-sm hover:bg-white/10 transition-all"
-                  />
-                </div>
-
-                <div className="relative">
-                  <Bell className="w-5 h-5 text-gray-400 hover:text-purple-400 transition-colors cursor-pointer" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full shadow-lg shadow-purple-500/50"></div>
-                </div>
-
-                <div className="flex items-center gap-3 pl-4 border-l border-white/10">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center font-semibold">
-                    AG
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+      <div className="relative z-10"> 
+        <div className="pb-20">
+          <Header />
+        </div>
 
         <div className="flex">
-          <Sidebar currentPage="budgets" />
+          <div className="pr-60">
+            <Sidebar currentPage="budgets" />
+          </div>
 
-          {/* Main Content */}
           <main className="flex-1 p-8 max-w-[1400px]">
-            {/* Page Header */}
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h1 className="text-[42px] font-bold mb-3">Budget Manager</h1>
@@ -167,9 +128,7 @@ const Budgets = () => {
               </button>
             </div>
 
-            {/* Overview Cards */}
             <div className="grid grid-cols-3 gap-6 mb-8">
-              {/* Total Budget */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
                 <div className="relative bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
@@ -231,7 +190,6 @@ const Budgets = () => {
               </div>
             </div>
 
-            {/* Alerts */}
             {(overBudgetCategories.length > 0 ||
               warningCategories.length > 0) && (
               <div className="mb-8 space-y-4">

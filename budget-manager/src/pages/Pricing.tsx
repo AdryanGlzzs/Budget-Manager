@@ -1,5 +1,4 @@
 import { Check, Star } from "lucide-react";
-import Sidebar from "../components/Sidebar";
 
 const Pricing = () => {
   const billingCycle = "monthly";
@@ -52,17 +51,14 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#050510] text-white overflow-hidden">
-      {/* Background Gradients */}
+    <div className="min-h-screen bg-[#050510] text-white">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[20%] w-[800px] h-[800px] bg-purple-600/10 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[100px]"></div>
       </div>
 
-      <Sidebar currentPage="pricing" />
-
-      <main className="flex-1 p-8 max-w-[1400px] relative z-10 overflow-y-auto h-screen flex flex-col items-center">
-        <div className="text-center max-w-2xl mx-auto mb-12 pt-8">
+      <main className="flex-1 p-6 max-w-[1400px] relative z-10 flex flex-col items-center mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-8 pt-8">
           <h1 className="text-[42px] font-bold mb-4 bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
             Escolha o plano ideal para você
           </h1>
@@ -71,9 +67,7 @@ const Pricing = () => {
             premium. Cancele a qualquer momento.
           </p>
         </div>
-
-        {/* Toggle Switch */}
-        <div className="flex items-center gap-4 bg-white/5 p-1 rounded-xl border border-white/10 mb-12">
+        <div className="flex items-center gap-4 bg-white/5 p-1 rounded-xl border border-white/10 mb-8">
           <button
             className={`px-6 py-2.5 rounded-lg text-[14px] font-medium transition-all ${
               billingCycle === "monthly"
@@ -84,11 +78,7 @@ const Pricing = () => {
             Mensal
           </button>
           <button
-            className={`px-6 py-2.5 rounded-lg text-[14px] font-medium transition-all flex items-center gap-2 ${
-              billingCycle === "yearly"
-                ? "bg-white/10 text-white shadow-lg"
-                : "text-gray-400 hover:text-white"
-            }`}
+            className={`px-6 py-2.5 rounded-lg text-[14px] font-medium transition-all flex items-center gap-2`}
           >
             Anual
             <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full border border-green-500/20">
@@ -97,7 +87,6 @@ const Pricing = () => {
           </button>
         </div>
 
-        {/* Plans Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl px-4">
           {plans.map((plan) => (
             <div key={plan.name} className="relative group">

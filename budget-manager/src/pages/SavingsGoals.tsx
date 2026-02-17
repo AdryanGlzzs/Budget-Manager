@@ -9,7 +9,8 @@ import {
   Plane,
   Car,
 } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/sidebar";
+import Header from "../components/Header";
 
 const SavingsGoals = () => {
   const goals = [
@@ -53,15 +54,20 @@ const SavingsGoals = () => {
 
   return (
     <div className="flex min-h-screen bg-[#050510] text-white overflow-hidden">
-      {/* Background Gradients */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]"></div>
       </div>
 
-      <Sidebar currentPage="savings" />
+      <div className="pb-0">
+        <Header />
+      </div>
 
-      <main className="flex-1 p-8 max-w-[1400px] relative z-10 overflow-y-auto h-screen">
+      <div className="z-20 pr-60">
+        <Sidebar currentPage="savings-goals"/>
+      </div>
+
+      <main className="flex-1 p-8 max-w-[1400px] relative z-10 overflow-y-auto h-screen mt-15">
         <header className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-[28px] font-bold mb-2">Metas de Economia</h1>
@@ -75,7 +81,6 @@ const SavingsGoals = () => {
           </button>
         </header>
 
-        {/* Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
