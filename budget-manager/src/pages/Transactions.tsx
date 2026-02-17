@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Logo from "../images/logo.png";
 import {
   Search,
@@ -18,12 +17,12 @@ import {
   Smartphone,
   ChevronDown,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 
 const Transactions = () => {
-  const [selectedFilter, setSelectedFilter] = useState("All");
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  // Static state values for UI rendering
+  const selectedFilter = "All";
+  const selectedCategory = "All Categories";
 
   const transactions = [
     {
@@ -139,27 +138,9 @@ const Transactions = () => {
   ];
 
   const filterOptions = ["All", "Income", "Expenses", "Pending"];
-  const categories = [
-    "All Categories",
-    "Food & Dining",
-    "Transportation",
-    "Shopping",
-    "Entertainment",
-    "Bills & Utilities",
-    "Income",
-  ];
 
-  const filteredTransactions = transactions.filter((t) => {
-    if (selectedFilter === "Income" && t.type !== "income") return false;
-    if (selectedFilter === "Expenses" && t.type !== "expense") return false;
-    if (selectedFilter === "Pending" && t.status !== "pending") return false;
-    if (
-      selectedCategory !== "All Categories" &&
-      t.category !== selectedCategory
-    )
-      return false;
-    return true;
-  });
+  // Use all transactions directly since we are removing filtering logic
+  const filteredTransactions = transactions;
 
   const totalIncome = transactions
     .filter((t) => t.type === "income")
@@ -170,7 +151,6 @@ const Transactions = () => {
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
-      {/* Background Gradient Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
@@ -179,7 +159,6 @@ const Transactions = () => {
       </div>
 
       <div className="relative z-10">
-        {/* Header */}
         <header className="border-b border-white/10 bg-[#050510]/80 backdrop-blur-xl sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-8 py-5">
             <div className="flex items-center justify-between">
@@ -220,9 +199,7 @@ const Transactions = () => {
         <div className="flex">
           <Sidebar currentPage="transactions" />
 
-          {/* Main Content */}
           <main className="flex-1 p-8 max-w-[1400px]">
-            {/* Page Header */}
             <div className="mb-8">
               <h1 className="text-[42px] font-bold mb-3">Transactions</h1>
               <p className="text-[16px] text-gray-400">
@@ -230,7 +207,6 @@ const Transactions = () => {
               </p>
             </div>
 
-            {/* Stats Overview */}
             <div className="grid grid-cols-3 gap-6 mb-8">
               <div className="relative group">
                 <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
@@ -285,18 +261,15 @@ const Transactions = () => {
               </div>
             </div>
 
-            {/* Filters and Actions */}
             <div className="relative group mb-6">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    {/* Filter Tabs */}
                     <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl">
                       {filterOptions.map((filter) => (
                         <button
                           key={filter}
-                          onClick={() => setSelectedFilter(filter)}
                           className={`px-4 py-2 rounded-lg text-[14px] font-medium transition-all ${
                             selectedFilter === filter
                               ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
@@ -308,37 +281,12 @@ const Transactions = () => {
                       ))}
                     </div>
 
-                    {/* Category Dropdown */}
                     <div className="relative">
-                      <button
-                        onClick={() => setShowFilterMenu(!showFilterMenu)}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[14px] hover:bg-white/10 transition-all"
-                      >
+                      <button className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[14px] hover:bg-white/10 transition-all">
                         <Filter className="w-4 h-4" />
                         {selectedCategory}
                         <ChevronDown className="w-4 h-4" />
                       </button>
-
-                      {showFilterMenu && (
-                        <div className="absolute top-full mt-2 left-0 bg-[#0a0a14] border border-white/10 rounded-xl p-2 min-w-[200px] shadow-2xl shadow-black/50 z-50">
-                          {categories.map((cat) => (
-                            <button
-                              key={cat}
-                              onClick={() => {
-                                setSelectedCategory(cat);
-                                setShowFilterMenu(false);
-                              }}
-                              className={`w-full text-left px-4 py-2 rounded-lg text-[14px] transition-all ${
-                                selectedCategory === cat
-                                  ? "bg-purple-600/20 text-purple-400"
-                                  : "text-gray-400 hover:bg-white/5 hover:text-white"
-                              }`}
-                            >
-                              {cat}
-                            </button>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -371,7 +319,6 @@ const Transactions = () => {
                   <div className="col-span-1 text-right">Amount</div>
                 </div>
 
-                {/* Table Body */}
                 <div className="divide-y divide-white/5">
                   {filteredTransactions.map((transaction) => {
                     const Icon = transaction.icon;
@@ -380,7 +327,6 @@ const Transactions = () => {
                         key={transaction.id}
                         className="grid grid-cols-12 gap-4 px-6 py-5 hover:bg-white/5 transition-all cursor-pointer items-center"
                       >
-                        {/* Transaction Name */}
                         <div className="col-span-4 flex items-center gap-4">
                           <div
                             className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
@@ -404,7 +350,6 @@ const Transactions = () => {
                           </div>
                         </div>
 
-                        {/* Category */}
                         <div className="col-span-2">
                           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg text-[13px]">
                             <div
@@ -418,12 +363,10 @@ const Transactions = () => {
                           </div>
                         </div>
 
-                        {/* Date */}
                         <div className="col-span-3 text-[14px] text-gray-400">
                           {transaction.date}
                         </div>
 
-                        {/* Status */}
                         <div className="col-span-2 flex justify-center">
                           <span
                             className={`px-3 py-1.5 rounded-lg text-[12px] font-medium ${
@@ -438,7 +381,6 @@ const Transactions = () => {
                           </span>
                         </div>
 
-                        {/* Amount */}
                         <div className="col-span-1 text-right">
                           <div
                             className={`text-[18px] font-bold ${
@@ -456,7 +398,6 @@ const Transactions = () => {
                   })}
                 </div>
 
-                {/* Empty State */}
                 {filteredTransactions.length === 0 && (
                   <div className="py-20 text-center">
                     <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">

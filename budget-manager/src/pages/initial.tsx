@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   LineChart,
   Line,
@@ -26,20 +25,33 @@ import {
   ShoppingBag,
   Calendar,
 } from "lucide-react";
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
 
 const InitialPage = () => {
-  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [IsScrolled ,setIsScrolled] = useState(false);
 
+  useEffect(() =>{
+    const handleScroll = () =>{
+      if(window.scrollY > 1) {
+        setIsScrolled(true)
+      }else{
+        setIsScrolled(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+
+    return () =>{
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
+
+  
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
-      {/* Background Gradient Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
@@ -47,10 +59,9 @@ const InitialPage = () => {
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
       </div>
 
-      {/* Navigation */}
       <nav
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled ? "bg-[#050510]/80 backdrop-blur-lg" : ""
+          IsScrolled ? "bg-[#050510]/80 backdrop-blur-lg" : ""
         }`}
       >
         <div className="max-w-7xl mx-auto px-12 py-6">
@@ -84,7 +95,6 @@ const InitialPage = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="relative pt-40 pb-16 px-12">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-[72px] font-bold mb-5 leading-[1.1] tracking-tight">
@@ -106,22 +116,15 @@ const InitialPage = () => {
         </div>
       </section>
 
-      {/* Dashboard Preview - GLASSMORPHISM PREMIUM BORDER */}
       <section className="relative px-12 pb-16">
         <div className="max-w-[1200px] mx-auto">
-          {/* CAMADA 1: Container do Glow Externo (mais difuso) */}
           <div className="relative rounded-[32px] p-[3px]">
-            {/* Glow Externo Grande - 60px blur */}
             <div className="absolute -inset-6 bg-gradient-to-br from-purple-500/40 via-purple-600/30 to-blue-600/40 rounded-[40px] blur-[60px] opacity-70"></div>
 
-            {/* CAMADA 2: Borda Gradiente Sólida */}
             <div className="relative rounded-[32px] p-[2px] bg-gradient-to-br from-purple-500/80 via-purple-600/90 to-blue-600/80">
-              {/* Glow Médio - 30px blur */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/50 via-purple-600/40 to-blue-600/50 rounded-[32px] blur-[30px]"></div>
 
-              {/* CAMADA 3: Container Principal com Glassmorphism */}
               <div className="relative bg-[#0a0a14]/95 backdrop-blur-xl rounded-[30px] overflow-hidden border border-white/10 shadow-2xl shadow-purple-900/20">
-                {/* Dashboard Header */}
                 <div className="flex items-center justify-between px-8 py-5 border-b border-white/10 bg-gradient-to-b from-white/[0.03] to-transparent">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/50">
@@ -151,7 +154,6 @@ const InitialPage = () => {
                 </div>
 
                 <div className="flex">
-                  {/* Sidebar */}
                   <div className="w-56 bg-[#08080f]/90 backdrop-blur-sm p-5 space-y-1.5 border-r border-white/10">
                     <div className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-3 rounded-xl flex items-center gap-3 text-[14px] font-medium shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all">
                       <LayoutGrid className="w-4 h-4" />
@@ -159,11 +161,8 @@ const InitialPage = () => {
                     </div>
                   </div>
 
-                  {/* Main Content */}
                   <div className="flex-1 p-6 space-y-5 bg-gradient-to-br from-[#0a0a14]/60 to-[#0a0a14]/40">
-                    {/* Balance and Spending Grid */}
                     <div className="grid grid-cols-2 gap-4">
-                      {/* My Balance Card - com hover glow */}
                       <div className="relative group">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-blue-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                         <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -186,7 +185,6 @@ const InitialPage = () => {
                         </div>
                       </div>
 
-                      {/* Spending by Category Card */}
                       <div className="relative group">
                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-transparent to-purple-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                         <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -315,7 +313,6 @@ const InitialPage = () => {
                       </div>
                     </div>
 
-                    {/* Income and Expenses Cards */}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="relative group">
                         <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
@@ -364,7 +361,6 @@ const InitialPage = () => {
                       </div>
                     </div>
 
-                    {/* Cash Flow Chart */}
                     <div className="relative group">
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                       <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -432,7 +428,6 @@ const InitialPage = () => {
                       </div>
                     </div>
 
-                    {/* Savings Card */}
                     <div className="relative group">
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                       <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -464,7 +459,6 @@ const InitialPage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="relative px-12 py-16">
         <div className="max-w-7xl mx-auto text-center mb-12">
           <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
@@ -480,7 +474,6 @@ const InitialPage = () => {
         </div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Feature Card 1 - Comprehensive Financial Overview */}
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-blue-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -552,7 +545,6 @@ const InitialPage = () => {
             </div>
           </div>
 
-          {/* Feature Card 2 - Smart Saving Plan */}
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-transparent to-purple-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -645,7 +637,6 @@ const InitialPage = () => {
             </div>
           </div>
 
-          {/* Feature Card 3 - Smart Expense & Income Analytics */}
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-transparent to-cyan-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -755,7 +746,6 @@ const InitialPage = () => {
             </div>
           </div>
 
-         
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-purple-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -864,7 +854,6 @@ const InitialPage = () => {
                     <div className="text-[13px] font-semibold text-green-400 text-right">
                       +$5,500.00
                     </div>
-                    
                   </div>
                 </div>
               </div>
@@ -873,7 +862,6 @@ const InitialPage = () => {
         </div>
       </section>
 
-      {/* Benefits Section */}
       <section className="relative pt-10 pb-20 px-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -968,7 +956,6 @@ const InitialPage = () => {
         </div>
       </section>
 
-      {/* Pricing Section */}
       <section className="relative px-12 py-20">
         <div className="max-w-7xl mx-auto text-center mb-16">
           <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
@@ -982,7 +969,6 @@ const InitialPage = () => {
         </div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Free Plan */}
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-500/5 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-b from-white/10 to-white/[0.02] rounded-3xl border border-white/10 p-8 hover:border-white/20 transition-all backdrop-blur-sm">
@@ -1024,14 +1010,10 @@ const InitialPage = () => {
             </div>
           </div>
 
-          {/* Pro Plan - Popular with Premium Border */}
           <div className="relative">
-            {/* Glow Externo */}
             <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/40 via-purple-600/30 to-blue-600/40 rounded-[40px] blur-[40px] opacity-80"></div>
 
-            {/* Borda Gradiente */}
             <div className="relative rounded-3xl p-[2px] bg-gradient-to-br from-purple-500/80 via-purple-600/90 to-blue-600/80">
-              {/* Glow Médio */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/50 via-purple-600/40 to-blue-600/50 rounded-3xl blur-[20px]"></div>
 
               <div className="relative bg-[#0a0a14] rounded-3xl p-8 backdrop-blur-xl">
@@ -1087,7 +1069,6 @@ const InitialPage = () => {
             </div>
           </div>
 
-          {/* Enterprise Plan */}
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-b from-white/10 to-white/[0.02] rounded-3xl border border-white/10 p-8 hover:border-white/20 transition-all backdrop-blur-sm">
@@ -1137,7 +1118,6 @@ const InitialPage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <section className="flex justify-center items-center px-12 py-20">
         <div className="max-w-7xl mx-auto flex items-center flex-row gap-30">
           <div>
@@ -1221,7 +1201,6 @@ const InitialPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="relative px-12 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="relative overflow-hidden rounded-3xl">

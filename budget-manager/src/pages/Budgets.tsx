@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Logo from "../images/logo.png";
 import {
   Search,
@@ -18,11 +17,9 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 
 const Budgets = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("This Month");
-
   const budgets = [
     {
       id: 1,
@@ -98,7 +95,7 @@ const Budgets = () => {
 
   const overBudgetCategories = budgets.filter((b) => b.percentage > 100);
   const warningCategories = budgets.filter(
-    (b) => b.percentage >= 80 && b.percentage <= 100
+    (b) => b.percentage >= 80 && b.percentage <= 100,
   );
 
   return (
@@ -299,8 +296,7 @@ const Budgets = () => {
                     Budget Categories
                   </h2>
                   <select
-                    value={selectedPeriod}
-                    onChange={(e) => setSelectedPeriod(e.target.value)}
+                    defaultValue="This Month"
                     className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
                   >
                     <option>This Month</option>
@@ -317,17 +313,14 @@ const Budgets = () => {
                       budget.percentage >= 80 && budget.percentage <= 100;
 
                     return (
-                      <div
-                        key={budget.id}
-                        className="relative group/card"
-                      >
+                      <div key={budget.id} className="relative group/card">
                         <div
                           className={`absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover/card:opacity-60 transition-opacity ${
                             isOverBudget
                               ? "bg-red-600/30"
                               : isWarning
-                              ? "bg-yellow-600/30"
-                              : "bg-purple-600/20"
+                                ? "bg-yellow-600/30"
+                                : "bg-purple-600/20"
                           }`}
                         ></div>
                         <div
@@ -335,8 +328,8 @@ const Budgets = () => {
                             isOverBudget
                               ? "border-red-500/30"
                               : isWarning
-                              ? "border-yellow-500/30"
-                              : "border-white/10"
+                                ? "border-yellow-500/30"
+                                : "border-white/10"
                           }`}
                         >
                           <div className="flex items-center gap-4 mb-4">
@@ -366,8 +359,8 @@ const Budgets = () => {
                                       budget.trendType === "up"
                                         ? "text-red-400 bg-red-400/10"
                                         : budget.trendType === "down"
-                                        ? "text-green-400 bg-green-400/10"
-                                        : "text-gray-400 bg-gray-400/10"
+                                          ? "text-green-400 bg-green-400/10"
+                                          : "text-gray-400 bg-gray-400/10"
                                     }`}
                                   >
                                     {budget.trend} vs last month
@@ -384,9 +377,7 @@ const Budgets = () => {
                               <div className="flex items-baseline gap-2 mb-3">
                                 <span
                                   className={`text-[28px] font-bold ${
-                                    isOverBudget
-                                      ? "text-red-400"
-                                      : "text-white"
+                                    isOverBudget ? "text-red-400" : "text-white"
                                   }`}
                                 >
                                   ${budget.spent}
@@ -399,8 +390,8 @@ const Budgets = () => {
                                     isOverBudget
                                       ? "text-red-400"
                                       : isWarning
-                                      ? "text-yellow-400"
-                                      : "text-green-400"
+                                        ? "text-yellow-400"
+                                        : "text-green-400"
                                   }`}
                                 >
                                   {budget.percentage}%
@@ -414,8 +405,8 @@ const Budgets = () => {
                                     isOverBudget
                                       ? "bg-gradient-to-r from-red-600 to-red-500 shadow-red-600/50"
                                       : isWarning
-                                      ? "bg-gradient-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
-                                      : "bg-gradient-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
+                                        ? "bg-gradient-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
+                                        : "bg-gradient-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
                                   }`}
                                   style={{
                                     width: `${Math.min(budget.percentage, 100)}%`,
@@ -424,7 +415,11 @@ const Budgets = () => {
                               </div>
 
                               <div className="mt-3 text-[13px] text-gray-400">
-                                ${budget.limit - budget.spent > 0 ? budget.limit - budget.spent : 0} remaining
+                                $
+                                {budget.limit - budget.spent > 0
+                                  ? budget.limit - budget.spent
+                                  : 0}{" "}
+                                remaining
                                 {isOverBudget && (
                                   <span className="text-red-400 ml-2">
                                     • ${budget.spent - budget.limit} over budget

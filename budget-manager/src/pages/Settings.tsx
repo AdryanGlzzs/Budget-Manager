@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Logo from "../images/logo.png";
 import {
   Search,
@@ -8,27 +7,25 @@ import {
   CreditCard,
   Globe,
   Smartphone,
-  Mail,
-  Shield,
   Eye,
   EyeOff,
   Camera,
   Save,
   Check,
-  Download
+  Download,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState("profile");
-  const [showPassword, setShowPassword] = useState(false);
-  const [notifications, setNotifications] = useState({
+  const activeTab = "profile";
+  const showPassword = false;
+  const notifications = {
     transactions: true,
     budgetAlerts: true,
     savingsGoals: true,
     monthlyReports: false,
     marketing: false,
-  });
+  };
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
@@ -40,7 +37,6 @@ const Settings = () => {
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
-      {/* Background Gradient Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
@@ -49,7 +45,6 @@ const Settings = () => {
       </div>
 
       <div className="relative z-10">
-        {/* Header */}
         <header className="border-b border-white/10 bg-[#050510]/80 backdrop-blur-xl sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-8 py-5">
             <div className="flex items-center justify-between">
@@ -90,9 +85,7 @@ const Settings = () => {
         <div className="flex">
           <Sidebar currentPage="settings" />
 
-          {/* Main Content */}
           <main className="flex-1 p-8 max-w-[1400px]">
-            {/* Page Header */}
             <div className="mb-8">
               <h1 className="text-[42px] font-bold mb-3">Settings</h1>
               <p className="text-[16px] text-gray-400">
@@ -100,7 +93,6 @@ const Settings = () => {
               </p>
             </div>
 
-            {/* Settings Navigation */}
             <div className="relative group mb-8">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-2 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -110,7 +102,6 @@ const Settings = () => {
                     return (
                       <button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
                         className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] font-medium transition-all flex-1 justify-center ${
                           activeTab === tab.id
                             ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
@@ -243,7 +234,6 @@ const Settings = () => {
               </div>
             )}
 
-            {/* Security Tab */}
             {activeTab === "security" && (
               <div className="space-y-6">
                 {/* Change Password */}
@@ -264,10 +254,7 @@ const Settings = () => {
                             type={showPassword ? "text" : "password"}
                             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-12 text-[14px] focus:outline-none focus:border-purple-500/50 backdrop-blur-sm hover:bg-white/10 transition-all"
                           />
-                          <button
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                          >
+                          <button className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
                             {showPassword ? (
                               <EyeOff className="w-5 h-5" />
                             ) : (
@@ -422,15 +409,11 @@ const Settings = () => {
                               "Updates on your savings progress"}
                             {key === "monthlyReports" &&
                               "Monthly financial summary reports"}
-                            {key === "marketing" &&
-                              "News and product updates"}
+                            {key === "marketing" && "News and product updates"}
                           </div>
                         </div>
 
                         <button
-                          onClick={() =>
-                            setNotifications({ ...notifications, [key]: !value })
-                          }
                           className={`relative w-14 h-7 rounded-full transition-all ${
                             value
                               ? "bg-gradient-to-r from-purple-600 to-purple-500"
@@ -601,9 +584,21 @@ const Settings = () => {
 
                     <div className="space-y-3">
                       {[
-                        { date: "Feb 1, 2026", amount: "$15.00", status: "Paid" },
-                        { date: "Jan 1, 2026", amount: "$15.00", status: "Paid" },
-                        { date: "Dec 1, 2025", amount: "$15.00", status: "Paid" },
+                        {
+                          date: "Feb 1, 2026",
+                          amount: "$15.00",
+                          status: "Paid",
+                        },
+                        {
+                          date: "Jan 1, 2026",
+                          amount: "$15.00",
+                          status: "Paid",
+                        },
+                        {
+                          date: "Dec 1, 2025",
+                          amount: "$15.00",
+                          status: "Paid",
+                        },
                       ].map((invoice, index) => (
                         <div
                           key={index}

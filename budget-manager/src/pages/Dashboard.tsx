@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -10,11 +9,7 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import Logo from "../images/logo.png";
 import {
-  LayoutGrid,
-  Search,
-  Bell,
   TrendingUp,
   TrendingDown,
   ArrowDownRight,
@@ -27,17 +22,11 @@ import {
   DollarSign,
   Target,
   ChevronRight,
-  Receipt,
-  BarChart3,
-  Settings,
-  Plus,
-  ArrowRightLeft,
-  FileText,
 } from "lucide-react";
+import Sidebar from "../components/sidebar";
+import Header from '../components/Header'
 
 const Dashboard = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("This Month");
-
   const cashFlowData = [
     { month: "Jan", income: 4400, expense: 2200 },
     { month: "Feb", income: 5100, expense: 2800 },
@@ -103,7 +92,7 @@ const Dashboard = () => {
     },
     {
       id: 6,
-      name: "Electricity Bill", 
+      name: "Electricity Bill",
       category: "Bills",
       date: "Feb 6",
       amount: -125.0,
@@ -142,127 +131,13 @@ const Dashboard = () => {
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
       </div>
 
+      <div>
+        <Header/>
+      </div>
+
       <div className="relative z-10">
-        <header className="border-b border-white/10 bg-[#050510]/80 backdrop-blur-xl sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-8 py-5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                <img src={Logo} className="w-32" alt="Daryan Logo" />
-                <div className="h-8 w-px bg-white/10"></div>
-                <div>
-                  <div className="text-[13px] text-gray-500">Welcome back,</div>
-                  <div className="text-[17px] font-semibold">Adryan Glzzs</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                  <input
-                    type="text"
-                    placeholder="Search transactions..."
-                    className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-[14px] w-72 focus:outline-none focus:border-purple-500/50 placeholder-gray-600 backdrop-blur-sm hover:bg-white/10 transition-all"
-                  />
-                </div>
-
-                <div className="relative">
-                  <Bell className="w-5 h-5 text-gray-400 hover:text-purple-400 transition-colors cursor-pointer" />
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full shadow-lg shadow-purple-500/50"></div>
-                </div>
-
-                <div className="flex items-center gap-3 pl-4 border-l border-white/10">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center font-semibold">
-                    AG
-                  </div>
-                  <div>
-                    <div className="text-[14px] font-medium">Adryan G</div>
-                    <div className="text-[12px] text-gray-500">Pro Plan</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
         <div className="flex">
-          <aside className="w-64 min-h-screen border-r border-white/10 bg-[#08080f]/90 backdrop-blur-sm p-6 sticky top-[89px] h-[calc(100vh-89px)] flex flex-col">
-            <div className="space-y-3 mb-8">
-              <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-3.5 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
-                <Plus className="w-4 h-4" />
-                Add Transaction
-              </button>
-
-              <button className="w-full bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl text-[14px] font-medium transition-all flex items-center justify-center gap-2">
-                <ArrowRightLeft className="w-4 h-4" />
-                Transfer
-              </button>
-
-              <button className="w-full bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl text-[14px] font-medium transition-all flex items-center justify-center gap-2">
-                <FileText className="w-4 h-4" />
-                Create Budget
-              </button>
-            </div>
-
-            <nav className="space-y-2 flex-1">
-              <div className="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-3 px-3">
-                Menu
-              </div>
-
-              <a
-                href="#"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30 font-medium text-[14px]"
-              >
-                <LayoutGrid className="w-4 h-4" />
-                Dashboard
-              </a>
-
-              <a
-                href="#"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-400 hover:text-white text-[14px]"
-              >
-                <Receipt className="w-4 h-4" />
-                Transactions
-              </a>
-
-              <a
-                href="#"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-400 hover:text-white text-[14px]"
-              >
-                <Wallet className="w-4 h-4" />
-                Budgets
-              </a>
-
-              <a
-                href="#"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-400 hover:text-white text-[14px]"
-              >
-                <BarChart3 className="w-4 h-4" />
-                Analytics
-              </a>
-
-              <a
-                href="#"
-                className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-gray-400 hover:text-white text-[14px]"
-              >
-                <Settings className="w-4 h-4" />
-                Settings
-              </a>
-            </nav>
-
-            <div className="mt-auto">
-              <div className="bg-gradient-to-br from-white/10 to-white/[0.02] p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full shadow-sm shadow-green-400/50"></div>
-                  <div className="text-[12px] text-gray-400">
-                    Financial Health
-                  </div>
-                </div>
-                <div className="text-[16px] font-semibold text-green-400">
-                  Excellent
-                </div>
-              </div>
-            </div>
-          </aside>
+          <Sidebar currentPage="/dashboard" />
 
           <main className="flex-1 p-8 max-w-[1400px]">
             <section className="mb-8">
@@ -289,8 +164,7 @@ const Dashboard = () => {
                     </div>
 
                     <select
-                      value={selectedPeriod}
-                      onChange={(e) => setSelectedPeriod(e.target.value)}
+                      defaultValue="This Month"
                       className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
                     >
                       <option>This Month</option>

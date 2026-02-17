@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -29,13 +28,12 @@ import {
   Download,
   Filter,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 
 const Analytics = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("Last 6 Months");
-  const [selectedView, setSelectedView] = useState("overview");
+  const selectedPeriod = "Last 6 Months";
+  const selectedView = "overview";
 
-  // Mock data
   const monthlyData = [
     { month: "Aug", income: 4400, expense: 2200, savings: 2200 },
     { month: "Sep", income: 5100, expense: 2800, savings: 2300 },
@@ -96,7 +94,6 @@ const Analytics = () => {
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
-      {/* Background Gradient Blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
@@ -162,8 +159,7 @@ const Analytics = () => {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <select
-                  value={selectedPeriod}
-                  onChange={(e) => setSelectedPeriod(e.target.value)}
+                  defaultValue={selectedPeriod}
                   className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
                 >
                   <option>Last 6 Months</option>
@@ -176,7 +172,6 @@ const Analytics = () => {
                   {["overview", "income", "expenses"].map((view) => (
                     <button
                       key={view}
-                      onClick={() => setSelectedView(view)}
                       className={`px-4 py-2 rounded-lg text-[14px] font-medium capitalize transition-all ${
                         selectedView === view
                           ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
@@ -212,8 +207,8 @@ const Analytics = () => {
                         stat.trend === "up"
                           ? "text-green-400"
                           : stat.trend === "down"
-                          ? "text-red-400"
-                          : "text-gray-400"
+                            ? "text-red-400"
+                            : "text-gray-400"
                       }`}
                     >
                       {stat.trend === "up" ? (
