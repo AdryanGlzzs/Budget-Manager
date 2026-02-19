@@ -1,6 +1,4 @@
-import Logo from "../images/logo.png";
 import {
-  Search,
   Bell,
   User,
   Lock,
