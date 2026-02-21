@@ -19,7 +19,7 @@ const Budgets = () => {
   const budgets = [
     {
       id: 1,
-      name: "Food & Dining",
+      name: "Alimentação",
       icon: Coffee,
       color: "#6366F1",
       spent: 450,
@@ -30,7 +30,7 @@ const Budgets = () => {
     },
     {
       id: 2,
-      name: "Transportation",
+      name: "Transporte",
       icon: Car,
       color: "#06B6D4",
       spent: 180,
@@ -41,7 +41,7 @@ const Budgets = () => {
     },
     {
       id: 3,
-      name: "Shopping",
+      name: "Compras",
       icon: ShoppingBag,
       color: "#10B981",
       spent: 890,
@@ -52,7 +52,7 @@ const Budgets = () => {
     },
     {
       id: 4,
-      name: "Bills & Utilities",
+      name: "Contas e Serviços",
       icon: Zap,
       color: "#EF4444",
       spent: 320,
@@ -63,7 +63,7 @@ const Budgets = () => {
     },
     {
       id: 5,
-      name: "Entertainment",
+      name: "Entretenimento",
       icon: Smartphone,
       color: "#F59E0B",
       spent: 150,
@@ -74,7 +74,7 @@ const Budgets = () => {
     },
     {
       id: 6,
-      name: "Housing",
+      name: "Habitação",
       icon: Home,
       color: "#8B5CF6",
       spent: 1800,
@@ -103,7 +103,7 @@ const Budgets = () => {
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="relative z-10"> 
+      <div className="relative z-10">
         <div className="pb-20">
           <Header />
         </div>
@@ -116,15 +116,18 @@ const Budgets = () => {
           <main className="flex-1 p-8 max-w-[1400px]">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h1 className="text-[42px] font-bold mb-3">Budget Manager</h1>
+                <h1 className="text-[42px] font-bold mb-3">
+                  Gerenciador de Orçamento
+                </h1>
                 <p className="text-[16px] text-gray-400">
-                  Create and track budgets for different spending categories
+                  Crie e acompanhe orçamentos para diferentes categorias de
+                  gastos
                 </p>
               </div>
 
               <button className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02]">
                 <Plus className="w-5 h-5" />
-                Create Budget
+                Criar Orçamento
               </button>
             </div>
 
@@ -137,14 +140,14 @@ const Budgets = () => {
                       <Target className="w-6 h-6 text-purple-400" />
                     </div>
                     <div className="text-[14px] text-gray-400">
-                      Total Budget
+                      Orçamento Total
                     </div>
                   </div>
                   <div className="text-[36px] font-bold mb-2">
                     ${totalBudget.toLocaleString()}
                   </div>
                   <div className="text-[13px] text-gray-400">
-                    Across all categories
+                    Em todas as categorias
                   </div>
                 </div>
               </div>
@@ -157,14 +160,14 @@ const Budgets = () => {
                     <div className="w-12 h-12 bg-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
                       <TrendingUp className="w-6 h-6 text-cyan-400" />
                     </div>
-                    <div className="text-[14px] text-gray-400">Total Spent</div>
+                    <div className="text-[14px] text-gray-400">Total Gasto</div>
                   </div>
                   <div className="text-[36px] font-bold mb-2">
                     ${totalSpent.toLocaleString()}
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="text-[13px] text-cyan-400">
-                      {totalPercentage}% of budget
+                      {totalPercentage}% do orçamento
                     </div>
                   </div>
                 </div>
@@ -178,13 +181,13 @@ const Budgets = () => {
                     <div className="w-12 h-12 bg-green-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
                       <Target className="w-6 h-6 text-green-400" />
                     </div>
-                    <div className="text-[14px] text-gray-400">Remaining</div>
+                    <div className="text-[14px] text-gray-400">Restante</div>
                   </div>
                   <div className="text-[36px] font-bold mb-2">
                     ${(totalBudget - totalSpent).toLocaleString()}
                   </div>
                   <div className="text-[13px] text-green-400">
-                    {100 - totalPercentage}% available
+                    {100 - totalPercentage}% disponível
                   </div>
                 </div>
               </div>
@@ -201,12 +204,12 @@ const Budgets = () => {
                         <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                         <div className="flex-1">
                           <div className="text-[15px] font-semibold text-red-400 mb-2">
-                            Over Budget Alert
+                            Alerta de Orçamento Excedido
                           </div>
                           <div className="text-[14px] text-gray-300">
-                            You've exceeded your budget in{" "}
-                            {overBudgetCategories.length} category
-                            {overBudgetCategories.length > 1 ? "ies" : ""}:{" "}
+                            Você excedeu seu orçamento em{" "}
+                            {overBudgetCategories.length} categoria
+                            {overBudgetCategories.length > 1 ? "s" : ""}:{" "}
                             <span className="font-medium">
                               {overBudgetCategories
                                 .map((b) => b.name)
@@ -227,12 +230,12 @@ const Budgets = () => {
                         <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                         <div className="flex-1">
                           <div className="text-[15px] font-semibold text-yellow-400 mb-2">
-                            Budget Warning
+                            Aviso de Orçamento
                           </div>
                           <div className="text-[14px] text-gray-300">
-                            You're approaching your limit in{" "}
-                            {warningCategories.length} category
-                            {warningCategories.length > 1 ? "ies" : ""}:{" "}
+                            Você está se aproximando do limite em{" "}
+                            {warningCategories.length} categoria
+                            {warningCategories.length > 1 ? "s" : ""}:{" "}
                             <span className="font-medium">
                               {warningCategories.map((b) => b.name).join(", ")}
                             </span>
@@ -251,15 +254,15 @@ const Budgets = () => {
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-[20px] font-semibold">
-                    Budget Categories
+                    Categorias de Orçamento
                   </h2>
                   <select
-                    defaultValue="This Month"
+                    defaultValue="Este Mês"
                     className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
                   >
-                    <option>This Month</option>
-                    <option>Last Month</option>
-                    <option>This Year</option>
+                    <option>Este Mês</option>
+                    <option>Mês Passado</option>
+                    <option>Este Ano</option>
                   </select>
                 </div>
 
@@ -321,7 +324,7 @@ const Budgets = () => {
                                           : "text-gray-400 bg-gray-400/10"
                                     }`}
                                   >
-                                    {budget.trend} vs last month
+                                    {budget.trend} vs mês passado
                                   </div>
                                   <button className="p-2 hover:bg-white/5 rounded-lg transition-all">
                                     <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
@@ -341,7 +344,7 @@ const Budgets = () => {
                                   ${budget.spent}
                                 </span>
                                 <span className="text-[16px] text-gray-500">
-                                  of ${budget.limit}
+                                  de ${budget.limit}
                                 </span>
                                 <span
                                   className={`text-[14px] ml-auto ${
@@ -377,10 +380,11 @@ const Budgets = () => {
                                 {budget.limit - budget.spent > 0
                                   ? budget.limit - budget.spent
                                   : 0}{" "}
-                                remaining
+                                restante
                                 {isOverBudget && (
                                   <span className="text-red-400 ml-2">
-                                    • ${budget.spent - budget.limit} over budget
+                                    • ${budget.spent - budget.limit} acima do
+                                    orçamento
                                   </span>
                                 )}
                               </div>

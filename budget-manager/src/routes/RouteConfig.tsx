@@ -6,6 +6,7 @@ import Analytics from "../pages/Analytics";
 import Budgets from "../pages/Budgets";
 import SavingsGoals from "../pages/SavingsGoals";
 import Pricing from "../pages/Pricing";
+import LoginPage from "../pages/LoginPage";
 
 export const ROUTES = {
   Home: "/",
@@ -16,6 +17,7 @@ export const ROUTES = {
   Budgets: "/budgets",
   SavingsGoals: "/savings-goals",
   Pricing: "/pricing",
+  Login: "/login",
 };
 
 export const routeConfig = [
@@ -27,4 +29,5 @@ export const routeConfig = [
   { path: ROUTES.Budgets, element: <Budgets /> },
   { path: ROUTES.SavingsGoals, element: <SavingsGoals /> },
   { path: ROUTES.Pricing, element: <Pricing /> },
+  { path: ROUTES.Login, element: <LoginPage /> },
 ];

@@ -16,25 +16,25 @@ const SavingsGoals = () => {
   const goals = [
     {
       id: 1,
-      name: "Emergency Fund",
+      name: "Fundo de Emergência",
       target: 15000,
       current: 8500,
       color: "purple",
       icon: ShieldCheck,
-      deadline: "Dec 2026",
+      deadline: "Dez 2026",
     },
     {
       id: 2,
-      name: "New Car",
+      name: "Carro Novo",
       target: 45000,
       current: 12000,
       color: "cyan",
       icon: Car,
-      deadline: "Aug 2027",
+      deadline: "Ago 2027",
     },
     {
       id: 3,
-      name: "Dream Vacation",
+      name: "Viagem dos Sonhos",
       target: 8000,
       current: 3200,
       color: "pink",
@@ -43,7 +43,7 @@ const SavingsGoals = () => {
     },
     {
       id: 4,
-      name: "Home Down Payment",
+      name: "Entrada da Casa",
       target: 100000,
       current: 25000,
       color: "green",
@@ -64,7 +64,7 @@ const SavingsGoals = () => {
       </div>
 
       <div className="z-20 pr-60">
-        <Sidebar currentPage="savings-goals"/>
+        <Sidebar currentPage="savings-goals" />
       </div>
 
       <main className="flex-1 p-8 max-w-[1400px] relative z-10 overflow-y-auto h-screen mt-15">
@@ -106,7 +106,7 @@ const SavingsGoals = () => {
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Metas Ativas</p>
-                  <h3 className="text-[24px] font-bold">4 Metas</h3>
+                  <h3 className="text-[24px] font-bold">4 Ativas</h3>
                 </div>
               </div>
             </div>

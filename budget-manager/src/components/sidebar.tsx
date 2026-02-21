@@ -54,17 +54,17 @@ const Sidebar = ({ currentPage }: SidebarProps) => {
       <div className="space-y-3 mb-8">
         <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-3.5 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
           <Plus className="w-4 h-4" />
-          Add Transaction
+          Adicionar Transação
         </button>
 
         <button className="w-full bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl text-[14px] font-medium transition-all flex items-center justify-center gap-2">
           <ArrowRightLeft className="w-4 h-4" />
-          Transfer
+          Transferência
         </button>
 
         <button className="w-full bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl text-[14px] font-medium transition-all flex items-center justify-center gap-2">
           <FileText className="w-4 h-4" />
-          Create Budget
+          Criar Orçamento
         </button>
       </div>
 
@@ -93,7 +93,6 @@ const Sidebar = ({ currentPage }: SidebarProps) => {
           );
         })}
       </nav>
-
     </aside>
   );
 };

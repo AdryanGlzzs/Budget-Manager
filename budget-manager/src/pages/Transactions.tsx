@@ -1,7 +1,5 @@
-import Logo from "../images/logo.png";
 import {
   Search,
-  Bell,
   Filter,
   Download,
   ArrowUpRight,
@@ -21,123 +19,24 @@ import Sidebar from "../components/sidebar";
 import Header from "../components/Header";
 
 const Transactions = () => {
-  const selectedFilter = "All";
-  const selectedCategory = "All Categories";
+  const selectedFilter = "Tudo";
+  const selectedCategory = "Todas as Categorias";
 
   const transactions = [
     {
       id: 1,
       name: "Starbucks Coffee",
-      category: "Food & Dining",
-      date: "Today, 2:30 PM",
+      category: "Alimentação",
+      date: "Hoje, 14:30",
       amount: -12.5,
       icon: Coffee,
       color: "#6366F1",
       type: "expense",
       status: "completed",
     },
-    {
-      id: 2,
-      name: "Uber Ride",
-      category: "Transportation",
-      date: "Today, 10:15 AM",
-      amount: -18.75,
-      icon: Car,
-      color: "#06B6D4",
-      type: "expense",
-      status: "completed",
-    },
-    {
-      id: 3,
-      name: "Netflix Subscription",
-      category: "Entertainment",
-      date: "Yesterday, 8:00 PM",
-      amount: -15.99,
-      icon: CreditCard,
-      color: "#F59E0B",
-      type: "expense",
-      status: "completed",
-    },
-    {
-      id: 4,
-      name: "Freelance Payment",
-      category: "Income",
-      date: "Feb 8, 3:45 PM",
-      amount: 2500.0,
-      icon: TrendingUp,
-      color: "#10B981",
-      type: "income",
-      status: "completed",
-    },
-    {
-      id: 5,
-      name: "Amazon Purchase",
-      category: "Shopping",
-      date: "Feb 7, 6:20 PM",
-      amount: -89.99,
-      icon: ShoppingBag,
-      color: "#10B981",
-      type: "expense",
-      status: "completed",
-    },
-    {
-      id: 6,
-      name: "Electricity Bill",
-      category: "Bills & Utilities",
-      date: "Feb 6, 9:00 AM",
-      amount: -125.0,
-      icon: Zap,
-      color: "#EF4444",
-      type: "expense",
-      status: "completed",
-    },
-    {
-      id: 7,
-      name: "Salary Deposit",
-      category: "Income",
-      date: "Feb 5, 12:00 PM",
-      amount: 5500.0,
-      icon: TrendingUp,
-      color: "#10B981",
-      type: "income",
-      status: "completed",
-    },
-    {
-      id: 8,
-      name: "Grocery Shopping",
-      category: "Food & Dining",
-      date: "Feb 4, 4:30 PM",
-      amount: -156.43,
-      icon: ShoppingBag,
-      color: "#6366F1",
-      type: "expense",
-      status: "completed",
-    },
-    {
-      id: 9,
-      name: "iPhone Purchase",
-      category: "Shopping",
-      date: "Feb 3, 2:15 PM",
-      amount: -999.0,
-      icon: Smartphone,
-      color: "#10B981",
-      type: "expense",
-      status: "pending",
-    },
-    {
-      id: 10,
-      name: "Rent Payment",
-      category: "Bills & Utilities",
-      date: "Feb 1, 10:00 AM",
-      amount: -1800.0,
-      icon: Home,
-      color: "#EF4444",
-      type: "expense",
-      status: "completed",
-    },
   ];
 
-  const filterOptions = ["All", "Income", "Expenses", "Pending"];
+  const filterOptions = ["Tudo", "Receita", "Despesas", "Pendente"];
 
   const filteredTransactions = transactions;
 
@@ -169,9 +68,9 @@ const Transactions = () => {
 
           <main className="flex-1 p-8 max-w-[1400px]">
             <div className="mb-8">
-              <h1 className="text-[42px] font-bold mb-3">Transactions</h1>
+              <h1 className="text-[42px] font-bold mb-3">Transações</h1>
               <p className="text-[16px] text-gray-400">
-                Track and manage all your financial transactions
+                Acompanhe e gerencie todas as suas transações financeiras
               </p>
             </div>
 
@@ -184,13 +83,13 @@ const Transactions = () => {
                       <TrendingUp className="w-6 h-6 text-purple-400" />
                     </div>
                     <div className="text-[14px] text-gray-400">
-                      Total Income
+                      Receita Total
                     </div>
                   </div>
                   <div className="text-[32px] font-bold mb-1">
                     ${totalIncome.toFixed(2)}
                   </div>
-                  <div className="text-[13px] text-green-400">This month</div>
+                  <div className="text-[13px] text-green-400">Este mês</div>
                 </div>
               </div>
 
@@ -202,13 +101,13 @@ const Transactions = () => {
                       <TrendingDown className="w-6 h-6 text-cyan-400" />
                     </div>
                     <div className="text-[14px] text-gray-400">
-                      Total Expenses
+                      Despesas Totais
                     </div>
                   </div>
                   <div className="text-[32px] font-bold mb-1">
                     ${totalExpenses.toFixed(2)}
                   </div>
-                  <div className="text-[13px] text-red-400">This month</div>
+                  <div className="text-[13px] text-red-400">Este mês</div>
                 </div>
               </div>
 
@@ -219,12 +118,12 @@ const Transactions = () => {
                     <div className="w-12 h-12 bg-green-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
                       <ArrowUpRight className="w-6 h-6 text-green-400" />
                     </div>
-                    <div className="text-[14px] text-gray-400">Net Income</div>
+                    <div className="text-[14px] text-gray-400">Saldo</div>
                   </div>
                   <div className="text-[32px] font-bold mb-1">
                     ${(totalIncome - totalExpenses).toFixed(2)}
                   </div>
-                  <div className="text-[13px] text-green-400">This month</div>
+                  <div className="text-[13px] text-green-400">Este mês</div>
                 </div>
               </div>
             </div>
@@ -261,13 +160,13 @@ const Transactions = () => {
                   <div className="flex items-center gap-3">
                     <button className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[14px] hover:bg-white/10 transition-all">
                       <Calendar className="w-4 h-4" />
-                      This Month
+                      Este Mês
                       <ChevronDown className="w-4 h-4" />
                     </button>
 
                     <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all">
                       <Download className="w-4 h-4" />
-                      Export
+                      Exportar
                     </button>
                   </div>
                 </div>
@@ -280,11 +179,11 @@ const Transactions = () => {
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] rounded-2xl border border-white/10 backdrop-blur-sm overflow-hidden">
                 {/* Table Header */}
                 <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 bg-white/5 text-[13px] text-gray-400 font-medium">
-                  <div className="col-span-4">Transaction</div>
-                  <div className="col-span-2">Category</div>
-                  <div className="col-span-3">Date & Time</div>
+                  <div className="col-span-4">Transação</div>
+                  <div className="col-span-2">Categoria</div>
+                  <div className="col-span-3">Data e Hora</div>
                   <div className="col-span-2 text-center">Status</div>
-                  <div className="col-span-1 text-right">Amount</div>
+                  <div className="col-span-1 text-right">Valor</div>
                 </div>
 
                 <div className="divide-y divide-white/5">
@@ -344,8 +243,8 @@ const Transactions = () => {
                             }`}
                           >
                             {transaction.status === "completed"
-                              ? "Completed"
-                              : "Pending"}
+                              ? "Concluído"
+                              : "Pendente"}
                           </span>
                         </div>
 
@@ -372,10 +271,10 @@ const Transactions = () => {
                       <Search className="w-10 h-10 text-gray-500" />
                     </div>
                     <div className="text-[18px] font-semibold mb-2">
-                      No transactions found
+                      Nenhuma transação encontrada
                     </div>
                     <div className="text-[14px] text-gray-500">
-                      Try adjusting your filters
+                      Tente ajustar seus filtros
                     </div>
                   </div>
                 )}

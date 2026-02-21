@@ -69,24 +69,24 @@ const InitialPage = () => {
 
             <div className="hidden md:flex items-center gap-10 text-[15px]">
               <Link to="" className="hover:text-purple-400 transition-colors">
-                Home
+                Início
               </Link>
               <Link to="" className="hover:text-purple-400 transition-colors">
-                Features
+                Funcionalidades
               </Link>
               <Link to="" className="hover:text-purple-400 transition-colors">
-                Benefits
+                Benefícios
               </Link>
               <Link to="" className="hover:text-purple-400 transition-colors">
-                Pricing
+                Preços
               </Link>
               <Link to="" className="hover:text-purple-400 transition-colors">
-                Testimonials
+                Depoimentos
               </Link>
             </div>
 
             <button className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2 rounded-full text-[15px] font-medium transition-all sm:pl-20">
-              Get Started
+              Começar
             </button>
           </div>
         </div>
@@ -95,19 +95,20 @@ const InitialPage = () => {
       <section className="relative pt-28 sm:pt-36 md:pt-40 pb-12 sm:pb-16 px-4 sm:px-8 md:px-12">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-[36px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-bold mb-4 sm:mb-5 leading-[1.1] tracking-tight">
-            Manage Finances
+            Gerencie Finanças
             <br />
-            Easily and Smartly
+            de Forma Inteligente
           </h1>
 
           <p className="text-[14px] sm:text-[16px] md:text-[17px] text-gray-400 mb-8 sm:mb-12 max-w-xl mx-auto leading-relaxed">
-            Daryan helps you control spending, track income, and manage
+            Daryan ajuda você a controlar gastos, acompanhar receitas e
+            gerenciar
             <br />
-            savings with an intuitive financial dashboard.
+            economias com um dashboard financeiro intuitivo.
           </p>
 
           <button className="bg-white text-slate-900 px-8 py-3.5 rounded-full text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105 inline-flex items-center gap-2">
-            Try it Free
+            Experimente Grátis
             <ChevronRight />
           </button>
         </div>
@@ -129,7 +130,7 @@ const InitialPage = () => {
                     </div>
                     <div>
                       <div className="font-medium text-[15px]">Daryan</div>
-                      <div className="text-[13px] text-gray-500">Dashboard</div>
+                      <div className="text-[13px] text-gray-500">Painel</div>
                     </div>
                   </div>
 
@@ -138,7 +139,7 @@ const InitialPage = () => {
                       <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                       <input
                         type="text"
-                        placeholder="Search"
+                        placeholder="Buscar"
                         className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-[13px] w-40 lg:w-56 focus:outline-none focus:border-purple-500/50 placeholder-gray-600 backdrop-blur-sm hover:bg-white/10 transition-all"
                       />
                     </div>
@@ -156,7 +157,7 @@ const InitialPage = () => {
                   <div className="hidden md:block md:w-40 lg:w-56 bg-[#08080f]/90 backdrop-blur-sm p-3 lg:p-5 space-y-1.5 border-r border-white/10">
                     <div className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-3 lg:px-4 py-2.5 lg:py-3 rounded-xl flex items-center gap-2 lg:gap-3 text-[13px] lg:text-[14px] font-medium shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all">
                       <LayoutGrid className="w-4 h-4" />
-                      Dashboard
+                      Painel
                     </div>
                   </div>
 
@@ -168,18 +169,18 @@ const InitialPage = () => {
                           <div className="flex justify-between items-start mb-4">
                             <div>
                               <div className="text-[13px] text-gray-500 mb-1">
-                                My Balance
+                                Meu Saldo
                               </div>
                               <div className="text-[22px] sm:text-[28px] md:text-[32px] font-bold leading-none bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent">
                                 $66,000.00
                               </div>
                             </div>
                             <button className="bg-purple-600 hover:bg-purple-700 px-2 sm:px-4 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-[13px] font-medium transition-all shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 hover:scale-105">
-                              Add Expenses
+                              Adicionar Despesas
                             </button>
                           </div>
                           <div className="text-[12px] text-gray-500">
-                            Your Balance this Month
+                            Seu Saldo este Mês
                           </div>
                         </div>
                       </div>
@@ -190,14 +191,14 @@ const InitialPage = () => {
                           <div className="flex justify-between items-start mb-3">
                             <div>
                               <div className="text-[13px] text-gray-500 mb-1">
-                                Spending by Category
+                                Gastos por Categoria
                               </div>
                               <div className="text-[22px] sm:text-[28px] md:text-[32px] font-bold leading-none">
                                 $15,000.00
                               </div>
                             </div>
                             <select className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-[12px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer">
-                              <option>This Month</option>
+                              <option>Este Mês</option>
                             </select>
                           </div>
 
@@ -248,7 +249,7 @@ const InitialPage = () => {
                               <div className="absolute inset-0 flex flex-col items-center justify-center">
                                 <div className="text-[24px] font-bold">80%</div>
                                 <div className="text-[11px] text-gray-500">
-                                  Total Spent
+                                  Total Gasto
                                 </div>
                               </div>
                             </div>
@@ -257,25 +258,25 @@ const InitialPage = () => {
                               {[
                                 {
                                   color: "#6366F1",
-                                  label: "Food",
+                                  label: "Alimentação",
                                   percent: "30%",
                                   amount: "19%",
                                 },
                                 {
                                   color: "#06B6D4",
-                                  label: "Shopping",
+                                  label: "Compras",
                                   percent: "20%",
                                   amount: "10%",
                                 },
                                 {
                                   color: "#10B981",
-                                  label: "Transport",
+                                  label: "Transporte",
                                   percent: "25%",
                                   amount: "6%",
                                 },
                                 {
                                   color: "#F59E0B",
-                                  label: "Entertainment",
+                                  label: "Entretenimento",
                                   percent: "20%",
                                   amount: "9%",
                                 },
@@ -322,7 +323,7 @@ const InitialPage = () => {
                             </div>
                             <div>
                               <div className="hidden sm:block text-[13px] text-gray-400">
-                                Income
+                                Receitas
                               </div>
                               <div className="text-[18px] sm:text-[22px] md:text-[24px] font-bold">
                                 $44,000.00
@@ -345,7 +346,7 @@ const InitialPage = () => {
                             </div>
                             <div>
                               <div className="hidden sm:block text-[13px] text-gray-400">
-                                Expenses
+                                Despesas
                               </div>
                               <div className="text-[18px] sm:text-[22px] md:text-[24px] font-bold">
                                 $22,000.00
@@ -366,22 +367,22 @@ const InitialPage = () => {
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-3 sm:mb-5">
                           <div>
                             <div className="text-[15px] font-semibold mb-1">
-                              Cash Flow
+                              Fluxo de Caixa
                             </div>
                             <div className="flex items-center gap-4 text-[12px]">
                               <div className="flex items-center gap-1.5">
                                 <div className="w-3 h-1 bg-purple-500 rounded-full shadow-sm shadow-purple-500/50"></div>
-                                <span className="text-gray-400">Income</span>
+                                <span className="text-gray-400">Receitas</span>
                               </div>
                               <div className="flex items-center gap-1.5">
                                 <div className="w-3 h-1 bg-cyan-500 rounded-full shadow-sm shadow-cyan-500/50"></div>
-                                <span className="text-gray-400">Expense</span>
+                                <span className="text-gray-400">Despesas</span>
                               </div>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                             <select className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-[12px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer">
-                              <option>This Year</option>
+                              <option>Este Ano</option>
                             </select>
                             <div className="text-[18px] sm:text-[22px] md:text-[24px] font-bold">
                               +$264,455
@@ -433,7 +434,7 @@ const InitialPage = () => {
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="text-[13px] text-gray-500 mb-1">
-                              My Savings (ETH)
+                              Minhas Economias
                             </div>
                             <div className="text-[20px] sm:text-[24px] md:text-[28px] font-bold">
                               $24,000.00
@@ -441,10 +442,10 @@ const InitialPage = () => {
                           </div>
                           <div className="text-right">
                             <div className="text-[13px] text-gray-500 mb-1">
-                              Financial Health
+                              Saúde Financeira
                             </div>
                             <div className="text-[14px] font-medium text-green-400 px-3 py-1 bg-green-400/10 rounded-md inline-block">
-                              Excellent
+                              Excelente
                             </div>
                           </div>
                         </div>
@@ -461,14 +462,15 @@ const InitialPage = () => {
       <section className="relative px-4 sm:px-8 md:px-12 py-10 sm:py-14 md:py-16">
         <div className="max-w-7xl mx-auto text-center mb-12">
           <h2 className="text-[56px] font-bold mb-5 leading-[1.1] tracking-tight">
-            Powerful Features to Elevate
+            Funcionalidades Poderosas para
             <br />
-            Your Financial
+            Suas Finanças
           </h2>
           <p className="text-[17px] text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            All the tools you need to manage your money—smart, simple,
+            Todas as ferramentas que você precisa para gerenciar seu dinheiro —
+            inteligente,
             <br />
-            and seamless.
+            simples e prático.
           </p>
         </div>
 
@@ -477,11 +479,11 @@ const InitialPage = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-blue-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-4 sm:p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <h3 className="text-[20px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-3">
-                Comprehensive Financial Overview
+                Visão Financeira Abrangente
               </h3>
               <p className="text-gray-400 text-[14px] sm:text-[15px] mb-5 sm:mb-8 leading-relaxed">
-                View your total balance, income, and expenses at a glance to
-                stay on top of your finances.
+                Veja seu saldo total, receitas e despesas de relance para manter
+                o controle de suas finanças.
               </p>
 
               <div className="space-y-6">
@@ -489,21 +491,21 @@ const InitialPage = () => {
                   <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                     <div>
                       <div className="text-[12px] sm:text-[13px] text-gray-500 mb-1 sm:mb-2">
-                        My Balance
+                        Meu Saldo
                       </div>
                       <div className="text-[26px] sm:text-[34px] md:text-[42px] font-bold leading-none">
                         $66,000.00
                       </div>
                       <div className="text-[12px] sm:text-[13px] text-gray-500 mt-1">
-                        Your Balance in Month
+                        Seu Saldo no Mês
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
                       <button className="bg-purple-600 hover:bg-purple-700 px-2 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 rounded-xl text-[11px] sm:text-[13px] md:text-[14px] font-medium transition-all shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 whitespace-nowrap">
-                        Add Transaction
+                        Adicionar Transação
                       </button>
                       <select className="bg-white/5 border border-white/10 rounded-xl px-2 sm:px-4 py-1.5 sm:py-2.5 text-[11px] sm:text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer">
-                        <option>This Month</option>
+                        <option>Este Mês</option>
                       </select>
                     </div>
                   </div>
@@ -520,7 +522,7 @@ const InitialPage = () => {
                         <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6 text-purple-400" />
                       </div>
                       <div className="text-[11px] sm:text-[13px] text-gray-500">
-                        Income
+                        Receitas
                       </div>
                     </div>
                     <div className="text-[18px] sm:text-[22px] md:text-[28px] font-bold mb-1">
@@ -538,7 +540,7 @@ const InitialPage = () => {
                         <TrendingDown className="w-4 h-4 sm:w-6 sm:h-6 text-cyan-400" />
                       </div>
                       <div className="text-[11px] sm:text-[13px] text-gray-500">
-                        Expends
+                        Despesas
                       </div>
                     </div>
                     <div className="text-[18px] sm:text-[22px] md:text-[28px] font-bold mb-1">
@@ -557,10 +559,12 @@ const InitialPage = () => {
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-transparent to-purple-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
-              <h3 className="text-[28px] font-bold mb-3">Smart Saving Plan</h3>
+              <h3 className="text-[28px] font-bold mb-3">
+                Plano de Economia Inteligente
+              </h3>
               <p className="text-gray-400 text-[15px] mb-8 leading-relaxed">
-                Create, manage, and achieve your savings goals with a plan
-                tailored to your needs.
+                Crie, gerencie e alcance seus objetivos de economia com um plano
+                feito para você.
               </p>
 
               <div className="space-y-4">
@@ -571,7 +575,7 @@ const InitialPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="text-[15px] font-medium mb-1">
-                        Financial Saving
+                        Economia Financeira
                       </div>
                       <div className="flex items-center justify-between text-[13px]">
                         <span className="text-gray-400">
@@ -598,7 +602,7 @@ const InitialPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="text-[15px] font-medium mb-1">
-                        Educational Plan
+                        Plano Educacional
                       </div>
                       <div className="flex items-center justify-between text-[13px]">
                         <span className="text-gray-400">
@@ -623,7 +627,7 @@ const InitialPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="text-[15px] font-medium mb-1">
-                        Retirement Plan
+                        Plano de Aposentadoria
                       </div>
                       <div className="flex items-center justify-between text-[13px]">
                         <span className="text-gray-400">
@@ -650,11 +654,11 @@ const InitialPage = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-transparent to-cyan-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-4 sm:p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <h3 className="text-[20px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-3">
-                Smart Expense & Income Analytics
+                Análise Inteligente de Despesas e Receitas
               </h3>
               <p className="text-gray-400 text-[14px] sm:text-[15px] mb-5 sm:mb-8 leading-relaxed">
-                Monitor, analyze, and optimize your income and expenses with
-                real-time data.
+                Monitore, analise e otimize suas receitas e despesas com dados
+                em tempo real.
               </p>
 
               <div className="bg-[#0a0a14]/80 backdrop-blur-sm p-3 sm:p-6 rounded-2xl border border-white/5 hover:border-white/10 transition-all">
@@ -663,28 +667,28 @@ const InitialPage = () => {
                     <div className="flex items-center gap-2 mb-3">
                       <Zap className="w-5 h-5 text-yellow-400" />
                       <span className="text-[13px] font-semibold text-yellow-400">
-                        Fast And Responsive
+                        Rápido e Responsivo
                       </span>
                     </div>
                     <div className="text-[15px] font-medium mb-2">
-                      Cash Flow
+                      Fluxo de Caixa
                     </div>
                     <div className="flex items-center gap-4 text-[13px]">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 bg-purple-500 rounded-sm shadow-sm shadow-purple-500/50"></div>
-                        <span className="text-gray-400">Income</span>
+                        <span className="text-gray-400">Receitas</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 bg-cyan-500 rounded-sm shadow-sm shadow-cyan-500/50"></div>
-                        <span className="text-gray-400">Expends</span>
+                        <span className="text-gray-400">Despesas</span>
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
                     <select className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[12px] focus:outline-none mb-2 backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer">
-                      <option>This Year</option>
-                      <option>This Month</option>
-                      <option>This Week</option>
+                      <option>Este Ano</option>
+                      <option>Este Mês</option>
+                      <option>Esta Semana</option>
                     </select>
                     <button className="text-gray-500 hover:text-gray-400 transition-colors">
                       <span className="text-[20px]">•••</span>
@@ -761,23 +765,23 @@ const InitialPage = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-purple-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-4 sm:p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <h3 className="text-[20px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-3">
-                Automated Budgeting & Forecasting
+                Orçamento Automatizado e Previsão
               </h3>
               <p className="text-gray-400 text-[14px] sm:text-[15px] mb-5 sm:mb-8 leading-relaxed">
-                Set budgets automatically and get financial predictions for
-                better money management.
+                Defina orçamentos automaticamente e obtenha previsões
+                financeiras para um melhor gerenciamento.
               </p>
 
               <div className="bg-[#0a0a14]/80 backdrop-blur-sm p-3 sm:p-6 rounded-2xl border border-white/5 hover:border-white/10 transition-all">
                 <div className="flex items-center justify-between mb-3 sm:mb-6">
                   <h4 className="text-[17px] font-semibold">
-                    Recent Transaction
+                    Transações Recentes
                   </h4>
                   <div className="relative">
                     <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="Search"
+                      placeholder="Buscar"
                       className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-[13px] w-24 sm:w-40 focus:outline-none focus:border-purple-500/50 placeholder-gray-600 backdrop-blur-sm hover:bg-white/10 transition-all"
                     />
                   </div>
@@ -785,10 +789,10 @@ const InitialPage = () => {
 
                 <div className="space-y-1">
                   <div className="grid grid-cols-4 gap-1 sm:gap-4 text-[10px] sm:text-[12px] text-gray-500 pb-3 border-b border-white/5">
-                    <div>Merchant Name</div>
-                    <div>Category</div>
-                    <div>Date</div>
-                    <div className="text-right">Amount</div>
+                    <div>Nome do Estabelecimento</div>
+                    <div>Categoria</div>
+                    <div>Data</div>
+                    <div className="text-right">Valor</div>
                   </div>
 
                   <div className="grid grid-cols-4 gap-1 sm:gap-4 py-2 sm:py-3 border-b border-white/5 items-center hover:bg-white/5 transition-colors rounded-lg px-1 sm:px-2">
@@ -797,7 +801,7 @@ const InitialPage = () => {
                         <CreditCard className="w-4 h-4 text-purple-400" />
                       </div>
                       <span className="text-[11px] sm:text-[13px] font-medium">
-                        iCloud Monthly
+                        Assinatura iCloud
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -818,13 +822,13 @@ const InitialPage = () => {
                         <ShoppingBag className="w-4 h-4 text-pink-400" />
                       </div>
                       <span className="text-[11px] sm:text-[13px] font-medium">
-                        Shopping
+                        Compras
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-pink-500 rounded-full shadow-sm shadow-pink-500/50"></div>
                       <span className="hidden sm:inline text-[13px] text-gray-400">
-                        Shopping
+                        Compras
                       </span>
                     </div>
                     <div className="text-[13px] text-gray-400">07 Des 2024</div>
@@ -839,13 +843,13 @@ const InitialPage = () => {
                         <Calendar className="w-4 h-4 text-cyan-400" />
                       </div>
                       <span className="text-[11px] sm:text-[13px] font-medium">
-                        Subscription
+                        Assinatura
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-cyan-500 rounded-full shadow-sm shadow-cyan-500/50"></div>
                       <span className="hidden sm:inline text-[13px] text-gray-400">
-                        Services
+                        Serviços
                       </span>
                     </div>
                     <div className="text-[13px] text-gray-400">06 Des 2024</div>
@@ -860,13 +864,13 @@ const InitialPage = () => {
                         <TrendingUp className="w-4 h-4 text-green-400" />
                       </div>
                       <span className="text-[11px] sm:text-[13px] font-medium">
-                        Salary
+                        Salário
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full shadow-sm shadow-green-500/50"></div>
                       <span className="hidden sm:inline text-[13px] text-gray-400">
-                        Income
+                        Receita
                       </span>
                     </div>
                     <div className="text-[13px] text-gray-400">01 Des 2024</div>
@@ -886,20 +890,22 @@ const InitialPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
             <div>
               <h1 className="text-[38px] sm:text-[50px] md:text-[60px] lg:text-[68px] font-bold mb-4 sm:mb-6 leading-[1.05] tracking-tight text-center lg:text-left">
-                A Smarter Way to
+                Uma Forma Mais Inteligente de
                 <br />
-                Manage Your Money
+                Gerenciar seu Dinheiro
               </h1>
 
               <p className="text-[14px] sm:text-[16px] md:text-[17px] text-gray-400 mb-6 sm:mb-10 leading-relaxed max-w-lg text-center lg:text-left mx-auto lg:mx-0">
-                Built for professionals and businesses, Daryan provides
-                seamless, secure, and intuitive financial management.
+                Desenvolvido para profissionais e empresas, Daryan oferece um
+                gerenciamento financeiro prático, seguro e intuitivo.
               </p>
 
-              <button className="bg-white text-slate-900 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-[14px] sm:text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105 inline-flex items-center gap-2 mx-auto lg:mx-0 block sm:inline-flex">
-                Try it Free
-                <ChevronRight />
-              </button>
+              <div className="flex justify-center lg:justify-start">
+                <button className="bg-white text-slate-900 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-[14px] sm:text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105 inline-flex items-center gap-2">
+                  Experimente Grátis
+                  <ChevronRight />
+                </button>
+              </div>
             </div>
 
             <div className="relative">
@@ -912,10 +918,10 @@ const InitialPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="text-[15px] font-medium mb-1">
-                        Smart Financial Insights
+                        Insights Financeiros Inteligentes
                       </div>
                       <div className="hidden sm:block text-[13px] text-gray-400">
-                        Real-time analytics and predictions
+                        Análises e previsões em tempo real
                       </div>
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-500" />
@@ -927,10 +933,10 @@ const InitialPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="text-[15px] font-medium mb-1">
-                        Personalized Financial Goals
+                        Metas Financeiras Personalizadas
                       </div>
                       <div className="hidden sm:block text-[13px] text-gray-400">
-                        Track and achieve your objectives
+                        Acompanhe e alcance seus objetivos
                       </div>
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-500" />
@@ -942,13 +948,12 @@ const InitialPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="text-[15px] font-medium mb-1">
-                        Smart Expense Splitting
+                        Divisão Inteligente de Despesas
                       </div>
                       <div className="text-[13px] text-gray-300">
-                        Easily split bills with friends, family, or colleagues,
-                        ensuring fair contributions and clear tracking of shared
-                        expenses—no more confusion, manual calculations, or
-                        missed payments.
+                        Divida contas facilmente com amigos, família ou colegas,
+                        garantindo contribuições justas e acompanhamento claro
+                        das despesas compartilhadas.
                       </div>
                     </div>
                     <ChevronRight className="w-5 h-5 text-purple-400" />
@@ -960,10 +965,10 @@ const InitialPage = () => {
                     </div>
                     <div className="flex-1">
                       <div className="text-[15px] font-medium mb-1">
-                        Automated Budgeting & Forecasting
+                        Orçamento e Previsão Automatizados
                       </div>
                       <div className="hidden sm:block text-[13px] text-gray-400">
-                        Set smart budgets automatically
+                        Defina orçamentos inteligentes automaticamente
                       </div>
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-500" />
@@ -978,12 +983,13 @@ const InitialPage = () => {
       <section className="relative px-4 sm:px-8 md:px-12 py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto text-center mb-8 sm:mb-12 md:mb-16">
           <h2 className="text-[32px] sm:text-[42px] md:text-[56px] font-bold mb-4 sm:mb-5 leading-[1.1] tracking-tight">
-            Flexible Plans for Every Need
+            Planos Flexíveis para Cada Necessidade
           </h2>
           <p className="text-[17px] text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Choose a plan that fits your financial goals – whether you're an
+            Escolha um plano que se adapte aos seus objetivos financeiros – seja
+            você
             <br />
-            individual or a business.
+            um indivíduo ou uma empresa.
           </p>
         </div>
 
@@ -992,31 +998,33 @@ const InitialPage = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-500/5 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
             <div className="relative bg-gradient-to-b from-white/10 to-white/[0.02] rounded-3xl border border-white/10 p-5 sm:p-8 hover:border-white/20 transition-all backdrop-blur-sm">
               <div className="text-center mb-8">
-                <div className="text-[15px] text-gray-400 mb-2">Free Plan</div>
+                <div className="text-[15px] text-gray-400 mb-2">
+                  Plano Grátis
+                </div>
                 <div className="text-[24px] font-semibold mb-2">
-                  For Individual
+                  Para Indivíduos
                 </div>
                 <div className="flex items-baseline justify-center gap-1 mb-3">
                   <span className="text-[48px] font-bold">$0</span>
-                  <span className="text-[15px] text-gray-400">per month</span>
+                  <span className="text-[15px] text-gray-400">por mês</span>
                 </div>
                 <p className="text-[14px] text-gray-400 mb-8">
-                  Basic tools to manage your money
+                  Ferramentas básicas para gerenciar seu dinheiro
                   <br />
-                  at no cost.
+                  sem custo.
                 </p>
                 <button className="w-full bg-purple-600 hover:bg-purple-700 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50">
-                  Get Started
+                  Começar
                 </button>
               </div>
 
               <div className="space-y-3">
                 {[
-                  "Real-time balance tracking",
-                  "Basic cash flow insights",
-                  "Expense categorization",
-                  "Community support",
-                  "Up to 2 linked bank accounts",
+                  "Rastreamento de saldo em tempo real",
+                  "Insights básicos de fluxo de caixa",
+                  "Categorização de despesas",
+                  "Suporte da comunidade",
+                  "Até 2 contas bancárias vinculadas",
                 ].map((feature, i) => (
                   <div key={i} className="flex items-center gap-3 text-[14px]">
                     <div className="w-5 h-5 rounded-full border-2 border-gray-600 flex items-center justify-center flex-shrink-0">
@@ -1038,36 +1046,38 @@ const InitialPage = () => {
               <div className="relative bg-[#0a0a14] rounded-3xl p-5 sm:p-8 backdrop-blur-xl">
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <div className="bg-purple-600 text-white px-6 py-1.5 rounded-full text-[13px] font-semibold shadow-lg shadow-purple-600/50">
-                    Popular Plan
+                    Plano Popular
                   </div>
                 </div>
 
                 <div className="text-center mb-8 mt-4">
-                  <div className="text-[15px] text-gray-400 mb-2">Pro Plan</div>
+                  <div className="text-[15px] text-gray-400 mb-2">
+                    Plano Pro
+                  </div>
                   <div className="text-[24px] font-semibold mb-2">
-                    For Freelancers
+                    Para Freelancers
                   </div>
                   <div className="flex items-baseline justify-center gap-1 mb-3">
                     <span className="text-[48px] font-bold">$15</span>
-                    <span className="text-[15px] text-gray-400">per month</span>
+                    <span className="text-[15px] text-gray-400">por mês</span>
                   </div>
                   <p className="text-[14px] text-gray-400 mb-8">
-                    Advanced insights and automation
+                    Insights avançados e automação
                     <br />
-                    for power users.
+                    para usuários experientes.
                   </p>
                   <button className="w-full bg-purple-600 hover:bg-purple-700 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-purple-600/50 hover:shadow-purple-600/70">
-                    Get Started
+                    Começar
                   </button>
                 </div>
 
                 <div className="space-y-3">
                   {[
-                    "Everything in Free Plan, plus:",
-                    "AI - powered financial insights",
-                    "Unlimited linked bank accounts",
-                    "Advanced budgeting tools",
-                    "Multi-device sync (Desktop & Mobile)",
+                    "Tudo no Plano Grátis, mais:",
+                    "Insights financeiros via IA",
+                    "Contas bancárias vinculadas ilimitadas",
+                    "Ferramentas de orçamento avançadas",
+                    "Sincronização multi-dispositivo (Desktop e Mobile)",
                   ].map((feature, i) => (
                     <div
                       key={i}
@@ -1093,32 +1103,32 @@ const InitialPage = () => {
             <div className="relative bg-gradient-to-b from-white/10 to-white/[0.02] rounded-3xl border border-white/10 p-5 sm:p-8 hover:border-white/20 transition-all backdrop-blur-sm">
               <div className="text-center mb-8">
                 <div className="text-[15px] text-gray-400 mb-2">
-                  Enterprise Plan
+                  Plano Enterprise
                 </div>
                 <div className="text-[24px] font-semibold mb-2">
-                  For Businesses
+                  Para Empresas
                 </div>
                 <div className="flex items-baseline justify-center gap-1 mb-3">
                   <span className="text-[48px] font-bold">$35</span>
-                  <span className="text-[15px] text-gray-400">per month</span>
+                  <span className="text-[15px] text-gray-400">por mês</span>
                 </div>
                 <p className="text-[14px] text-gray-400 mb-8">
-                  Tailored solutions for
+                  Soluções personalizadas para
                   <br />
-                  businesses.
+                  empresas.
                 </p>
                 <button className="w-full bg-purple-600 hover:bg-purple-700 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50">
-                  Get Started
+                  Começar
                 </button>
               </div>
 
               <div className="space-y-3">
                 {[
-                  "Everything in Pro Plan, plus:",
-                  "Team financial management",
-                  "Advanced security & role-based access",
-                  "Dedicated account manager",
-                  "Custom reporting & analytics",
+                  "Tudo no Plano Pro, mais:",
+                  "Gestão financeira de equipes",
+                  "Segurança avançada e acesso por funções",
+                  "Gerente de conta dedicado",
+                  "Relatórios e análises personalizados",
                 ].map((feature, i) => (
                   <div key={i} className="flex items-center gap-3 text-[14px]">
                     <div className="w-5 h-5 rounded-full border-2 border-gray-600 flex items-center justify-center flex-shrink-0">
@@ -1141,12 +1151,12 @@ const InitialPage = () => {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-center gap-10 lg:gap-20 xl:gap-30 w-full">
           <div>
             <h2 className="text-[32px] sm:text-[42px] md:text-[56px] font-bold leading-tight">
-              Real Stories, Real Results
+              Histórias Reais, Resultados Reais
             </h2>
             <p className="text-[17px] text-gray-400 mt-5 leading-relaxed">
-              See how Drayan is transforming the
+              Veja como o Daryan está transformando a
               <br />
-              way people manage their finances.
+              forma como as pessoas gerenciam suas finanças.
             </p>
           </div>
 
@@ -1157,16 +1167,16 @@ const InitialPage = () => {
                   "
                 </div>
                 <p className="text-[15px] text-gray-300 leading-relaxed mb-8">
-                  As a business owner, managing finances was overwhelming.
-                  Daryan's reporting and analytics helped me optimize my
-                  spending and grow my profits.
+                  Como proprietário de uma empresa, gerenciar finanças era
+                  exaustivo. Os relatórios e análises do Daryan me ajudaram a
+                  otimizar meus gastos e aumentar meus lucros.
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg shadow-purple-500/30"></div>
                   <div>
                     <div className="text-[15px] font-semibold">David Lee</div>
                     <div className="text-[13px] text-gray-500">
-                      Startup Founder
+                      Fundador de Startup
                     </div>
                   </div>
                 </div>
@@ -1177,9 +1187,9 @@ const InitialPage = () => {
                   "
                 </div>
                 <p className="text-[15px] text-gray-300 leading-relaxed mb-8">
-                  I love how Moneta automatically categorizes my expenses. The
-                  interface is user-friendly, and it gives me complete control
-                  over my finances.
+                  Adoro como o Daryan categoriza automaticamente minhas
+                  despesas. A interface é amigável e me dá controle total sobre
+                  minhas finanças.
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full shadow-lg shadow-blue-500/30"></div>
@@ -1188,7 +1198,7 @@ const InitialPage = () => {
                       Sophia Martinez
                     </div>
                     <div className="text-[13px] text-gray-500">
-                      Marketing Consultant
+                      Consultora de Marketing
                     </div>
                   </div>
                 </div>
@@ -1199,9 +1209,10 @@ const InitialPage = () => {
                   "
                 </div>
                 <p className="text-[15px] text-gray-300 leading-relaxed mb-8">
-                  I've tried multiple apps before, but Moneta is by far the
-                  best. The savings plan and budget tracking features keep me on
-                  top of my goals.
+                  Já experimentei vários aplicativos antes, mas o Daryan é de
+                  longe o melhor. O plano de economia e os recursos de
+                  acompanhamento de orçamento me mantêm no controle dos meus
+                  objetivos.
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full shadow-lg shadow-amber-500/30"></div>
@@ -1210,7 +1221,7 @@ const InitialPage = () => {
                       Michael Johnson
                     </div>
                     <div className="text-[13px] text-gray-500">
-                      Startup Founder
+                      Fundador de Startup
                     </div>
                   </div>
                 </div>
@@ -1229,17 +1240,17 @@ const InitialPage = () => {
 
             <div className="relative z-10 text-center py-10 sm:py-16 md:py-20 px-4 sm:px-8 md:px-12">
               <h2 className="text-[28px] sm:text-[38px] md:text-[52px] font-bold mb-4 sm:mb-6 leading-[1.1] tracking-tight">
-                Take Charge of Your
+                Assuma o Controle de Suas
                 <br />
-                Finances Today!
+                Finanças Hoje!
               </h2>
               <p className="text-[13px] sm:text-[15px] md:text-[16px] text-gray-300 mb-6 sm:mb-10 max-w-2xl mx-auto">
-                Join thousands of users who trust Drayan for smarter money
+                Junte-se a milhares de usuários que confiam no Daryan para um
                 <br />
-                management.
+                gerenciamento financeiro mais inteligente.
               </p>
               <button className="bg-white text-slate-900 px-6 sm:px-10 py-3 sm:py-4 rounded-full text-[14px] sm:text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/30 transition-all transform hover:scale-105">
-                Get Started
+                Começar
               </button>
             </div>
           </div>

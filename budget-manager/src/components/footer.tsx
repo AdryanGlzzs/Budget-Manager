@@ -1,102 +1,133 @@
-import { Twitter, Linkedin, MessageCircle, Instagram, Youtube } from 'lucide-react';
-import Logo from '../images/logo.png'
+import {
+  Twitter,
+  Linkedin,
+  MessageCircle,
+  Instagram,
+  Youtube,
+} from "lucide-react";
+import Logo from "../images/logo.png";
 
 const Footer = () => {
   return (
     <footer className="relative bg-black text-white px-12 py-20">
       <div className="max-w-7xl mx-auto">
-    
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-20">
-        
           <div className="lg:col-span-5">
-          
             <div className="flex items-center gap-3 mb-8">
-                <img src={Logo} alt="" className='w-50'/>
+              <img src={Logo} alt="" className="w-50" />
             </div>
 
             <p className="text-[18px] leading-relaxed max-w-md text-white">
-              Start managing your money smarter and achieve your financial goals with ease.
+              Comece a gerenciar seu dinheiro de forma mais inteligente e
+              alcance seus objetivos financeiros com facilidade.
             </p>
           </div>
 
           <div className="lg:col-span-3">
-            <h3 className="text-[18px] font-semibold mb-6">Quick Links</h3>
+            <h3 className="text-[18px] font-semibold mb-6">Links Rápidos</h3>
             <nav className="space-y-4">
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Home
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Início
               </a>
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Features
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Funcionalidades
               </a>
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Benefits
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Benefícios
               </a>
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Pricing
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Preços
               </a>
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Testimonials
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Depoimentos
               </a>
             </nav>
           </div>
 
           <div className="lg:col-span-4">
-            <h3 className="text-[18px] font-semibold mb-6">Support & Resources</h3>
+            <h3 className="text-[18px] font-semibold mb-6">
+              Suporte e Recursos
+            </h3>
             <nav className="space-y-4">
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Help Center
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Central de Ajuda
               </a>
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
                 FAQs
               </a>
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Privacy Policy
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Política de Privacidade
               </a>
-              <a href="#" className="block text-[16px] text-gray-400 hover:text-white transition-colors">
-                Terms & Conditions
+              <a
+                href="#"
+                className="block text-[16px] text-gray-400 hover:text-white transition-colors"
+              >
+                Termos e Condições
               </a>
             </nav>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-white/10">
-       
           <p className="text-[14px] text-gray-400">
-            Copyright © 2025 eluxspace. All rights reserved.
+            Copyright © 2025 eluxspace. Todos os direitos reservados.
           </p>
 
-      
           <div className="flex items-center gap-2">
-            <a 
-              href="#" 
+            <a
+              href="#"
               className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
               aria-label="Twitter"
             >
               <Twitter className="w-5 h-5" />
             </a>
-            <a 
-              href="#" 
+            <a
+              href="#"
               className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
               aria-label="LinkedIn"
             >
               <Linkedin className="w-5 h-5" />
             </a>
-            <a 
-              href="#" 
+            <a
+              href="#"
               className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
               aria-label="Discord"
             >
               <MessageCircle className="w-5 h-5" />
             </a>
-            <a 
-              href="#" 
+            <a
+              href="#"
               className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
               aria-label="Instagram"
             >
               <Instagram className="w-5 h-5" />
             </a>
-            <a 
-              href="#" 
+            <a
+              href="#"
               className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
               aria-label="YouTube"
             >
@@ -105,7 +136,7 @@ const Footer = () => {
           </div>
 
           <p className="text-[14px] text-gray-400">
-            Smarter Money, Better Future.
+            Dinheiro Inteligente, Futuro Melhor.
           </p>
         </div>
       </div>

@@ -23,62 +23,62 @@ import Sidebar from "../components/sidebar";
 import Header from "../components/Header";
 
 const Analytics = () => {
-  const selectedPeriod = "Last 6 Months";
-  const selectedView = "overview";
+  const selectedPeriod = "Últimos 6 Meses";
+  const selectedView = "visão geral";
 
   const monthlyData = [
-    { month: "Aug", income: 4400, expense: 2200, savings: 2200 },
-    { month: "Sep", income: 5100, expense: 2800, savings: 2300 },
-    { month: "Oct", income: 4800, expense: 2400, savings: 2400 },
+    { month: "Ago", income: 4400, expense: 2200, savings: 2200 },
+    { month: "Set", income: 5100, expense: 2800, savings: 2300 },
+    { month: "Out", income: 4800, expense: 2400, savings: 2400 },
     { month: "Nov", income: 5500, expense: 3100, savings: 2400 },
-    { month: "Dec", income: 5200, expense: 2900, savings: 2300 },
+    { month: "Dez", income: 5200, expense: 2900, savings: 2300 },
     { month: "Jan", income: 6000, expense: 3500, savings: 2500 },
   ];
 
   const categorySpending = [
-    { name: "Food & Dining", value: 1200, percentage: 30, color: "#6366F1" },
-    { name: "Transportation", value: 800, percentage: 20, color: "#06B6D4" },
-    { name: "Shopping", value: 1000, percentage: 25, color: "#10B981" },
-    { name: "Entertainment", value: 600, percentage: 15, color: "#F59E0B" },
-    { name: "Bills", value: 400, percentage: 10, color: "#EF4444" },
+    { name: "Alimentação", value: 1200, percentage: 30, color: "#6366F1" },
+    { name: "Transporte", value: 800, percentage: 20, color: "#06B6D4" },
+    { name: "Compras", value: 1000, percentage: 25, color: "#10B981" },
+    { name: "Entretenimento", value: 600, percentage: 15, color: "#F59E0B" },
+    { name: "Contas", value: 400, percentage: 10, color: "#EF4444" },
   ];
 
   const weeklySpending = [
-    { week: "Week 1", spending: 450 },
-    { week: "Week 2", spending: 620 },
-    { week: "Week 3", spending: 380 },
-    { week: "Week 4", spending: 550 },
+    { week: "Semana 1", spending: 450 },
+    { week: "Semana 2", spending: 620 },
+    { week: "Semana 3", spending: 380 },
+    { week: "Semana 4", spending: 550 },
   ];
 
   const incomeBreakdown = [
-    { source: "Salary", amount: 5500, color: "#10B981" },
-    { source: "Freelance", amount: 2500, color: "#6366F1" },
-    { source: "Investments", amount: 800, color: "#F59E0B" },
-    { source: "Other", amount: 200, color: "#06B6D4" },
+    { source: "Salário", amount: 5500, color: "#10B981" },
+    { source: "Freelancer", amount: 2500, color: "#6366F1" },
+    { source: "Investimentos", amount: 800, color: "#F59E0B" },
+    { source: "Outros", amount: 200, color: "#06B6D4" },
   ];
 
   const stats = [
     {
-      label: "Average Monthly Income",
+      label: "Receita Mensal Média",
       value: "$5,167",
       change: "+8.2%",
       trend: "up",
     },
     {
-      label: "Average Monthly Expense",
+      label: "Despesa Mensal Média",
       value: "$2,817",
       change: "-3.1%",
       trend: "down",
     },
     {
-      label: "Savings Rate",
+      label: "Taxa de Economia",
       value: "45.5%",
       change: "+5.3%",
       trend: "up",
     },
     {
-      label: "Largest Expense Category",
-      value: "Food",
+      label: "Maior Categoria de Gastos",
+      value: "Alimentação",
       change: "30%",
       trend: "neutral",
     },
@@ -105,11 +105,10 @@ const Analytics = () => {
 
           <main className="flex-1 p-8 max-w-[1400px] mt-20">
             <div className="mb-8">
-              <h1 className="text-[42px] font-bold mb-3">
-                Financial Analytics
-              </h1>
+              <h1 className="text-[42px] font-bold mb-3">Análise Financeira</h1>
               <p className="text-[16px] text-gray-400">
-                Deep insights into your spending patterns and financial health
+                Insights detalhados sobre seus padrões de gastos e saúde
+                financeira
               </p>
             </div>
 
@@ -119,14 +118,14 @@ const Analytics = () => {
                   defaultValue={selectedPeriod}
                   className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
                 >
-                  <option>Last 6 Months</option>
-                  <option>Last 12 Months</option>
-                  <option>This Year</option>
-                  <option>All Time</option>
+                  <option>Últimos 6 Meses</option>
+                  <option>Últimos 12 Meses</option>
+                  <option>Este Ano</option>
+                  <option>Todo o Tempo</option>
                 </select>
 
                 <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl">
-                  {["overview", "income", "expenses"].map((view) => (
+                  {["visão geral", "receita", "despesas"].map((view) => (
                     <button
                       key={view}
                       className={`px-4 py-2 rounded-lg text-[14px] font-medium capitalize transition-all ${
@@ -143,7 +142,7 @@ const Analytics = () => {
 
               <button className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all">
                 <Download className="w-4 h-4" />
-                Export Report
+                Exportar Relatório
               </button>
             </div>
 
@@ -189,20 +188,20 @@ const Analytics = () => {
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h2 className="text-[20px] font-semibold mb-2">
-                        Income vs Expenses Trend
+                        Tendência de Receitas vs Despesas
                       </h2>
                       <div className="flex items-center gap-4 text-[13px]">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-                          <span className="text-gray-400">Income</span>
+                          <span className="text-gray-400">Receita</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
-                          <span className="text-gray-400">Expenses</span>
+                          <span className="text-gray-400">Despesas</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 bg-purple-500 rounded-sm"></div>
-                          <span className="text-gray-400">Savings</span>
+                          <span className="text-gray-400">Economias</span>
                         </div>
                       </div>
                     </div>
@@ -299,7 +298,7 @@ const Analytics = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <h2 className="text-[20px] font-semibold mb-6">
-                    Spending by Category
+                    Gastos por Categoria
                   </h2>
 
                   <div className="flex items-center gap-6">
@@ -361,7 +360,7 @@ const Analytics = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <h2 className="text-[20px] font-semibold mb-6">
-                    Weekly Spending Pattern
+                    Padrão de Gastos Semanal
                   </h2>
 
                   <ResponsiveContainer width="100%" height={240}>
@@ -411,7 +410,7 @@ const Analytics = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <h2 className="text-[20px] font-semibold mb-6">
-                    Income Breakdown
+                    Detalhamento de Receitas
                   </h2>
 
                   <div className="grid grid-cols-4 gap-5">
@@ -450,7 +449,7 @@ const Analytics = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-orange-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <h2 className="text-[20px] font-semibold mb-6">
-                  Key Financial Insights
+                  Principais Insights Financeiros
                 </h2>
 
                 <div className="grid grid-cols-2 gap-5">
@@ -459,12 +458,12 @@ const Analytics = () => {
                       <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
                       <div>
                         <div className="text-[15px] font-medium mb-2">
-                          Strong Savings Trend
+                          Forte Tendência de Economia
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
-                          Your savings rate has increased by 5.3% over the last
-                          6 months, keeping you on track for your financial
-                          goals.
+                          Sua taxa de economia aumentou 5,3% nos últimos 6
+                          meses, mantendo você no caminho certo para seus
+                          objetivos financeiros.
                         </div>
                       </div>
                     </div>
@@ -475,11 +474,12 @@ const Analytics = () => {
                       <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2"></div>
                       <div>
                         <div className="text-[15px] font-medium mb-2">
-                          High Food Spending
+                          Gastos Elevados com Alimentação
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
-                          Food & Dining represents 30% of your total expenses.
-                          Consider setting a stricter budget for this category.
+                          Alimentação representa 30% das suas despesas totais.
+                          Considere definir um orçamento mais rigoroso para esta
+                          categoria.
                         </div>
                       </div>
                     </div>
@@ -490,11 +490,12 @@ const Analytics = () => {
                       <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
                       <div>
                         <div className="text-[15px] font-medium mb-2">
-                          Diversified Income
+                          Receita Diversificada
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
-                          You have 4 different income sources, which provides
-                          good financial stability and risk diversification.
+                          Você tem 4 fontes de receita diferentes, o que
+                          proporciona boa estabilidade financeira e
+                          diversificação de riscos.
                         </div>
                       </div>
                     </div>
@@ -505,11 +506,11 @@ const Analytics = () => {
                       <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2"></div>
                       <div>
                         <div className="text-[15px] font-medium mb-2">
-                          Expense Reduction
+                          Redução de Despesas
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
-                          Your average monthly expenses decreased by 3.1%,
-                          showing improved spending discipline.
+                          Suas despesas mensais médias diminuíram 3,1%,
+                          mostrando uma melhoria na disciplina de gastos.
                         </div>
                       </div>
                     </div>
