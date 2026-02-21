@@ -85,9 +85,11 @@ const InitialPage = () => {
               </Link>
             </div>
 
-            <button className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2 rounded-full text-[15px] font-medium transition-all sm:pl-20">
-              Começar
-            </button>
+            <Link to="/login">
+              <button className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2 rounded-full text-[15px] font-medium transition-all sm:pl-20">
+                Começar
+              </button>
+            </Link>
           </div>
         </div>
       </nav>
@@ -107,10 +109,12 @@ const InitialPage = () => {
             economias com um dashboard financeiro intuitivo.
           </p>
 
-          <button className="bg-white text-slate-900 px-8 py-3.5 rounded-full text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105 inline-flex items-center gap-2">
-            Experimente Grátis
-            <ChevronRight />
-          </button>
+          <Link to="/signup">
+            <button className="bg-white text-slate-900 px-8 py-3.5 rounded-full text-[15px] font-semibold hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105 inline-flex items-center gap-2">
+              Experimente Grátis
+              <ChevronRight />
+            </button>
+          </Link>
         </div>
       </section>
 

@@ -1,27 +1,36 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Mail, Lock, ChevronRight, Eye, EyeOff} from "lucide-react";
+import { Mail, Lock, ChevronRight, Eye, EyeOff, User } from "lucide-react";
 import Logo from "../images/logo.png";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const handleLogin = () => {
+  const handleRegister = (e: React.FormEvent) => {
+    
+  
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     
   };
 
   return (
     <div className="min-h-screen bg-[#050510] text-white flex items-center justify-center p-6 relative overflow-hidden">
-
+  
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="w-full max-w-[440px] relative z-10 animate-in fade-in zoom-in duration-500">
-     
+      <div className="w-full max-w-[480px] relative z-10 animate-in fade-in zoom-in duration-500 my-8">
+       
         <div className="flex flex-col items-center mb-10">
           <Link to="/">
             <img
@@ -31,10 +40,10 @@ const LoginPage = () => {
             />
           </Link>
           <h1 className="text-3xl font-bold tracking-tight">
-            Bem-vindo de volta
+            Criar nova conta
           </h1>
           <p className="text-gray-400 mt-2">
-            Acesse sua conta para gerenciar suas finanças
+            Comece sua jornada financeira com Daryan
           </p>
         </div>
 
@@ -42,7 +51,7 @@ const LoginPage = () => {
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-blue-600/50 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
 
           <div className="relative bg-[#0a0a14]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
-            
+           
             <div className="grid grid-cols-2 gap-4 mb-8">
               <button className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -84,12 +93,30 @@ const LoginPage = () => {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-[#0a0a14] px-2 text-gray-500">
-                  Ou continue com email
+                  Ou preencha com seus dados
                 </span>
               </div>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-5">
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400 ml-1">
+                  Nome Completo
+                </label>
+                <div className="relative group/input">
+                  <User className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="João Silva"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                    required
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400 ml-1">
                   Email
@@ -98,8 +125,9 @@ const LoginPage = () => {
                   <Mail className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
                   <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder="exemplo@email.com"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
                     required
@@ -107,60 +135,79 @@ const LoginPage = () => {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between items-center ml-1">
-                  <label className="text-sm font-medium text-gray-400">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-400 ml-1">
                     Senha
                   </label>
-                  <Link
-                    to="/forgot-password"
-                    size-1294
-                    class="text-xs text-purple-400 hover:text-purple-300 transition-colors"
-                  >
-                    Esqueceu a senha?
-                  </Link>
+                  <div className="relative group/input">
+                    <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="••••••••"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="relative group/input">
-                  <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-12 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
-                    ) : (
-                      <Eye className="w-5 h-5" />
-                    )}
-                  </button>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-400 ml-1">
+                    Confirmar Senha
+                  </label>
+                  <div className="relative group/input">
+                    <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="••••••••"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                      required
+                    />
+                  </div>
                 </div>
+              </div>
+
+              <div className="flex items-center gap-2 ml-1">
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1"
+                >
+                  {showPassword ? (
+                    <>
+                      <EyeOff className="w-4 h-4" /> Ocultar senhas
+                    </>
+                  ) : (
+                    <>
+                      <Eye className="w-4 h-4" /> Mostrar senhas
+                    </>
+                  )}
+                </button>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-[15px] shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-2"
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-[15px] shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-4"
               >
-                Entrar na Conta
+                Criar Conta Grátis
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
 
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-400">
-                Não tem uma conta?{" "}
+                Já tem uma conta?{" "}
                 <Link
-                  to="/signup"
+                  to="/login"
                   className="text-purple-400 font-semibold hover:text-purple-300 transition-colors"
                 >
-                  Cadastre-se grátis
+                  Faça login
                 </Link>
               </p>
             </div>
@@ -169,7 +216,7 @@ const LoginPage = () => {
 
         {/* Footer info */}
         <p className="text-center text-gray-600 text-[12px] mt-10">
-          Ao entrar, você concorda com nossos <br />
+          Ao se cadastrar, você concorda com nossos <br />
           <Link to="/terms" className="underline hover:text-gray-400">
             Termos de Serviço
           </Link>{" "}
@@ -181,11 +228,10 @@ const LoginPage = () => {
         </p>
       </div>
 
-      {/* Visual Decoration */}
       <div className="absolute top-1/2 -translate-y-1/2 -right-24 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute top-1/2 -translate-y-1/2 -left-24 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
