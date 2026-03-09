@@ -15,9 +15,7 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   Wallet,
-  ShoppingBag,
   Calendar,
-  CreditCard,
   Zap,
   DollarSign,
   Target,
@@ -25,71 +23,16 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { use, useState } from "react";
 
 const Dashboard = () => {
-  const cashFlowData = [
-    { month: "Jan", income: 4400, expense: 2200 },
-    { month: "Fev", income: 5100, expense: 2800 },
-    { month: "Mar", income: 4800, expense: 2400 },
-    { month: "Abr", income: 5500, expense: 3100 },
-    { month: "Mai", income: 5200, expense: 2900 },
-    { month: "Jun", income: 6000, expense: 3500 },
-  ];
+  const [open, setOpen] = useState(false);
 
-  const categoryData = [
-    { name: "Alimentação", value: 30, color: "#6366F1" },
-    { name: "Transporte", value: 20, color: "#06B6D4" },
-    { name: "Compras", value: 25, color: "#10B981" },
-    { name: "Entretenimento", value: 15, color: "#F59E0B" },
-    { name: "Contas", value: 10, color: "#EF4444" },
-  ];
+  const cashFlowData = [{ month: "Jan", income: 4400, expense: 2200 }];
+
+  const categoryData = [{ name: "Alimentação", value: 30, color: "#6366F1" }];
 
   const recentTransactions = [
-    {
-      id: 1,
-      name: "Café Starbucks",
-      category: "Alimentação",
-      date: "Hoje, 14:30",
-      amount: -12.5,
-      icon: ShoppingBag,
-      color: "#6366F1",
-    },
-    {
-      id: 2,
-      name: "Corrida Uber",
-      category: "Transporte",
-      date: "Hoje, 10:15",
-      amount: -18.75,
-      icon: Calendar,
-      color: "#06B6D4",
-    },
-    {
-      id: 3,
-      name: "Assinatura Netflix",
-      category: "Entretenimento",
-      date: "Ontem",
-      amount: -15.99,
-      icon: CreditCard,
-      color: "#F59E0B",
-    },
-    {
-      id: 4,
-      name: "Pagamento Freelancer",
-      category: "Receita",
-      date: "8 Fev",
-      amount: 2500.0,
-      icon: TrendingUp,
-      color: "#10B981",
-    },
-    {
-      id: 5,
-      name: "Compra Amazon",
-      category: "Compras",
-      date: "7 Fev",
-      amount: -89.99,
-      icon: ShoppingBag,
-      color: "#10B981",
-    },
     {
       id: 6,
       name: "Conta de Luz",
@@ -103,8 +46,6 @@ const Dashboard = () => {
 
   const upcomingBills = [
     { name: "Netflix", date: "15 Fev", amount: 15.99, status: "warning" },
-    { name: "Spotify", date: "18 Fev", amount: 9.99, status: "normal" },
-    { name: "Internet", date: "20 Fev", amount: 79.99, status: "normal" },
   ];
 
   const insights = [
@@ -112,20 +53,12 @@ const Dashboard = () => {
       text: "Você gastou 20% a menos em alimentação este mês! Continue assim! 🎉",
       type: "positive",
     },
-    {
-      text: "Considere reservar mais $200 para economias este mês",
-      type: "warning",
-    },
-    {
-      text: "Suas contas de serviços aumentaram 15% em comparação ao mês passado",
-      type: "alert",
-    },
   ];
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className="absolute left-[-200px] top-[  -200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
@@ -135,10 +68,10 @@ const Dashboard = () => {
         <Header />
       </div>
 
-      <div className="relative z-10">
+      <div className="hidden sm:relative z-10 ">
         <div className="flex">
           <div className="pr-60">
-            <Sidebar currentPage="/dashboard" />
+            <Sidebar open={open} setOpen={setOpen} />
           </div>
 
           <main className="flex-1 p-8 max-w-[1400px]">

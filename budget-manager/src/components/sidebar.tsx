@@ -10,14 +10,20 @@ import {
   Target,
   CreditCard,
   Home,
+  X
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 
-interface SidebarProps {
-  currentPage: string;
+
+export interface SidebarMobileMenuProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-const Sidebar = ({ currentPage }: SidebarProps) => {
+const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
+  const { pathname } = useLocation();
+
   const menuItems = [
     { id: "home", label: "Início", icon: Home, path: "/" },
     {
@@ -50,9 +56,17 @@ const Sidebar = ({ currentPage }: SidebarProps) => {
   ];
 
   return (
-    <aside className="w-64 min-h-screen border-r border-white/10 bg-[#08080f]/90 backdrop-blur-sm p-6 top-[83px] h-[calc(100vh-89px)] fixed z-10 flex-col">
+    <aside
+      className={`sm:left-0 fixed h-[calc(100vh-89px)] z-[100] top-0 sm:top-10 right-0 w-64 min-h-screen border-r border-white/10 bg-[#08080f]/90 backdrop-blur-sm p-6 flex-col transition-transform duration-300 ${
+        open ? "translate-x-0" : "translate-x-full sm:translate-x-0"
+      }`}
+    >
+      <button onClick={() => setOpen(false)} className="mb-6 text-gray-400">
+        <X/>
+      </button>
+
       <div className="space-y-3 mb-8">
-        <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-3.5 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+        <button className="w-full mt-10 bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-3.5 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
           <Plus className="w-4 h-4" />
           Adicionar Transação
         </button>
@@ -75,7 +89,7 @@ const Sidebar = ({ currentPage }: SidebarProps) => {
 
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = currentPage === item.id;
+          const isActive = pathname === item.path;
 
           return (
             <Link

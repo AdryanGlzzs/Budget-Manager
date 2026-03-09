@@ -84,12 +84,13 @@ const InitialPage = () => {
                 Depoimentos
               </Link>
             </div>
-
-            <Link to="/login">
-              <button className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2 rounded-full text-[15px] font-medium transition-all sm:pl-20">
-                Começar
-              </button>
-            </Link>
+            <div className="flex items-center justify-center">
+              <Link to="/login">
+                <button className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2 rounded-full text-[15px] font-medium transition-all  justify-center align-bottom">
+                  Começar
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
