@@ -68,9 +68,9 @@ const Dashboard = () => {
         <Header />
       </div>
 
-      <div className="hidden sm:relative z-10 ">
+      <div className="hidden lg:block sm:relative z-10">
         <div className="flex">
-          <div className="pr-60">
+          <div className="w-64 shrink-0">
             <Sidebar open={open} setOpen={setOpen} />
           </div>
 

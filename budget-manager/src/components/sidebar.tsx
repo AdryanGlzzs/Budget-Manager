@@ -10,11 +10,9 @@ import {
   Target,
   CreditCard,
   Home,
-  X
+  X,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-
 
 export interface SidebarMobileMenuProps {
   open: boolean;
@@ -25,7 +23,6 @@ const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
   const { pathname } = useLocation();
 
   const menuItems = [
-    { id: "home", label: "Início", icon: Home, path: "/" },
     {
       id: "dashboard",
       label: "Visão Geral",
@@ -57,12 +54,15 @@ const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
 
   return (
     <aside
-      className={`sm:left-0 fixed h-[calc(100vh-89px)] z-[100] top-0 sm:top-10 right-0 w-64 min-h-screen border-r border-white/10 bg-[#08080f]/90 backdrop-blur-sm p-6 flex-col transition-transform duration-300 ${
-        open ? "translate-x-0" : "translate-x-full sm:translate-x-0"
-      }`}
+      className={`fixed h-[calc(100vh-89px)] z-[100] top-0 lg:top-[89px] w-64 min-h-screen border-l lg:border-l-0 lg:border-r border-white/10 bg-[#08080f]/90 backdrop-blur-sm p-6 flex flex-col transition-transform duration-300 
+    ${open ? "translate-x-0" : "translate-x-full lg:translate-x-0"} 
+    right-0 lg:right-auto lg:left-0 lg:flex lg:mt-0`}
     >
-      <button onClick={() => setOpen(false)} className="mb-6 text-gray-400">
-        <X/>
+      <button
+        onClick={() => setOpen(false)}
+        className="mb-6 text-gray-400 sm:hidden md:flex lg:hidden"
+      >
+        <X />
       </button>
 
       <div className="space-y-3 mb-8">
