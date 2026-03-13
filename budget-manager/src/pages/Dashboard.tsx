@@ -68,25 +68,24 @@ const Dashboard = () => {
         <Header />
       </div>
 
-      <div className="hidden lg:block sm:relative z-10">
+      <div className="lg:block sm:relative z-10">
         <div className="flex">
-          <div className="w-64 shrink-0">
+          <div className="hidden lg:block w-64 shrink-0 z-100">
             <Sidebar open={open} setOpen={setOpen} />
           </div>
 
-          <main className="flex-1 p-8 max-w-[1400px]">
+          <main className="sm:flex-1 p-4 max-w-[1400px] z-50">
             <section className="mb-8 mt-20">
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/30 via-purple-600/20 to-blue-600/30 rounded-[40px] blur-[60px] opacity-70"></div>
-
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
-                  <div className="flex items-start justify-between mb-6">
+                <div className="flex flex-col bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                  <div className="flex sm:flex-row items-center justify-between gap-4 sm:gap-0 mb-6">
                     <div>
                       <div className="text-[14px] text-gray-400 mb-2 flex items-center gap-2">
                         <DollarSign className="w-4 h-4" />
                         Saldo Total
                       </div>
-                      <div className="text-[56px] font-bold leading-none bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-3">
+                      <div className="mt-5 text-[45px] font-bold leading-none bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-3">
                         $66,000.00
                       </div>
                       <div className="flex items-center gap-2 text-[14px]">
@@ -98,18 +97,20 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <select
-                      defaultValue="Este Mês"
-                      className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
-                    >
-                      <option>Este Mês</option>
-                      <option>Mês Passado</option>
-                      <option>Este Ano</option>
-                    </select>
+                    <section className="absolute top-5 right-5 sm:top-10">
+                      <select
+                        defaultValue="Este Mês"
+                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
+                      >
+                        <option>Este Mês</option>
+                        <option>Mês Passado</option>
+                        <option>Este Ano</option>
+                      </select>
+                    </section>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-5">
-                    <div className="relative group/card">
+                  <div className="sm:grid sm:grid-cols-2 gap-5 flex flex-col">
+                    <div className=" block sm:relative group/card">
                       <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover/card:opacity-80 transition-opacity"></div>
                       <div className="relative bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm hover:border-purple-500/50 transition-all">
                         <div className="flex items-center gap-4">
@@ -159,7 +160,7 @@ const Dashboard = () => {
               </div>
             </section>
 
-            <section className="grid grid-cols-2 gap-6 mb-8">
+            <section className="sm:grid sm:grid-cols-2 sm:gap-6 sm:mb-8">
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -239,7 +240,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="relative group">
+              <div className="relative group mt-5">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
@@ -301,7 +302,7 @@ const Dashboard = () => {
               </div>
             </section>
 
-            <section className="mb-8">
+            <section className="mb-8 mt-5">
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -365,7 +366,7 @@ const Dashboard = () => {
               </div>
             </section>
 
-            <section className="grid grid-cols-3 gap-6 mb-8">
+            <section className="sm:grid sm:grid-cols-3 gap-6 mb-8">
               <div className="relative group">
                 <div className="absolute inset-0 bg-purple-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -399,7 +400,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="relative group">
+              <div className="relative group mt-5">
                 <div className="absolute inset-0 bg-green-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-3 mb-4">
@@ -437,7 +438,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="relative group">
+              <div className="relative group mt-5">
                 <div className="absolute inset-0 bg-orange-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-3 mb-4">
