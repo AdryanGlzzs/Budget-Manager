@@ -12,10 +12,13 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { useState } from "react";
 
 const Budgets = () => {
+  const [open, setOpen] = useState(false);
+
   const budgets = [
     {
       id: 1,
@@ -109,84 +112,86 @@ const Budgets = () => {
         </div>
 
         <div className="flex">
-          <div className="pr-60">
-            <Sidebar currentPage="budgets" />
+          <div className="lg:pr-60">
+            <Sidebar open={open} setOpen={setOpen} />
           </div>
 
-          <main className="flex-1 p-8 max-w-[1400px]">
-            <div className="flex items-center justify-between mb-8">
+          <main className="flex-1 w-full p-4 sm:p-6 md:p-8 max-w-[1400px] overflow-x-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
               <div>
-                <h1 className="text-[42px] font-bold mb-3">
+                <h1 className="text-[28px] sm:text-[34px] md:text-[42px] font-bold mb-2 md:mb-3">
                   Gerenciador de Orçamento
                 </h1>
-                <p className="text-[16px] text-gray-400">
+                <p className="text-[14px] md:text-[16px] text-gray-400">
                   Crie e acompanhe orçamentos para diferentes categorias de
                   gastos
                 </p>
               </div>
 
-              <button className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02]">
+              <button className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0">
                 <Plus className="w-5 h-5" />
                 Criar Orçamento
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
               <div className="relative group">
                 <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
-                      <Target className="w-6 h-6 text-purple-400" />
+                <div className="relative bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-5 md:p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 mb-3 md:mb-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
+                      <Target className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
                     </div>
-                    <div className="text-[14px] text-gray-400">
+                    <div className="text-[13px] md:text-[14px] text-gray-400">
                       Orçamento Total
                     </div>
                   </div>
-                  <div className="text-[36px] font-bold mb-2">
+                  <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
                     ${totalBudget.toLocaleString()}
                   </div>
-                  <div className="text-[13px] text-gray-400">
+                  <div className="text-[12px] md:text-[13px] text-gray-400">
                     Em todas as categorias
                   </div>
                 </div>
               </div>
 
-              {/* Total Spent */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-cyan-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-cyan-600/20 to-cyan-800/10 p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                      <TrendingUp className="w-6 h-6 text-cyan-400" />
+                <div className="relative bg-gradient-to-br from-cyan-600/20 to-cyan-800/10 p-5 md:p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 mb-3 md:mb-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                      <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" />
                     </div>
-                    <div className="text-[14px] text-gray-400">Total Gasto</div>
+                    <div className="text-[13px] md:text-[14px] text-gray-400">
+                      Total Gasto
+                    </div>
                   </div>
-                  <div className="text-[36px] font-bold mb-2">
+                  <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
                     ${totalSpent.toLocaleString()}
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="text-[13px] text-cyan-400">
+                    <div className="text-[12px] md:text-[13px] text-cyan-400">
                       {totalPercentage}% do orçamento
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Remaining */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-green-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-green-600/20 to-green-800/10 p-6 rounded-2xl border border-green-500/30 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-green-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
-                      <Target className="w-6 h-6 text-green-400" />
+                <div className="relative bg-gradient-to-br from-green-600/20 to-green-800/10 p-5 md:p-6 rounded-2xl border border-green-500/30 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 mb-3 md:mb-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-green-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
+                      <Target className="w-5 h-5 md:w-6 md:h-6 text-green-400" />
                     </div>
-                    <div className="text-[14px] text-gray-400">Restante</div>
+                    <div className="text-[13px] md:text-[14px] text-gray-400">
+                      Restante
+                    </div>
                   </div>
-                  <div className="text-[36px] font-bold mb-2">
+                  <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
                     ${(totalBudget - totalSpent).toLocaleString()}
                   </div>
-                  <div className="text-[13px] text-green-400">
+                  <div className="text-[12px] md:text-[13px] text-green-400">
                     {100 - totalPercentage}% disponível
                   </div>
                 </div>
@@ -195,18 +200,18 @@ const Budgets = () => {
 
             {(overBudgetCategories.length > 0 ||
               warningCategories.length > 0) && (
-              <div className="mb-8 space-y-4">
+              <div className="mb-6 md:mb-8 space-y-3 md:space-y-4">
                 {overBudgetCategories.length > 0 && (
                   <div className="relative group">
                     <div className="absolute inset-0 bg-red-600/20 rounded-2xl blur-xl opacity-60"></div>
-                    <div className="relative bg-gradient-to-br from-red-600/20 to-red-800/10 p-5 rounded-2xl border border-red-500/30 backdrop-blur-sm">
+                    <div className="relative bg-gradient-to-br from-red-600/20 to-red-800/10 p-4 md:p-5 rounded-2xl border border-red-500/30 backdrop-blur-sm">
                       <div className="flex items-start gap-3">
                         <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                        <div className="flex-1">
-                          <div className="text-[15px] font-semibold text-red-400 mb-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[14px] md:text-[15px] font-semibold text-red-400 mb-1 md:mb-2">
                             Alerta de Orçamento Excedido
                           </div>
-                          <div className="text-[14px] text-gray-300">
+                          <div className="text-[13px] md:text-[14px] text-gray-300">
                             Você excedeu seu orçamento em{" "}
                             {overBudgetCategories.length} categoria
                             {overBudgetCategories.length > 1 ? "s" : ""}:{" "}
@@ -225,14 +230,14 @@ const Budgets = () => {
                 {warningCategories.length > 0 && (
                   <div className="relative group">
                     <div className="absolute inset-0 bg-yellow-600/20 rounded-2xl blur-xl opacity-60"></div>
-                    <div className="relative bg-gradient-to-br from-yellow-600/20 to-yellow-800/10 p-5 rounded-2xl border border-yellow-500/30 backdrop-blur-sm">
+                    <div className="relative bg-gradient-to-br from-yellow-600/20 to-yellow-800/10 p-4 md:p-5 rounded-2xl border border-yellow-500/30 backdrop-blur-sm">
                       <div className="flex items-start gap-3">
                         <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                        <div className="flex-1">
-                          <div className="text-[15px] font-semibold text-yellow-400 mb-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[14px] md:text-[15px] font-semibold text-yellow-400 mb-1 md:mb-2">
                             Aviso de Orçamento
                           </div>
-                          <div className="text-[14px] text-gray-300">
+                          <div className="text-[13px] md:text-[14px] text-gray-300">
                             Você está se aproximando do limite em{" "}
                             {warningCategories.length} categoria
                             {warningCategories.length > 1 ? "s" : ""}:{" "}
@@ -248,17 +253,16 @@ const Budgets = () => {
               </div>
             )}
 
-            {/* Budget Categories */}
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-              <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-[20px] font-semibold">
+              <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-4 md:p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 md:mb-6">
+                  <h2 className="text-[18px] md:text-[20px] font-semibold">
                     Categorias de Orçamento
                   </h2>
                   <select
                     defaultValue="Este Mês"
-                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
+                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer w-full sm:w-auto"
                   >
                     <option>Este Mês</option>
                     <option>Mês Passado</option>
@@ -266,7 +270,7 @@ const Budgets = () => {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-1 gap-5">
+                <div className="grid grid-cols-1 gap-4 md:gap-5">
                   {budgets.map((budget) => {
                     const Icon = budget.icon;
                     const isOverBudget = budget.percentage > 100;
@@ -285,7 +289,7 @@ const Budgets = () => {
                           }`}
                         ></div>
                         <div
-                          className={`relative bg-white/5 p-6 rounded-2xl border backdrop-blur-sm hover:bg-white/10 transition-all ${
+                          className={`relative bg-white/5 p-4 md:p-6 rounded-2xl border backdrop-blur-sm hover:bg-white/10 transition-all ${
                             isOverBudget
                               ? "border-red-500/30"
                               : isWarning
@@ -293,102 +297,110 @@ const Budgets = () => {
                                 : "border-white/10"
                           }`}
                         >
-                          <div className="flex items-center gap-4 mb-4">
-                            {/* Icon */}
+                          <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
                             <div
-                              className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
+                              className="w-11 h-11 md:w-14 md:h-14 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
                               style={{
                                 backgroundColor: `${budget.color}20`,
                                 boxShadow: `0 4px 12px ${budget.color}20`,
                               }}
                             >
                               <Icon
-                                className="w-7 h-7"
+                                className="w-5 h-5 md:w-7 md:h-7"
                                 style={{ color: budget.color }}
                               />
                             </div>
 
-                            {/* Name and Stats */}
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="text-[18px] font-semibold">
-                                  {budget.name}
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <div
-                                    className={`text-[13px] px-2 py-1 rounded-md ${
-                                      budget.trendType === "up"
-                                        ? "text-red-400 bg-red-400/10"
-                                        : budget.trendType === "down"
-                                          ? "text-green-400 bg-green-400/10"
-                                          : "text-gray-400 bg-gray-400/10"
-                                    }`}
-                                  >
-                                    {budget.trend} vs mês passado
-                                  </div>
-                                  <button className="p-2 hover:bg-white/5 rounded-lg transition-all">
-                                    <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
-                                  </button>
-                                  <button className="p-2 hover:bg-white/5 rounded-lg transition-all">
-                                    <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-400" />
-                                  </button>
-                                </div>
-                              </div>
-
-                              <div className="flex items-baseline gap-2 mb-3">
-                                <span
-                                  className={`text-[28px] font-bold ${
-                                    isOverBudget ? "text-red-400" : "text-white"
-                                  }`}
-                                >
-                                  ${budget.spent}
-                                </span>
-                                <span className="text-[16px] text-gray-500">
-                                  de ${budget.limit}
-                                </span>
-                                <span
-                                  className={`text-[14px] ml-auto ${
-                                    isOverBudget
-                                      ? "text-red-400"
-                                      : isWarning
-                                        ? "text-yellow-400"
-                                        : "text-green-400"
-                                  }`}
-                                >
-                                  {budget.percentage}%
-                                </span>
-                              </div>
-
-                              {/* Progress Bar */}
-                              <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden">
-                                <div
-                                  className={`h-full rounded-full shadow-lg transition-all ${
-                                    isOverBudget
-                                      ? "bg-gradient-to-r from-red-600 to-red-500 shadow-red-600/50"
-                                      : isWarning
-                                        ? "bg-gradient-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
-                                        : "bg-gradient-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
-                                  }`}
-                                  style={{
-                                    width: `${Math.min(budget.percentage, 100)}%`,
-                                  }}
-                                ></div>
-                              </div>
-
-                              <div className="mt-3 text-[13px] text-gray-400">
-                                $
-                                {budget.limit - budget.spent > 0
-                                  ? budget.limit - budget.spent
-                                  : 0}{" "}
-                                restante
-                                {isOverBudget && (
-                                  <span className="text-red-400 ml-2">
-                                    • ${budget.spent - budget.limit} acima do
-                                    orçamento
-                                  </span>
-                                )}
+                            <div className="flex-1 min-w-0">
+                              <div className="text-[16px] md:text-[18px] font-semibold truncate">
+                                {budget.name}
                               </div>
                             </div>
+
+                            <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
+                              <div
+                                className={`hidden sm:block text-[12px] md:text-[13px] px-2 py-1 rounded-md whitespace-nowrap ${
+                                  budget.trendType === "up"
+                                    ? "text-red-400 bg-red-400/10"
+                                    : budget.trendType === "down"
+                                      ? "text-green-400 bg-green-400/10"
+                                      : "text-gray-400 bg-gray-400/10"
+                                }`}
+                              >
+                                {budget.trend} vs mês passado
+                              </div>
+                              <button className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all">
+                                <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
+                              </button>
+                              <button className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all">
+                                <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-400" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div
+                            className={`sm:hidden inline-block text-[11px] px-2 py-1 rounded-md mb-3 ${
+                              budget.trendType === "up"
+                                ? "text-red-400 bg-red-400/10"
+                                : budget.trendType === "down"
+                                  ? "text-green-400 bg-green-400/10"
+                                  : "text-gray-400 bg-gray-400/10"
+                            }`}
+                          >
+                            {budget.trend} vs mês passado
+                          </div>
+
+                          <div className="flex items-baseline gap-2 mb-3">
+                            <span
+                              className={`text-[22px] md:text-[28px] font-bold ${
+                                isOverBudget ? "text-red-400" : "text-white"
+                              }`}
+                            >
+                              ${budget.spent}
+                            </span>
+                            <span className="text-[14px] md:text-[16px] text-gray-500">
+                              de ${budget.limit}
+                            </span>
+                            <span
+                              className={`text-[13px] md:text-[14px] ml-auto ${
+                                isOverBudget
+                                  ? "text-red-400"
+                                  : isWarning
+                                    ? "text-yellow-400"
+                                    : "text-green-400"
+                              }`}
+                            >
+                              {budget.percentage}%
+                            </span>
+                          </div>
+
+                          <div className="w-full bg-white/5 rounded-full h-2.5 md:h-3 overflow-hidden">
+                            <div
+                              className={`h-full rounded-full shadow-lg transition-all ${
+                                isOverBudget
+                                  ? "bg-gradient-to-r from-red-600 to-red-500 shadow-red-600/50"
+                                  : isWarning
+                                    ? "bg-gradient-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
+                                    : "bg-gradient-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
+                              }`}
+                              style={{
+                                width: `${Math.min(budget.percentage, 100)}%`,
+                              }}
+                            ></div>
+                          </div>
+
+                          <div className="mt-2.5 md:mt-3 text-[12px] md:text-[13px] text-gray-400">
+                            $
+                            {budget.limit - budget.spent > 0
+                              ? budget.limit - budget.spent
+                              : 0}{" "}
+                            restante
+                            {isOverBudget && (
+                              <span className="text-red-400 ml-2">
+                                • ${budget.spent - budget.limit} acima do
+                                orçamento
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
