@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { use, useState } from "react";
+import { useState } from "react";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -68,13 +68,13 @@ const Dashboard = () => {
         <Header />
       </div>
 
-      <div className="lg:block sm:relative z-10">
+      <div className="lg:block sm:relative z-20">
         <div className="flex">
           <div className="hidden lg:block w-64 shrink-0 z-100">
             <Sidebar open={open} setOpen={setOpen} />
           </div>
 
-          <main className="sm:flex-1 p-4 max-w-[1400px] z-50">
+          <main className="sm:flex-1 p-4 max-w-[1400px] z-10">
             <section className="mb-8 mt-20">
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/30 via-purple-600/20 to-blue-600/30 rounded-[40px] blur-[60px] opacity-70"></div>
