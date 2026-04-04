@@ -9,10 +9,14 @@ import {
   Plane,
   Car,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { useState } from "react";
 
 const SavingsGoals = () => {
+
+  const [open, setOpen] = useState(false)
+
   const goals = [
     {
       id: 1,
@@ -63,20 +67,20 @@ const SavingsGoals = () => {
         <Header />
       </div>
 
-      <div className="z-20 pr-60">
-        <Sidebar currentPage="savings-goals" />
+      <div className="z-20 lg:pr-60">
+        <Sidebar open={open} setOpen={setOpen}/>
       </div>
 
       <main className="flex-1 p-8 max-w-[1400px] relative z-10 overflow-y-auto h-screen mt-15">
         <header className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-[28px] font-bold mb-2">Metas de Economia</h1>
-            <p className="text-gray-400 text-[15px]">
+            <p className="text-gray-400 text-[15px] w-[80%]">
               Visualize e gerencie seus objetivos financeiros de longo prazo.
             </p>
           </div>
           <button className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2">
-            <Plus className="w-4 h-4" />
+            <Plus className="w-5 h-5" />
             Nova Meta
           </button>
         </header>

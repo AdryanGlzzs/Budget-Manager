@@ -19,10 +19,14 @@ import {
   ArrowDownRight,
   Download,
 } from "lucide-react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { useState } from "react";
 
 const Analytics = () => {
+
+  const [open, setOpen] = useState(false)
+
   const selectedPeriod = "Últimos 6 Meses";
   const selectedView = "visão geral";
 
@@ -99,24 +103,24 @@ const Analytics = () => {
         </div>
 
         <div className="flex">
-          <div className="pr-60">
-            <Sidebar currentPage="analytics" />
+          <div className="lg:pr-60">
+            <Sidebar open={open} setOpen={setOpen}/>
           </div>
 
-          <main className="flex-1 p-8 max-w-[1400px] mt-20">
+          <main className="flex-1 p-4 md:p-8 max-w-[1400px] mt-20">
             <div className="mb-8">
-              <h1 className="text-[42px] font-bold mb-3">Análise Financeira</h1>
-              <p className="text-[16px] text-gray-400">
+              <h1 className="text-[24px] md:text-[35px] font-bold mb-3">Análise Financeira</h1>
+              <p className="text-[14px] md:text-[16px] text-gray-400 w-full md:w-[50%]">
                 Insights detalhados sobre seus padrões de gastos e saúde
                 financeira
               </p>
             </div>
 
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
                 <select
                   defaultValue={selectedPeriod}
-                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
+                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer w-full sm:w-auto"
                 >
                   <option>Últimos 6 Meses</option>
                   <option>Últimos 12 Meses</option>
@@ -124,11 +128,11 @@ const Analytics = () => {
                   <option>Todo o Tempo</option>
                 </select>
 
-                <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl">
+                <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl w-full sm:w-auto">
                   {["visão geral", "receita", "despesas"].map((view) => (
                     <button
                       key={view}
-                      className={`px-4 py-2 rounded-lg text-[14px] font-medium capitalize transition-all ${
+                      className={`px-3 md:px-4 py-2 rounded-lg text-[13px] md:text-[14px] font-medium capitalize transition-all flex-1 sm:flex-none ${
                         selectedView === view
                           ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
                           : "text-gray-400 hover:text-white hover:bg-white/5"
@@ -140,14 +144,13 @@ const Analytics = () => {
                 </div>
               </div>
 
-              <button className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all">
+              <button className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all w-full sm:w-auto">
                 <Download className="w-4 h-4" />
                 Exportar Relatório
               </button>
             </div>
 
-            {/* Key Stats */}
-            <div className="grid grid-cols-4 gap-5 mb-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mb-8">
               {stats.map((stat, index) => (
                 <div key={index} className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-blue-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
@@ -155,7 +158,7 @@ const Analytics = () => {
                     <div className="text-[13px] text-gray-400 mb-2">
                       {stat.label}
                     </div>
-                    <div className="text-[28px] font-bold mb-2">
+                    <div className="text-[20px] md:text-[28px] font-bold mb-2">
                       {stat.value}
                     </div>
                     <div
@@ -179,10 +182,8 @@ const Analytics = () => {
               ))}
             </div>
 
-            {/* Charts Grid */}
-            <div className="grid grid-cols-2 gap-6 mb-8">
-              {/* Income vs Expenses Over Time */}
-              <div className="relative group col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="relative group md:col-span-2">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
@@ -293,7 +294,6 @@ const Analytics = () => {
                 </div>
               </div>
 
-              {/* Category Distribution */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -301,8 +301,8 @@ const Analytics = () => {
                     Gastos por Categoria
                   </h2>
 
-                  <div className="flex items-center gap-6">
-                    <div className="w-48 h-48">
+                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="w-40 h-40 sm:w-48 sm:h-48">
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                           <Pie
@@ -355,7 +355,6 @@ const Analytics = () => {
                 </div>
               </div>
 
-              {/* Weekly Spending Trend */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -406,14 +405,14 @@ const Analytics = () => {
               </div>
 
               {/* Income Sources */}
-              <div className="relative group col-span-2">
+              <div className="relative group md:col-span-2">
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <h2 className="text-[20px] font-semibold mb-6">
                     Detalhamento de Receitas
                   </h2>
 
-                  <div className="grid grid-cols-4 gap-5">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
                     {incomeBreakdown.map((source, index) => (
                       <div
                         key={index}
@@ -444,7 +443,6 @@ const Analytics = () => {
               </div>
             </div>
 
-            {/* Financial Insights */}
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-orange-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -452,7 +450,7 @@ const Analytics = () => {
                   Principais Insights Financeiros
                 </h2>
 
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                   <div className="bg-white/5 p-5 rounded-xl border border-white/10">
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
