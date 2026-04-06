@@ -22,10 +22,10 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
+import Footer from "../components/Footer";
 
 const Analytics = () => {
-
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const selectedPeriod = "Últimos 6 Meses";
   const selectedView = "visão geral";
@@ -104,12 +104,14 @@ const Analytics = () => {
 
         <div className="flex">
           <div className="lg:pr-60">
-            <Sidebar open={open} setOpen={setOpen}/>
+            <Sidebar open={open} setOpen={setOpen} />
           </div>
 
           <main className="flex-1 p-4 md:p-8 max-w-[1400px] mt-20">
             <div className="mb-8">
-              <h1 className="text-[24px] md:text-[35px] font-bold mb-3">Análise Financeira</h1>
+              <h1 className="text-[24px] md:text-[35px] font-bold mb-3">
+                Análise Financeira
+              </h1>
               <p className="text-[14px] md:text-[16px] text-gray-400 w-full md:w-[50%]">
                 Insights detalhados sobre seus padrões de gastos e saúde
                 financeira
@@ -404,7 +406,6 @@ const Analytics = () => {
                 </div>
               </div>
 
-              {/* Income Sources */}
               <div className="relative group md:col-span-2">
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
@@ -519,6 +520,8 @@ const Analytics = () => {
           </main>
         </div>
       </div>
+
+      
     </div>
   );
 };

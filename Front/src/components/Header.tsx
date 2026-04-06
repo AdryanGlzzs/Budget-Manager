@@ -1,10 +1,20 @@
 import Logo from "../images/logo.png";
 import { Search, Bell, Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [time, setTime] = useState(new Date())
+
+  useEffect(() =>{
+    const interval = setInterval(() =>{
+      setTime(new Date())
+    }, 1000);
+    return () => clearInterval(interval)
+  }, [])
+
+  const Hour = time.getHours();
 
   function handleOpenMenu() {
     setOpen(!open);
@@ -19,7 +29,7 @@ const Header = () => {
             <div className="hidden sm:flex h-8 w-px bg-white/10 md:hidden lg:flex"></div>
             <div className="hidden sm:flex md:hidden lg:flex">
               <div className="text-[13px] text-gray-500">
-                Bem-vindo de volta,
+                {Hour <= 12 ? "Bom dia" : Hour < 18 ? "Boa tarde" : "Boa noite" }
               </div>
               <div className="text-[17px] font-semibold ml-1">Adryan Glzzs</div>
             </div>
