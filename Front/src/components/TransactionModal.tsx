@@ -11,7 +11,6 @@ type TransactionModalProps = {
 
 export const TransactionModal = ({Isopen, close}:TransactionModalProps) => {
     
-  
   if(!Isopen) return null
 
    

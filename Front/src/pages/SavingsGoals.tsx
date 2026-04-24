@@ -12,9 +12,11 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
+import { SavingsGoalsModal } from "../components/SavingGoalsModal";
+
 
 const SavingsGoals = () => {
-
+  const [SavingModal, setSavingModal] = useState(false)
   const [open, setOpen] = useState(false)
 
   const goals = [
@@ -79,7 +81,7 @@ const SavingsGoals = () => {
               Visualize e gerencie seus objetivos financeiros de longo prazo.
             </p>
           </div>
-          <button className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2">
+          <button onClick={() => setSavingModal(true)} className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2">
             <Plus className="w-5 h-5" />
             Nova Meta
           </button>
@@ -132,14 +134,12 @@ const SavingsGoals = () => {
           </div>
         </div>
 
-        {/* Goals Grid */}
         <h2 className="text-[20px] font-semibold mb-6">Suas Metas</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {goals.map((goal) => {
             const percent = Math.round((goal.current / goal.target) * 100);
             const Icon = goal.icon;
 
-            // Helper for dynamic colors
             const getColorClasses = (color: string) => {
               switch (color) {
                 case "purple":
@@ -246,16 +246,10 @@ const SavingsGoals = () => {
             );
           })}
 
-          {/* Add New Goal Card */}
-          <button className="group relative h-full min-h-[280px] border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-4 hover:border-purple-500/50 hover:bg-white/[0.02] transition-all">
-            <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg group-hover:shadow-purple-500/20">
-              <Plus className="w-6 h-6 text-gray-400 group-hover:text-purple-400 transition-colors" />
-            </div>
-            <span className="text-gray-400 font-medium group-hover:text-purple-400 transition-colors">
-              Criar Nova Meta
-            </span>
-          </button>
+          
         </div>
+
+        <SavingsGoalsModal IsOpen={SavingModal} OnClose={() => setSavingModal(false)}  />
       </main>
     </div>
   );
