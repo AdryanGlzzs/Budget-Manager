@@ -15,9 +15,11 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
+import BudgetModal from "../components/BudgetModal";
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
+  const [budgetOpen, setBudgetOpen] = useState(false)
 
   const budgets = [
     {
@@ -128,8 +130,12 @@ const Budgets = () => {
                 </p>
               </div>
 
-              <button className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0">
-                <Plus className="w-5 h-5" />
+              <button className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0"
+              onClick={() => setBudgetOpen(true)}
+              >
+                <Plus className="w-5 h-5" 
+                
+                />
                 Criar Orçamento
               </button>
             </div>
@@ -412,6 +418,7 @@ const Budgets = () => {
           </main>
         </div>
       </div>
+      <BudgetModal IsOpen={budgetOpen} OnClose={() => setBudgetOpen(false)}/>
     </div>
   );
 };

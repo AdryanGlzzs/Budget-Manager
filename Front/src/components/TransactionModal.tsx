@@ -31,7 +31,7 @@ export const TransactionModal = ({Isopen, close}:TransactionModalProps) => {
               </p>
             </div>
             <button className="p-2 hover:bg-white/5 rounded-full text-gray-400 hover:text-white transition-colors"
-            
+            onClick={() => close()}
             >
               <Plus className="w-6 h-6 rotate-45" />
             </button>
@@ -111,6 +111,7 @@ export const TransactionModal = ({Isopen, close}:TransactionModalProps) => {
 
             <div className="flex gap-3 pt-4">
               <button
+              onClick={() => close()}
                 type="button"
                 className="flex-1 px-6 py-3.5 rounded-xl bg-white/5 text-white font-semibold hover:bg-white/10 transition-all border border-white/10"
               >
