@@ -22,7 +22,7 @@ const Pricing = () => {
       name: "Pro",
       price: billingCycle === "monthly" ? 12 : 10,
       description: "Tudo o que você precisa para controle total.",
-      features: [
+      features: [ 
         "Tudo no plano Free",
         "Contas ilimitadas",
         "Metas de economia ilimitadas",

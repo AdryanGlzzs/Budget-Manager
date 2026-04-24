@@ -115,7 +115,7 @@ const LoginPage = () => {
                   <Link
                     to="/forgot-password"
                     size-1294
-                    class="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+                    className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
                   >
                     Esqueceu a senha?
                   </Link>
@@ -167,7 +167,6 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* Footer info */}
         <p className="text-center text-gray-600 text-[12px] mt-10">
           Ao entrar, você concorda com nossos <br />
           <Link to="/terms" className="underline hover:text-gray-400">
@@ -181,7 +180,6 @@ const LoginPage = () => {
         </p>
       </div>
 
-      {/* Visual Decoration */}
       <div className="absolute top-1/2 -translate-y-1/2 -right-24 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute top-1/2 -translate-y-1/2 -left-24 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
     </div>

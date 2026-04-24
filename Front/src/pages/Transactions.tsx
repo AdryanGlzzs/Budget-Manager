@@ -8,14 +8,17 @@ import {
   TrendingDown,
   Coffee,
   ChevronDown,
+  Plus,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
+import { TransactionModal } from "../components/TransactionModal";
+
 
 const Transactions = () => {
   const [open, setOpen] = useState(false);
-
+  const [openModal, setOpenModal] = useState(false)
   const selectedFilter = "Tudo";
   const selectedCategory = "Todas as Categorias";
 
@@ -64,11 +67,18 @@ const Transactions = () => {
           </div>
 
           <main className="flex-1 w-full p-4 sm:p-8 max-w-[1400px] overflow-x-hidden">
-            <div className="mb-8">
-              <h1 className="text-[42px] font-bold mb-3 mt-20">Transações</h1>
-              <p className="w-full sm:w-[50%] sm:text-[16px] text-gray-400">
-                Acompanhe e gerencie todas as suas transações financeiras
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+              <div>
+                <h1 className="text-[42px] font-bold mb-3 mt-20">Transações</h1>
+                <p className="w-full sm:text-[16px] text-gray-400">
+                  Acompanhe e gerencie todas as suas transações financeiras
+                </p>
+              </div>
+              <button className="flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0 sm:mt-20 z-[60]"
+              onClick={() => setOpenModal(true)}>
+                <Plus className="w-5 h-5" />
+                Nova Transação
+              </button>
             </div>
 
             <section className="flex flex-col items-center justify-center w-full">
@@ -347,6 +357,11 @@ const Transactions = () => {
             </div>
           </main>
         </div>
+      </div>
+
+      <div>
+        <TransactionModal Isopen={openModal} close={() => setOpenModal(false)}
+        />
       </div>
     </div>
   );

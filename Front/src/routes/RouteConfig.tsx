@@ -20,6 +20,7 @@ export const ROUTES = {
   Pricing: "/pricing",
   Login: "/login",
   Register: "/signup",
+  
 };
 
 export const routeConfig = [
