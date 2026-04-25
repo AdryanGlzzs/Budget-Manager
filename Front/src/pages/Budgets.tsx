@@ -19,9 +19,8 @@ import BudgetModal from "../components/BudgetModal";
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
-  const [budgetOpen, setBudgetOpen] = useState(false)
-
-  const budgets = [
+  const [budgetOpen, setBudgetOpen] = useState(false);
+  const [budgets, setBudgets] = useState([
     {
       id: 1,
       name: "Alimentação",
@@ -88,8 +87,12 @@ const Budgets = () => {
       trend: "0%",
       trendType: "neutral",
     },
-  ];
+  ]);
 
+  const handleRemove = (id: number) =>{
+    const NewList = budgets.filter((budget) => budget.id !== id)
+    setBudgets(NewList)
+  }
   const totalBudget = budgets.reduce((sum, b) => sum + b.limit, 0);
   const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
   const totalPercentage = Math.round((totalSpent / totalBudget) * 100);
@@ -130,12 +133,11 @@ const Budgets = () => {
                 </p>
               </div>
 
-              <button className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0"
-              onClick={() => setBudgetOpen(true)}
+              <button
+                className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0"
+                onClick={() => setBudgetOpen(true)}
               >
-                <Plus className="w-5 h-5" 
-                
-                />
+                <Plus className="w-5 h-5" />
                 Criar Orçamento
               </button>
             </div>
@@ -338,7 +340,10 @@ const Budgets = () => {
                               <button className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all">
                                 <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
                               </button>
-                              <button className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all">
+                              <button
+                                onClick={() => handleRemove(budget.id)}
+                                className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all"
+                              >
                                 <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-400" />
                               </button>
                             </div>
@@ -418,7 +423,7 @@ const Budgets = () => {
           </main>
         </div>
       </div>
-      <BudgetModal IsOpen={budgetOpen} OnClose={() => setBudgetOpen(false)}/>
+      <BudgetModal IsOpen={budgetOpen} OnClose={() => setBudgetOpen(false)} />
     </div>
   );
 };
