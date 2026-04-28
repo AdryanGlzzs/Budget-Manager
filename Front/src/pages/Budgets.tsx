@@ -375,7 +375,7 @@ const Budgets = () => {
                             <span
                               className={`text-[13px] md:text-[14px] ml-auto ${
                                 isOverBudget
-                                  ? "text-red-400"
+                                  ? "text-red-400" 
                                   : isWarning
                                     ? "text-yellow-400"
                                     : "text-green-400"

@@ -2,14 +2,23 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff} from "lucide-react";
 import Logo from "../images/logo.png";
+import { useNavigate } from "react-router-dom";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase/firebase";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
 
-  const handleLogin = () => {
-    
+  const handleLoginGoogle = async () => {
+    try{
+      const result = await signInWithPopup(auth, googleProvider)
+      navigate("/dashboard")
+    }catch(error){
+      console.log (error)
+    }
   };
 
   return (
@@ -44,7 +53,9 @@ const LoginPage = () => {
           <div className="relative bg-[#0a0a14]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
             
             <div className="grid grid-cols-2 gap-4 mb-8">
-              <button className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <button
+              onClick={handleLoginGoogle}
+              className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
@@ -89,7 +100,7 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-5">
+            <form  className="space-y-5">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400 ml-1">
                   Email
