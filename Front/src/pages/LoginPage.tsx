@@ -1,36 +1,44 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Mail, Lock, ChevronRight, Eye, EyeOff} from "lucide-react";
+import { Mail, Lock, ChevronRight, Eye, EyeOff } from "lucide-react";
 import Logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../firebase/firebase";
+import { auth, googleProvider, facebookProvider } from "../firebase/firebase";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const handleLoginFacebook = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      console.log("Usuário logado:", result.user);
+    } catch (error: any) {
+      console.error("Erro detalhado:", error);
+    }
+  };
 
   const handleLoginGoogle = async () => {
-    try{
-      const result = await signInWithPopup(auth, googleProvider)
-      navigate("/dashboard")
-    }catch(error){
-      console.log (error)
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      navigate("/dashboard");
+      console.log(result.user);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#050510] text-white flex items-center justify-center p-6 relative overflow-hidden">
-
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="w-full max-w-[440px] relative z-10 animate-in fade-in zoom-in duration-500">
-     
         <div className="flex flex-col items-center mb-10">
           <Link to="/">
             <img
@@ -51,11 +59,11 @@ const LoginPage = () => {
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-blue-600/50 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
 
           <div className="relative bg-[#0a0a14]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
-            
             <div className="grid grid-cols-2 gap-4 mb-8">
               <button
-              onClick={handleLoginGoogle}
-              className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+                onClick={handleLoginGoogle}
+                className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
@@ -77,7 +85,10 @@ const LoginPage = () => {
                 <span className="text-sm font-medium">Google</span>
               </button>
 
-              <button className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <button
+                onClick={handleLoginFacebook}
+                className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
                 <svg
                   className="w-5 h-5 text-[#1877F2]"
                   fill="currentColor"
@@ -100,7 +111,7 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <form  className="space-y-5">
+            <form className="space-y-5">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400 ml-1">
                   Email
