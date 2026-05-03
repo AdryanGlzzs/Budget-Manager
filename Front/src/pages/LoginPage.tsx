@@ -136,7 +136,6 @@ const LoginPage = () => {
                   </label>
                   <Link
                     to="/forgot-password"
-                    size-1294
                     className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
                   >
                     Esqueceu a senha?

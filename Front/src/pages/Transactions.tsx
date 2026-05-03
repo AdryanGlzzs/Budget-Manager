@@ -16,6 +16,8 @@ import { useState } from "react";
 import { TransactionModal } from "../components/TransactionModal";
 
 
+
+
 const Transactions = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false)
@@ -34,18 +36,13 @@ const Transactions = () => {
       type: "expense",
       status: "completed",
     },
+    
   ];
 
   const filterOptions = ["Tudo", "Receita", "Despesas", "Pendente"];
 
   const filteredTransactions = transactions;
 
-  const totalIncome = transactions
-    .filter((t) => t.type === "income")
-    .reduce((sum, t) => sum + t.amount, 0);
-  const totalExpenses = transactions
-    .filter((t) => t.type === "expense")
-    .reduce((sum, t) => sum + Math.abs(t.amount), 0);
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
@@ -95,7 +92,7 @@ const Transactions = () => {
                       </div>
                     </div>
                     <div className="text-[32px] font-bold mb-1">
-                      ${totalIncome.toFixed(2)}
+                    
                     </div>
                     <div className="text-[13px] text-green-400">Este mês</div>
                   </div>
@@ -113,7 +110,7 @@ const Transactions = () => {
                       </div>
                     </div>
                     <div className="text-[32px] font-bold mb-1">
-                      ${totalExpenses.toFixed(2)}
+                    
                     </div>
                     <div className="text-[13px] text-red-400">Este mês</div>
                   </div>
@@ -129,7 +126,6 @@ const Transactions = () => {
                       <div className="text-[14px] text-gray-400">Saldo</div>
                     </div>
                     <div className="text-[32px] font-bold mb-1">
-                      ${(totalIncome - totalExpenses).toFixed(2)}
                     </div>
                     <div className="text-[13px] text-green-400">Este mês</div>
                   </div>
