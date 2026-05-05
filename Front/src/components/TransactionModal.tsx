@@ -5,9 +5,10 @@ import { useState } from "react";
 type TransactionModalProps = {
   Isopen: boolean;
   close: () => void;
+  onSave: (transaction: TransactionProps) => void;
 };
 
-interface TransactionProps {
+export interface TransactionProps {
   id: number;
   name: string;
   category: string;
@@ -19,18 +20,22 @@ interface TransactionProps {
   status: boolean;
 }
 
-export const TransactionModal = ({ Isopen, close }: TransactionModalProps) => {
-const [formProps, setFormProps] = useState<TransactionProps>({
-    id: 1,
-    name: "Misera",
-    category: "Caraio",
-    dateString: "Hoje",
-    amount: 10,
+export const TransactionModal = ({
+  Isopen,
+  close,
+  onSave,
+}: TransactionModalProps) => {
+  const [formProps, setFormProps] = useState<TransactionProps>({
+    id: Math.floor(Math.random() * 1000),
+    name: "",
+    category: "Alimentação",
+    dateString: new Date().toISOString().split("T")[0],
+    amount: 0,
     icon: Coffee,
-    color: "Azul",
-    type: "expense",
+    color: "",
+    type: "revenue",
     status: true,
-  });  
+  });
 
   const HandleChange = (field: keyof TransactionProps, value: any) => {
     setFormProps((prev) => ({
@@ -39,9 +44,22 @@ const [formProps, setFormProps] = useState<TransactionProps>({
     }));
   };
 
-  const HandleTeste = () => {
-    let teste = formProps;
-    console.log(teste);
+  const HandleSave = () => {
+    if (!formProps.name && formProps.amount <= 0) return;
+
+    onSave(formProps);
+
+    setFormProps({
+      id: Math.floor(Math.random() * 1000),
+      name: "",
+      category: "Alimentação",
+      dateString: new Date().toISOString().split("T")[0],
+      amount: 0,
+      icon: Coffee,
+      color: "",
+      type: "revenue",
+      status: true,
+    });
   };
 
   if (!Isopen) return null;
@@ -71,10 +89,13 @@ const [formProps, setFormProps] = useState<TransactionProps>({
                       : "bg-red-500/15 text-red-400"
                   }`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full ${formProps.type == "revenue"
-                    ? " bg-emerald-400 shadow-sm"
-                    :  "bg-red-400"
-                  }`} />
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      formProps.type == "revenue"
+                        ? " bg-emerald-400 shadow-sm"
+                        : "bg-red-400"
+                    }`}
+                  />
                   <span
                     className={`text-[11px] font-semibold ${
                       formProps.type == "revenue"
@@ -122,7 +143,7 @@ const [formProps, setFormProps] = useState<TransactionProps>({
                 </span>
                 <input
                   value={formProps.amount}
-                  onChange={(e) => HandleChange("amount", e.target.value)}
+                  onChange={(e) => HandleChange("amount", e.target.value || 0)}
                   type="number"
                   placeholder="0,00"
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl pl-9 pr-4 py-3 text-white text-[14px] focus:outline-none focus:border-purple-500/50 transition-colors"
@@ -138,11 +159,11 @@ const [formProps, setFormProps] = useState<TransactionProps>({
                   onClick={() => HandleChange("type", "expense")}
                   type="button"
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-semibold transition-all duration-200
-      ${
-        formProps.type === "expense"
-          ? "bg-red-500/20 text-red-400 shadow-sm"
-          : "text-gray-500 hover:bg-white/5 hover:text-gray-300"
-      }`}
+        ${
+          formProps.type === "expense"
+            ? "bg-red-500/20 text-red-400 shadow-sm"
+            : "text-gray-500 hover:bg-white/5 hover:text-gray-300"
+        }`}
                 >
                   <TrendingDown className="w-3.5 h-3.5" />
                   Despesa
@@ -151,11 +172,11 @@ const [formProps, setFormProps] = useState<TransactionProps>({
                   onClick={() => HandleChange("type", "revenue")}
                   type="button"
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-semibold transition-all duration-200
-      ${
-        formProps.type === "revenue"
-          ? "bg-emerald-500/20 text-emerald-400 shadow-sm"
-          : "text-gray-500 hover:bg-white/5 hover:text-gray-300"
-      }`}
+        ${
+          formProps.type === "revenue"
+            ? "bg-emerald-500/20 text-emerald-400 shadow-sm"
+            : "text-gray-500 hover:bg-white/5 hover:text-gray-300"
+        }`}
                 >
                   <TrendingUp className="w-3.5 h-3.5" />
                   Receita
@@ -187,6 +208,8 @@ const [formProps, setFormProps] = useState<TransactionProps>({
                 Data
               </label>
               <input
+                value={formProps.dateString}
+                onChange={(e) => HandleChange("dateString", e.target.value)}
                 type="date"
                 className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white text-[14px] focus:outline-none focus:border-purple-500/50 transition-colors [color-scheme:dark]"
               />
@@ -204,7 +227,7 @@ const [formProps, setFormProps] = useState<TransactionProps>({
               Cancelar
             </button>
             <button
-              onClick={HandleTeste}
+              onClick={HandleSave}
               type="button"
               className="flex-[2] px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-700 to-purple-500 text-white font-bold text-[14px] hover:shadow-lg hover:shadow-purple-600/40 transition-all active:scale-[0.98]"
             >
