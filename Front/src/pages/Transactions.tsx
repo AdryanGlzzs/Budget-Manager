@@ -6,7 +6,6 @@
     Calendar,
     TrendingUp,
     TrendingDown,
-    Coffee,
     ChevronDown,
     Plus,
   } from "lucide-react";
@@ -15,8 +14,6 @@
   import { useState } from "react";
   import { TransactionModal } from "../components/TransactionModal";
   import type { TransactionProps } from "../components/TransactionModal";
-
-
 
 
   const Transactions = () => {
@@ -66,7 +63,7 @@
                     Acompanhe e gerencie todas as suas transações financeiras
                   </p>
                 </div>
-                <button className="flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0 sm:mt-20 z-[60]"
+                <button className="flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0 sm:mt-20 z-[20]"
                 onClick={() => setOpenModal(true)}>
                   <Plus className="w-5 h-5" />
                   Nova Transação

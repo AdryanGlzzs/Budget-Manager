@@ -1,4 +1,15 @@
-import { X, TrendingDown, TrendingUp, Coffee } from "lucide-react";
+import {
+  X,
+  Coffee,
+  ShoppingCart,
+  Car,
+  Home,
+  Heart,
+  Briefcase,
+  Utensils,
+  Gamepad2,
+  Zap,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -20,6 +31,30 @@ export interface TransactionProps {
   status: boolean;
 }
 
+const IconOptions = [
+  { id: 1, label: "Café", icon: Coffee },
+  { id: 2, label: "Compras", icon: ShoppingCart },
+  { id: 3, label: "Carro", icon: Car },
+  { id: 4, label: "Casa", icon: Home },
+  { id: 5, label: "Saúde", icon: Heart },
+  { id: 6, label: "Trabalho", icon: Briefcase },
+  { id: 7, label: "Comida", icon: Utensils },
+  { id: 8, label: "Lazer", icon: Gamepad2 },
+  { id: 9, label: "Energia", icon: Zap },
+];
+
+const ColorOptions = [
+  { label: "Indigo", hex: "#6366F1" },
+  { label: "Violeta", hex: "#8B5CF6" },
+  { label: "Rosa", hex: "#EC4899" },
+  { label: "Vermelho", hex: "#EF4444" },
+  { label: "Laranja", hex: "#F97316" },
+  { label: "Amarelo", hex: "#EAB308" },
+  { label: "Verde", hex: "#22C55E" },
+  { label: "Ciano", hex: "#06B6D4" },
+  { label: "Azul", hex: "#3B82F6" },
+];
+
 export const TransactionModal = ({
   Isopen,
   close,
@@ -32,7 +67,7 @@ export const TransactionModal = ({
     dateString: new Date().toISOString().split("T")[0],
     amount: 0,
     icon: Coffee,
-    color: "",
+    color: "#6366F1",
     type: "revenue",
     status: true,
   });
@@ -45,8 +80,7 @@ export const TransactionModal = ({
   };
 
   const HandleSave = () => {
-    if (!formProps.name && formProps.amount <= 0) return;
-
+    if (!formProps.name || formProps.amount <= 0) return;
     onSave(formProps);
 
     setFormProps({
@@ -56,10 +90,12 @@ export const TransactionModal = ({
       dateString: new Date().toISOString().split("T")[0],
       amount: 0,
       icon: Coffee,
-      color: "",
+      color: "#6366F1",
       type: "revenue",
       status: true,
     });
+
+    close();
   };
 
   if (!Isopen) return null;
@@ -71,10 +107,7 @@ export const TransactionModal = ({
         onClick={close}
       />
 
-      <div className="relative w-full max-w-[460px] bg-[#0a0a1a] border border-white/10 rounded-3xl overflow-hidden">
-        <div className="absolute -top-16 -right-16 w-44 h-44 bg-purple-600/20 rounded-full blur-[55px] pointer-events-none" />
-        <div className="absolute -bottom-16 -left-16 w-44 h-44 bg-purple-800/14 rounded-full blur-[55px] pointer-events-none" />
-
+      <div className="relative w-full max-w-[460px] bg-[#0a0a1a] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
         <div className="relative p-7">
           <div className="flex items-start justify-between mb-7">
             <div>
@@ -83,153 +116,130 @@ export const TransactionModal = ({
                   Nova Transação
                 </h2>
                 <span
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${
                     formProps.type === "revenue"
-                      ? "bg-emerald-500/20 text-emerald-400 shadow-sm"
+                      ? "bg-emerald-500/20 text-emerald-400"
                       : "bg-red-500/15 text-red-400"
                   }`}
                 >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      formProps.type == "revenue"
-                        ? " bg-emerald-400 shadow-sm"
-                        : "bg-red-400"
-                    }`}
-                  />
-                  <span
-                    className={`text-[11px] font-semibold ${
-                      formProps.type == "revenue"
-                        ? " text-emerald-400 shadow-sm"
-                        : " text-red-400"
-                    }`}
-                  >
-                    {formProps.type == "revenue" ? "Receita" : "Despesa"}
+                  <span className={`text-[11px] font-semibold`}>
+                    {formProps.type === "revenue" ? "Receita" : "Despesa"}
                   </span>
                 </span>
               </div>
-              <p className="text-[13px] text-gray-500">
-                Preencha os detalhes abaixo
-              </p>
             </div>
             <button
               onClick={close}
-              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/10 transition-all flex-shrink-0"
+              className="text-gray-500 hover:text-white transition-colors"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="mb-5">
-            <label className="block text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
-              Descrição
-            </label>
-            <input
-              value={formProps.name}
-              type="text"
-              onChange={(e) => HandleChange("name", e.target.value)}
-              placeholder="Ex: Assinatura Netflix"
-              className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white text-[14px] placeholder:text-gray-700 focus:outline-none focus:border-purple-500/50 transition-colors"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-5">
+          <div className="space-y-5">
             <div>
-              <label className="block text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
-                Valor
-              </label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-[14px] pointer-events-none">
-                  R$
-                </span>
-                <input
-                  value={formProps.amount}
-                  onChange={(e) => HandleChange("amount", e.target.value || 0)}
-                  type="number"
-                  placeholder="0,00"
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl pl-9 pr-4 py-3 text-white text-[14px] focus:outline-none focus:border-purple-500/50 transition-colors"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
-                Tipo
-              </label>
-              <div className="flex bg-white/[0.04] border border-white/[0.08] rounded-xl p-1 gap-1">
-                <button
-                  onClick={() => HandleChange("type", "expense")}
-                  type="button"
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-semibold transition-all duration-200
-        ${
-          formProps.type === "expense"
-            ? "bg-red-500/20 text-red-400 shadow-sm"
-            : "text-gray-500 hover:bg-white/5 hover:text-gray-300"
-        }`}
-                >
-                  <TrendingDown className="w-3.5 h-3.5" />
-                  Despesa
-                </button>
-                <button
-                  onClick={() => HandleChange("type", "revenue")}
-                  type="button"
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-semibold transition-all duration-200
-        ${
-          formProps.type === "revenue"
-            ? "bg-emerald-500/20 text-emerald-400 shadow-sm"
-            : "text-gray-500 hover:bg-white/5 hover:text-gray-300"
-        }`}
-                >
-                  <TrendingUp className="w-3.5 h-3.5" />
-                  Receita
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-1">
-            <div>
-              <label className="block text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
-                Categoria
-              </label>
-              <select
-                onChange={(e) => HandleChange("category", e.target.value)}
-                value={formProps.category}
-                className="w-full bg-[#0a0a1a] border border-white/10 rounded-xl px-4 py-3 text-white text-[14px] focus:outline-none focus:border-purple-500/50 appearance-none transition-colors"
-              >
-                <option>Alimentação</option>
-                <option>Lazer</option>
-                <option>Trabalho</option>
-                <option>Saúde</option>
-                <option>Transporte</option>
-                <option>Moradia</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
-                Data
+              <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                Descrição
               </label>
               <input
-                value={formProps.dateString}
-                onChange={(e) => HandleChange("dateString", e.target.value)}
-                type="date"
-                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white text-[14px] focus:outline-none focus:border-purple-500/50 transition-colors [color-scheme:dark]"
+                value={formProps.name}
+                onChange={(e) => HandleChange("name", e.target.value)}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white"
+                placeholder="Ex: Assinatura Netflix"
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                  Valor
+                </label>
+                <input
+                  type="number"
+                  value={formProps.amount}
+                  onChange={(e) =>
+                    HandleChange("amount", Number(e.target.value))
+                  }
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                  Tipo
+                </label>
+                <div className="flex bg-white/[0.04] border border-white/[0.08] rounded-xl p-1">
+                  <button
+                    onClick={() => HandleChange("type", "expense")}
+                    className={`flex-1 py-2 rounded-lg text-[12px] ${formProps.type === "expense" ? "bg-red-500/20 text-red-400" : "text-gray-500"}`}
+                  >
+                    Despesa
+                  </button>
+                  <button
+                    onClick={() => HandleChange("type", "revenue")}
+                    className={`flex-1 py-2 rounded-lg text-[12px] ${formProps.type === "revenue" ? "bg-emerald-500/20 text-emerald-400" : "text-gray-500"}`}
+                  >
+                    Receita
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                Cor
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {ColorOptions.map((color) => (
+                  <button
+                    key={color.hex}
+                    type="button"
+                    onClick={() => HandleChange("color", color.hex)}
+                    className={`w-8 h-8 rounded-full border-2 transition-all ${
+                      formProps.color === color.hex
+                        ? "border-white scale-110"
+                        : "border-transparent"
+                    }`}
+                    style={{ backgroundColor: color.hex }}
+                    title={color.label}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                Ícone
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {IconOptions.map(({ label, icon: IconOption, id }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => HandleChange("icon", IconOption)}
+                    title={label}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${
+                      formProps.icon === IconOption
+                        ? "border-purple-500 bg-purple-500/20 text-purple-400"
+                        : "border-white/10 bg-white/5 text-gray-400"
+                    }`}
+                  >
+                    <IconOption className="w-4 h-4" />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="border-t border-white/[0.06] my-5" />
-
-          <div className="flex gap-3">
+          <div className="flex gap-3 mt-8">
             <button
-              type="button"
               onClick={close}
-              className="flex-1 px-6 py-3.5 rounded-xl bg-white/5 border border-white/10 text-gray-500 font-semibold text-[14px] hover:bg-white/10 hover:text-white transition-all"
+              className="flex-1 py-3.5 rounded-xl bg-white/5 text-gray-500 font-semibold cursor-pointer"
             >
               Cancelar
             </button>
             <button
               onClick={HandleSave}
-              type="button"
-              className="flex-[2] px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-700 to-purple-500 text-white font-bold text-[14px] hover:shadow-lg hover:shadow-purple-600/40 transition-all active:scale-[0.98]"
+              className="cursor-pointer flex-[2] py-3.5 rounded-xl bg-gradient-to-r from-purple-700 to-purple-500 text-white font-bold shadow-lg shadow-purple-600/20"
             >
               Salvar Transação
             </button>
