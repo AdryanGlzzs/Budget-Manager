@@ -2,25 +2,22 @@ import {
   Plus,
   Target,
   TrendingUp,
-  ShoppingBag,
   Coffee,
-  Car,
-  Zap,
-  Home,
-  Smartphone,
   AlertCircle,
   Edit,
   Trash2,
+  Search,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
 import BudgetModal from "../components/BudgetModal";
+import type { BudgetsProps } from "../../src/components/BudgetModal";
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
   const [budgetOpen, setBudgetOpen] = useState(false);
-  const [budgets, setBudgets] = useState([
+  const [budgets, setBudgets] = useState<BudgetsProps[]>([
     {
       id: 1,
       name: "Alimentação",
@@ -30,69 +27,31 @@ const Budgets = () => {
       limit: 600,
       percentage: 75,
       trend: "+5%",
-      trendType: "up",
+      trendType: "Up",
     },
-    {
-      id: 2,
-      name: "Transporte",
-      icon: Car,
-      color: "#06B6D4",
-      spent: 180,
-      limit: 300,
-      percentage: 60,
-      trend: "-12%",
-      trendType: "down",
-    },
-    {
-      id: 3,
-      name: "Compras",
-      icon: ShoppingBag,
-      color: "#10B981",
-      spent: 890,
-      limit: 800,
-      percentage: 111,
-      trend: "+25%",
-      trendType: "up",
-    },
-    {
-      id: 4,
-      name: "Contas e Serviços",
-      icon: Zap,
-      color: "#EF4444",
-      spent: 320,
-      limit: 400,
-      percentage: 80,
-      trend: "+8%",
-      trendType: "up",
-    },
-    {
-      id: 5,
-      name: "Entretenimento",
-      icon: Smartphone,
-      color: "#F59E0B",
-      spent: 150,
-      limit: 250,
-      percentage: 60,
-      trend: "-5%",
-      trendType: "down",
-    },
-    {
-      id: 6,
-      name: "Habitação",
-      icon: Home,
-      color: "#8B5CF6",
-      spent: 1800,
-      limit: 1800,
-      percentage: 100,
-      trend: "0%",
-      trendType: "neutral",
-    },
-  ]);
+  ]
+  );
 
-  const handleRemove = (id: number) =>{
-    const NewList = budgets.filter((budget) => budget.id !== id)
-    setBudgets(NewList)
+  const HandleSaveBudget = (newBudget: BudgetsProps) => {
+    setBudgets((prev) => {
+      const exist = prev.find
+      ((b) => b.id == newBudget.id)
+
+      if(exist){
+        return prev.map((b) => b.id === newBudget.id ? newBudget : b )
+      }else{
+        return [...prev, newBudget]
+      }
+    } )
   }
+
+
+  const FilterBudgets = budgets;
+
+  const handleRemove = (id: number) => {
+    const NewList = budgets.filter((budget) => budget.id !== id);
+    setBudgets(NewList);
+  };
   const totalBudget = budgets.reduce((sum, b) => sum + b.limit, 0);
   const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
   const totalPercentage = Math.round((totalSpent / totalBudget) * 100);
@@ -278,6 +237,22 @@ const Budgets = () => {
                   </select>
                 </div>
 
+                <div>
+                  {FilterBudgets.length === 0 && (
+                    <div className="py-20 text-center">
+                      <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Search className="w-10 h-10 text-gray-500" />
+                      </div>
+                      <div className="text-[18px] font-semibold mb-2">
+                        Nenhum orçamento encontrado
+                      </div>
+                      <div className="text-[14px] text-gray-500">
+                        Tente ajustar seus filtros
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div className="grid grid-cols-1 gap-4 md:gap-5">
                   {budgets.map((budget) => {
                     const Icon = budget.icon;
@@ -328,9 +303,9 @@ const Budgets = () => {
                             <div className="flex items-center gap-1 md:gap-3 flex-shrink-0">
                               <div
                                 className={`hidden sm:block text-[12px] md:text-[13px] px-2 py-1 rounded-md whitespace-nowrap ${
-                                  budget.trendType === "up"
+                                  budget.trendType === "Up"
                                     ? "text-red-400 bg-red-400/10"
-                                    : budget.trendType === "down"
+                                    : budget.trendType === "Down"
                                       ? "text-green-400 bg-green-400/10"
                                       : "text-gray-400 bg-gray-400/10"
                                 }`}
@@ -351,9 +326,9 @@ const Budgets = () => {
 
                           <div
                             className={`sm:hidden inline-block text-[11px] px-2 py-1 rounded-md mb-3 ${
-                              budget.trendType === "up"
+                              budget.trendType === "Up"
                                 ? "text-red-400 bg-red-400/10"
-                                : budget.trendType === "down"
+                                : budget.trendType === "Down"
                                   ? "text-green-400 bg-green-400/10"
                                   : "text-gray-400 bg-gray-400/10"
                             }`}
@@ -375,7 +350,7 @@ const Budgets = () => {
                             <span
                               className={`text-[13px] md:text-[14px] ml-auto ${
                                 isOverBudget
-                                  ? "text-red-400" 
+                                  ? "text-red-400"
                                   : isWarning
                                     ? "text-yellow-400"
                                     : "text-green-400"
@@ -423,7 +398,7 @@ const Budgets = () => {
           </main>
         </div>
       </div>
-      <BudgetModal IsOpen={budgetOpen} OnClose={() => setBudgetOpen(false)} />
+      <BudgetModal isOpen={budgetOpen} onClose={() => setBudgetOpen(false)} onSave={HandleSaveBudget} />
     </div>
   );
 };
