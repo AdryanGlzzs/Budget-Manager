@@ -17,6 +17,8 @@ import type { BudgetsProps } from "../../src/components/BudgetModal";
 const Budgets = () => {
   const [open, setOpen] = useState(false);
   const [budgetOpen, setBudgetOpen] = useState(false);
+  const [editingBudget, setEditingBudget] = useState<BudgetsProps | null>(null);
+
   const [budgets, setBudgets] = useState<BudgetsProps[]>([
     {
       id: 1,
@@ -29,32 +31,39 @@ const Budgets = () => {
       trend: "+5%",
       trendType: "Up",
     },
-  ]
-  );
+  ]);
 
   const HandleSaveBudget = (newBudget: BudgetsProps) => {
     setBudgets((prev) => {
-      const exist = prev.find
-      ((b) => b.id == newBudget.id)
-
-      if(exist){
-        return prev.map((b) => b.id === newBudget.id ? newBudget : b )
-      }else{
-        return [...prev, newBudget]
+      const exist = prev.find((b) => b.id === newBudget.id);
+      if (exist) {
+        return prev.map((b) => (b.id === newBudget.id ? newBudget : b));
+      } else {
+        return [...prev, newBudget];
       }
-    } )
-  }
+    });
+  };
 
+  const handleRemove = (id: number) => {
+    setBudgets((prev) => prev.filter((budget) => budget.id !== id));
+  };
+
+  const handleEdit = (budget: BudgetsProps) => {
+    setEditingBudget(budget);
+    setBudgetOpen(true);
+  };
+
+  const handleClose = () => {
+    setBudgetOpen(false);
+    setEditingBudget(null);
+  };
 
   const FilterBudgets = budgets;
 
-  const handleRemove = (id: number) => {
-    const NewList = budgets.filter((budget) => budget.id !== id);
-    setBudgets(NewList);
-  };
   const totalBudget = budgets.reduce((sum, b) => sum + b.limit, 0);
   const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
-  const totalPercentage = Math.round((totalSpent / totalBudget) * 100);
+  const totalPercentage =
+    totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
 
   const overBudgetCategories = budgets.filter((b) => b.percentage > 100);
   const warningCategories = budgets.filter(
@@ -94,7 +103,10 @@ const Budgets = () => {
 
               <button
                 className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0"
-                onClick={() => setBudgetOpen(true)}
+                onClick={() => {
+                  setEditingBudget(null);
+                  setBudgetOpen(true);
+                }}
               >
                 <Plus className="w-5 h-5" />
                 Criar Orçamento
@@ -114,7 +126,7 @@ const Budgets = () => {
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
-                    ${totalBudget.toLocaleString()}
+                    R${totalBudget.toLocaleString()}
                   </div>
                   <div className="text-[12px] md:text-[13px] text-gray-400">
                     Em todas as categorias
@@ -134,7 +146,7 @@ const Budgets = () => {
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
-                    ${totalSpent.toLocaleString()}
+                    R${totalSpent.toLocaleString()}
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="text-[12px] md:text-[13px] text-cyan-400">
@@ -156,7 +168,7 @@ const Budgets = () => {
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
-                    ${(totalBudget - totalSpent).toLocaleString()}
+                    R${(totalBudget - totalSpent).toLocaleString()}
                   </div>
                   <div className="text-[12px] md:text-[13px] text-green-400">
                     {100 - totalPercentage}% disponível
@@ -237,21 +249,19 @@ const Budgets = () => {
                   </select>
                 </div>
 
-                <div>
-                  {FilterBudgets.length === 0 && (
-                    <div className="py-20 text-center">
-                      <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Search className="w-10 h-10 text-gray-500" />
-                      </div>
-                      <div className="text-[18px] font-semibold mb-2">
-                        Nenhum orçamento encontrado
-                      </div>
-                      <div className="text-[14px] text-gray-500">
-                        Tente ajustar seus filtros
-                      </div>
+                {FilterBudgets.length === 0 && (
+                  <div className="py-20 text-center">
+                    <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Search className="w-10 h-10 text-gray-500" />
                     </div>
-                  )}
-                </div>
+                    <div className="text-[18px] font-semibold mb-2">
+                      Nenhum orçamento encontrado
+                    </div>
+                    <div className="text-[14px] text-gray-500">
+                      Tente ajustar seus filtros
+                    </div>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 gap-4 md:gap-5">
                   {budgets.map((budget) => {
@@ -293,7 +303,6 @@ const Budgets = () => {
                                 style={{ color: budget.color }}
                               />
                             </div>
-
                             <div className="flex-1 min-w-0">
                               <div className="text-[16px] md:text-[18px] font-semibold truncate">
                                 {budget.name}
@@ -312,9 +321,14 @@ const Budgets = () => {
                               >
                                 {budget.trend} vs mês passado
                               </div>
-                              <button className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all">
+
+                              <button
+                                onClick={() => handleEdit(budget)}
+                                className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all"
+                              >
                                 <Edit className="w-4 h-4 text-gray-400 hover:text-white" />
                               </button>
+
                               <button
                                 onClick={() => handleRemove(budget.id)}
                                 className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all"
@@ -342,10 +356,10 @@ const Budgets = () => {
                                 isOverBudget ? "text-red-400" : "text-white"
                               }`}
                             >
-                              ${budget.spent}
+                              R${budget.spent}
                             </span>
                             <span className="text-[14px] md:text-[16px] text-gray-500">
-                              de ${budget.limit}
+                              de R${budget.limit}
                             </span>
                             <span
                               className={`text-[13px] md:text-[14px] ml-auto ${
@@ -376,14 +390,14 @@ const Budgets = () => {
                           </div>
 
                           <div className="mt-2.5 md:mt-3 text-[12px] md:text-[13px] text-gray-400">
-                            $
+                            R$
                             {budget.limit - budget.spent > 0
                               ? budget.limit - budget.spent
                               : 0}{" "}
                             restante
                             {isOverBudget && (
                               <span className="text-red-400 ml-2">
-                                • ${budget.spent - budget.limit} acima do
+                                • R${budget.spent - budget.limit} acima do
                                 orçamento
                               </span>
                             )}
@@ -398,7 +412,14 @@ const Budgets = () => {
           </main>
         </div>
       </div>
-      <BudgetModal isOpen={budgetOpen} onClose={() => setBudgetOpen(false)} onSave={HandleSaveBudget} />
+
+      <BudgetModal
+        isOpen={budgetOpen}
+        onClose={handleClose}
+        onSave={HandleSaveBudget}
+        onDelete={handleRemove}
+        editingBudget={editingBudget}
+      />
     </div>
   );
 };
