@@ -9,7 +9,7 @@ export const SavingsGoalsModal = ({IsOpen, OnClose}: SavingsGoalsModalProps) => 
 
     if(!IsOpen) return null
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-500">
       <div className="bg-[#0a0a18] border border-white/10 rounded-2xl p-7 w-full max-w-[480px] mx-4">
 
         <div className="flex justify-between items-center mb-6">

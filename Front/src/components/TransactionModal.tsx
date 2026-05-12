@@ -72,6 +72,7 @@ export const TransactionModal = ({
     status: true,
   });
 
+
   const HandleChange = (field: keyof TransactionProps, value: any) => {
     setFormProps((prev) => ({
       ...prev,
@@ -97,6 +98,8 @@ export const TransactionModal = ({
 
     close();
   };
+
+   
 
   if (!Isopen) return null;
 
