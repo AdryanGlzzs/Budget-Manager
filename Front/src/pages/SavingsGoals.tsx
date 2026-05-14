@@ -8,18 +8,20 @@ import {
   ShieldCheck,
   Plane,
   Car,
+  Trash2,
+  type LucideIcon,
+  Search,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
 import { SavingsGoalsModal } from "../components/SavingGoalsModal";
-
+import type { GoalsProps } from "../components/SavingGoalsModal";
 
 const SavingsGoals = () => {
-  const [SavingModal, setSavingModal] = useState(false)
-  const [open, setOpen] = useState(false)
-
-  const goals = [
+  const [SavingModal, setSavingModal] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [Goals, setGoals] = useState<GoalsProps[]>([
     {
       id: 1,
       name: "Fundo de Emergência",
@@ -56,7 +58,15 @@ const SavingsGoals = () => {
       icon: PiggyBank,
       deadline: "Jan 2030",
     },
-  ];
+  ]);
+
+  const HandleRemoveGoals = (id: number) => {
+    console.log("clicado");
+
+    setGoals((prev) => prev.filter((goals) => goals.id !== id));
+  };
+
+  const GoalsLength = Goals;
 
   return (
     <div className="flex min-h-screen bg-[#050510] text-white overflow-hidden">
@@ -70,7 +80,7 @@ const SavingsGoals = () => {
       </div>
 
       <div className="z-20 lg:pr-60">
-        <Sidebar open={open} setOpen={setOpen}/>
+        <Sidebar open={open} setOpen={setOpen} />
       </div>
 
       <main className="flex-1 p-8 max-w-[1400px] relative z-10 overflow-y-auto h-screen mt-15">
@@ -81,7 +91,10 @@ const SavingsGoals = () => {
               Visualize e gerencie seus objetivos financeiros de longo prazo.
             </p>
           </div>
-          <button onClick={() => setSavingModal(true)} className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2">
+          <button
+            onClick={() => setSavingModal(true)}
+            className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2"
+          >
             <Plus className="w-5 h-5" />
             Nova Meta
           </button>
@@ -136,9 +149,9 @@ const SavingsGoals = () => {
 
         <h2 className="text-[20px] font-semibold mb-6">Suas Metas</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {goals.map((goal) => {
-            const percent = Math.round((goal.current / goal.target) * 100);
-            const Icon = goal.icon;
+          {Goals.map((Goal) => {
+            const percent = Math.round((Goal.current / Goal.target) * 100);
+            const Icon = Goal.icon;
 
             const getColorClasses = (color: string) => {
               switch (color) {
@@ -190,33 +203,43 @@ const SavingsGoals = () => {
               }
             };
 
-            const colors = getColorClasses(goal.color);
+            const colors = getColorClasses(Goal.color);
 
             return (
-              <div key={goal.id} className="relative group cursor-pointer">
+              <div key={Goal.id} className="relative group cursor-pointer">
                 <div
-                  className={`absolute inset-0 bg-${goal.color}-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}
+                  className={`absolute inset-0 bg-${Goal.color}-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}
                 ></div>
+
                 <div className="relative bg-[#0a0a14]/60 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all hover:translate-y-[-4px]">
+                  <button
+                    className="absolute top -4 right-4 p-2 rounded-lg text-gray-500 hover:bg-red-500/10 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10"
+                    title="Remover meta"
+                    onClick={() => HandleRemoveGoals(Goal.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+
                   <div className="flex justify-between items-start mb-6">
                     <div
                       className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center shadow-lg ${colors.shadow}`}
                     >
                       <Icon className={`w-6 h-6 ${colors.text}`} />
                     </div>
-                    <div className="bg-white/5 px-3 py-1 rounded-lg text-[12px] text-gray-400 border border-white/5">
-                      {goal.deadline}
+
+                    <div className="bg-white/5 px-3 py-1 rounded-lg text-[12px] text-gray-400 border border-white/5 mr-8">
+                      {Goal.deadline}
                     </div>
                   </div>
 
-                  <h3 className="text-[18px] font-bold mb-2">{goal.name}</h3>
+                  <h3 className="text-[18px] font-bold mb-2">{Goal.name}</h3>
 
                   <div className="flex items-baseline gap-2 mb-4">
                     <span className={`text-[24px] font-bold ${colors.text}`}>
-                      ${goal.current.toLocaleString()}
+                      ${Goal.current.toLocaleString()}
                     </span>
                     <span className="text-[14px] text-gray-500">
-                      de ${goal.target.toLocaleString()}
+                      de ${Goal.target.toLocaleString()}
                     </span>
                   </div>
 
@@ -245,11 +268,26 @@ const SavingsGoals = () => {
               </div>
             );
           })}
-
-          
         </div>
 
-        <SavingsGoalsModal IsOpen={SavingModal} OnClose={() => setSavingModal(false)}  />
+        {GoalsLength.length === 0 && (
+          <div className="py-20 text-center">
+            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-10 h-10 text-gray-500" />
+            </div>
+            <div className="text-[18px] font-semibold mb-2">
+              Nenhuma meta encontrada
+            </div>
+            <div className="text-[14px] text-gray-500">
+              Tente ajustar seus filtros
+            </div>
+          </div>
+        )}
+
+        <SavingsGoalsModal
+          IsOpen={SavingModal}
+          OnClose={() => setSavingModal(false)}
+        />
       </main>
     </div>
   );
