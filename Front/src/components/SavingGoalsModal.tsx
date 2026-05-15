@@ -6,15 +6,21 @@ import {
   X,
   type LucideIcon,
   Coffee,
+  Check,
+  Home,
+  GraduationCap,
+  Laptop,
+  TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
 
 type SavingsGoalsModalProps = {
   IsOpen: boolean;
   OnClose: () => void;
+  OnSave: (GoalsProps: Goalsprops ) => void
 };
 
-export interface GoalsProps {
+export interface Goalsprops {
   id: number;
   name: string;
   target: number;
@@ -24,11 +30,34 @@ export interface GoalsProps {
   deadline: string;
 }
 
+const IconOptions = [
+  ShieldCheck,
+  Car,
+  Plane,
+  PiggyBank,
+  Home,
+  GraduationCap,
+  Laptop,
+  TrendingUp,
+];
+
+const colors = [
+  "#6366F1",
+  "#06B6D4",
+  "#10B981",
+  "#EF4444",
+  "#F59E0B",
+  "#8B5CF6",
+  "#EC4899",
+  "#F97316",
+];
+
 export const SavingsGoalsModal = ({
   IsOpen,
   OnClose,
+  OnSave
 }: SavingsGoalsModalProps) => {
-  const [GoalsProps, setGoalsProps] = useState<GoalsProps>({
+  const [GoalsProps, setGoalsProps] = useState<Goalsprops>({
     id: Math.floor(Math.random() * 1000),
     name: "",
     target: 0,
@@ -38,9 +67,19 @@ export const SavingsGoalsModal = ({
     deadline: "",
   });
 
+  const HandleChangeGoals = (field: keyof Goalsprops, value: any) => {
+    setGoalsProps((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const HandleSubmit = () => {
+    OnSave({...GoalsProps})
+    console.log(OnSave)
+    OnClose()
+  }
+
   if (!IsOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-500">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100]">
       <div className="bg-[#0a0a18] border border-white/10 rounded-2xl p-7 w-full max-w-[480px] mx-4">
         <div className="flex justify-between items-center mb-6">
           <div>
@@ -64,8 +103,8 @@ export const SavingsGoalsModal = ({
             Nome da meta
           </label>
           <input
+            onChange={(e) => HandleChangeGoals("name", e.target.value || "")}
             value={GoalsProps.name}
-            
             type="text"
             placeholder="Ex: Fundo de emergência"
             className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
@@ -78,6 +117,10 @@ export const SavingsGoalsModal = ({
               Valor alvo (R$)
             </label>
             <input
+              onChange={(e) =>
+                HandleChangeGoals("target", e.target.value || "")
+              }
+              value={GoalsProps.target}
               type="text"
               placeholder="0,00"
               className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
@@ -88,6 +131,10 @@ export const SavingsGoalsModal = ({
               Valor inicial (R$)
             </label>
             <input
+              value={GoalsProps.current}
+              onChange={(e) =>
+                HandleChangeGoals("current", e.target.value || "")
+              }
               type="text"
               placeholder="0,00"
               className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
@@ -98,6 +145,8 @@ export const SavingsGoalsModal = ({
         <div className="mb-5">
           <label className="text-[12px] text-white/45 block mb-2">Prazo</label>
           <input
+            onChange={(e) => HandleChangeGoals("deadline", e.target.value)}
+            value={GoalsProps.deadline}
             type="text"
             placeholder="Ex: Dez 2026"
             className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
@@ -108,26 +157,25 @@ export const SavingsGoalsModal = ({
           <label className="text-[12px] text-white/45 block mb-3">
             Ícone da meta
           </label>
-          <div className="flex gap-3">
-            {[
-              { icon: ShieldCheck, active: true },
-              { icon: Car, active: false },
-              { icon: Plane, active: false },
-              { icon: PiggyBank, active: false },
-            ].map(({ icon: Icon, active }, i) => (
-              <div
-                key={i}
-                className={`w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all ${
-                  active
-                    ? "bg-purple-500/25 border-2 border-purple-500/60"
-                    : "bg-white/[0.04] border border-white/10"
-                }`}
-              >
-                <Icon
-                  className={`w-[18px] h-[18px] ${active ? "text-purple-400" : "text-white/40"}`}
-                />
-              </div>
-            ))}
+          <div className="flex flex-wrap gap-3">
+            {IconOptions.map((IconOption, i) => {
+              const active = GoalsProps.icon === IconOption;
+              return (
+                <div
+                  key={i}
+                  onClick={() => HandleChangeGoals("icon", IconOption)}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all ${
+                    active
+                      ? "bg-purple-500/25 border-2 border-purple-500/60"
+                      : "bg-white/[0.04] border border-white/10 hover:bg-white/10"
+                  }`}
+                >
+                  <IconOption
+                    className={`w-[18px] h-[18px] ${active ? "text-purple-400" : "text-white/40"}`}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -136,24 +184,25 @@ export const SavingsGoalsModal = ({
             Cor da meta
           </label>
           <div className="flex gap-3">
-            {[
-              { hex: "#8b5cf6", active: true },
-              { hex: "#06b6d4", active: false },
-              { hex: "#ec4899", active: false },
-              { hex: "#22c55e", active: false },
-              { hex: "#f59e0b", active: false },
-            ].map(({ hex, active }, i) => (
-              <div
-                key={i}
-                className="w-7 h-7 rounded-full cursor-pointer transition-all"
-                style={{
-                  backgroundColor: hex,
-                  opacity: active ? 1 : 0.5,
-                  outline: active ? `2px solid white` : "none",
-                  outlineOffset: "2px",
-                }}
-              />
-            ))}
+            {colors.map((color) => {
+              const isSelected = GoalsProps.color === color;
+              return (
+                <button
+                  key={color}
+                  type="button"
+                  onClick={() => HandleChangeGoals("color", color)}
+                  className="w-7 h-7 rounded-full hover:scale-110 transition-all border-2 flex items-center justify-center"
+                  style={{
+                    background: color,
+                    borderColor: isSelected ? "white" : "transparent",
+                  }}
+                >
+                  {isSelected && (
+                    <Check className="w-3 text-white" strokeWidth={3} />
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -164,7 +213,9 @@ export const SavingsGoalsModal = ({
           >
             Cancelar
           </button>
-          <button className="flex-[2] py-3 bg-gradient-to-r from-purple-700 to-purple-500 rounded-xl text-[14px] font-semibold text-white shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 hover:scale-[1.02] transition-all">
+          <button className="flex-[2] py-3 bg-gradient-to-r from-purple-700 to-purple-500 rounded-xl text-[14px] font-semibold text-white shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 hover:scale-[1.02] transition-all"
+          onClick={() => HandleSubmit()}
+          >
             Criar Meta
           </button>
         </div>

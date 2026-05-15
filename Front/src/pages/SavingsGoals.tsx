@@ -9,19 +9,18 @@ import {
   Plane,
   Car,
   Trash2,
-  type LucideIcon,
   Search,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
 import { SavingsGoalsModal } from "../components/SavingGoalsModal";
-import type { GoalsProps } from "../components/SavingGoalsModal";
+import type { Goalsprops } from "../components/SavingGoalsModal";
 
 const SavingsGoals = () => {
   const [SavingModal, setSavingModal] = useState(false);
   const [open, setOpen] = useState(false);
-  const [Goals, setGoals] = useState<GoalsProps[]>([
+  const [Goals, setGoals] = useState<Goalsprops[]>([
     {
       id: 1,
       name: "Fundo de Emergência",
@@ -65,6 +64,12 @@ const SavingsGoals = () => {
 
     setGoals((prev) => prev.filter((goals) => goals.id !== id));
   };
+
+  const HandleSaveGoals = (NewGoals: Goalsprops) =>{
+    setGoals((prev) => {
+      return [...prev, NewGoals ]
+    } )
+  }
 
   const GoalsLength = Goals;
 
@@ -284,11 +289,14 @@ const SavingsGoals = () => {
           </div>
         )}
 
-        <SavingsGoalsModal
-          IsOpen={SavingModal}
-          OnClose={() => setSavingModal(false)}
-        />
+
       </main>
+
+      <SavingsGoalsModal
+        IsOpen={SavingModal}
+        OnClose={() => setSavingModal(false)}
+        OnSave={HandleSaveGoals}
+      />
     </div>
   );
 };
