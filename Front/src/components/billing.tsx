@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import { CreditCard, Download } from "lucide-react";
-
 import { themes } from "../themes/themes";
 
 type AccentColor = "purple" | "blue" | "emerald" | "pink";
@@ -46,22 +44,11 @@ const billingHistory: BillingHistory[] = [
 
 export const Billing = () => {
   const [accentColor] = useState<AccentColor>("purple");
-
   const [downloadingIndex, setDownloadingIndex] = useState<number | null>(null);
-
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
-
   const theme = themes[accentColor];
-
   const styles = {
-    cardGlow: `
-      absolute inset-0
-      bg-gradient-to-br ${theme.glow}
-      rounded-2xl blur-xl
-      opacity-0 group-hover:opacity-100
-      transition-all duration-300
-      pointer-events-none
-    `,
+    cardGlow: `absolute inset-0bg-gradient-to-br ${theme.glow}rounded-2xl blur-xlopacity-0 group-hover:opacity-100transition-all duration-300pointer-events-none`,
 
     cardBase: `
       relative
@@ -123,13 +110,11 @@ export const Billing = () => {
     setTimeout(() => {
       setDownloadingIndex(null);
 
-      const content = `
-FATURA BUDGET MANAGER
-
-Data: ${date}
-Valor: $15.00
-Status: PAGO
-Plano: PRO Mensal
+      const content = `FATURA BUDGET MANAGER
+      Data: ${date}
+      Valor: $15.00
+      Status: PAGO
+      Plano: PRO Mensal
       `;
 
       const dataStr =

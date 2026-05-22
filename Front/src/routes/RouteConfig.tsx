@@ -1,13 +1,15 @@
-import InitialPage from "../pages/Initial";
-import Dashboard from "../pages/Dashboard";
-import Transactions from "../pages/Transactions";
-import Settings from "../pages/Settings";
-import Analytics from "../pages/Analytics";
-import Budgets from "../pages/Budgets";
-import SavingsGoals from "../pages/SavingsGoals";
-import Pricing from "../pages/Pricing";
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
+import { lazy } from "react";
+
+const InitialPage = lazy(() => import("../pages/Initial"));
+const Dashboard = lazy(() => import("../pages/Dashboard"));
+const Transactions = lazy(() => import("../pages/Transactions"));
+const Settings = lazy(() => import("../pages/Settings"));
+const Analytics = lazy(() => import("../pages/Analytics"));
+const Budgets = lazy(() => import("../pages/Budgets"));
+const SavingsGoals = lazy(() => import("../pages/SavingsGoals"));
+const Pricing = lazy(() => import("../pages/Pricing"));
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const RegisterPage = lazy(() => import("../pages/RegisterPage"));
 
 export const ROUTES = {
   Home: "/",

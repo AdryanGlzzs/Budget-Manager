@@ -23,14 +23,14 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
-
   const cashFlowData = [{ month: "Jan", income: 4400, expense: 2200 }];
-
   const categoryData = [{ name: "Alimentação", value: 30, color: "#6366F1" }];
+
+  
 
   const recentTransactions = [
     {
