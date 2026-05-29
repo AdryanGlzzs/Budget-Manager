@@ -65,11 +65,11 @@ const SavingsGoals = () => {
     setGoals((prev) => prev.filter((goals) => goals.id !== id));
   };
 
-  const HandleSaveGoals = (NewGoals: Goalsprops) =>{
+  const HandleSaveGoals = (NewGoals: Goalsprops) => {
     setGoals((prev) => {
-      return [...prev, NewGoals ]
-    } )
-  }
+      return [...prev, NewGoals];
+    });
+  };
 
   const GoalsLength = Goals;
 
@@ -288,8 +288,6 @@ const SavingsGoals = () => {
             </div>
           </div>
         )}
-
-
       </main>
 
       <SavingsGoalsModal

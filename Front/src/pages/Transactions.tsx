@@ -13,13 +13,19 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
-import { TransactionModal } from "../components/TransactionModal";
+import { TransactionModal } from "../components/TransactionModal";  
 import type { TransactionProps } from "../components/TransactionModal";
 
 const Transactions = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
+
+  const TotalRevenue = transaction.filter(t => t.type === 'revenue').reduce((sun, t) => sun + t.amount , 0)
+  const TotalExpense = transaction.filter(t => t.type === 'expense').reduce((decrease , t) => decrease + t.amount, 0)
+  const TotalBalance = [TotalExpense, TotalRevenue].reduce((total, t) => total + t, 0)
+  console.log(TotalBalance)
+
 
   const HandleSaveTransaction = (NewTransaction: TransactionProps) => {
     setTransactions((prev) => [...prev, NewTransaction]);
@@ -89,7 +95,7 @@ const Transactions = () => {
                         Receita Total
                       </div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1"></div>
+                    <div className="text-[32px] font-bold mb-1">{TotalRevenue}</div>
                     <div className="text-[13px] text-green-400">Este mês</div>
                   </div>
                 </div>
@@ -105,7 +111,7 @@ const Transactions = () => {
                         Despesas Totais
                       </div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1"></div>
+                    <div className="text-[32px] font-bold mb-1">{TotalExpense}</div>
                     <div className="text-[13px] text-red-400">Este mês</div>
                   </div>
                 </div>
@@ -119,7 +125,7 @@ const Transactions = () => {
                       </div>
                       <div className="text-[14px] text-gray-400">Saldo</div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1"></div>
+                    <div className="text-[32px] font-bold mb-1">{TotalBalance}</div>
                     <div className="text-[13px] text-green-400">Este mês</div>
                   </div>
                 </div>

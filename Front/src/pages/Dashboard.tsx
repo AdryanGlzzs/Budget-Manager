@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);

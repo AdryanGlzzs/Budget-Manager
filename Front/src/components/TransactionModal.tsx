@@ -26,7 +26,7 @@ export interface TransactionProps {
   dateString: string;
   amount: number;
   icon: LucideIcon;
-  color: string;
+  color: string;  
   type: "expense" | "revenue";
   status: boolean;
 }
@@ -82,7 +82,12 @@ export const TransactionModal = ({
 
   const HandleSave = () => {
     if (!formProps.name || formProps.amount <= 0) return;
-    onSave(formProps);
+
+    const FinalAmount = formProps.type === 'expense'
+    ? -Math.abs(formProps.amount)
+    : formProps.amount;
+
+    onSave({ ...formProps, amount: FinalAmount });
 
     setFormProps({
       id: Math.floor(Math.random() * 1000),
@@ -162,6 +167,7 @@ export const TransactionModal = ({
                   value={formProps.amount}
                   onChange={(e) =>
                     HandleChange("amount", Number(e.target.value))
+
                   }
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white"
                 />
@@ -184,7 +190,7 @@ export const TransactionModal = ({
                     Receita
                   </button>
                 </div>
-              </div>
+              </div>  
             </div>
 
             <div>
