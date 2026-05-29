@@ -7,15 +7,18 @@ import {
   Edit,
   Trash2,
   Search,
+  MinusCircle,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
 import BudgetModal from "../components/BudgetModal";
 import type { BudgetsProps } from "../../src/components/BudgetModal";
+import { DeductModal } from "../components/deductModal";
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
+  const [deductModalOpen, setDeductiModalOpen] = useState(false)
   const [budgetOpen, setBudgetOpen] = useState(false);
   const [editingBudget, setEditingBudget] = useState<BudgetsProps | null>(null);
 
@@ -330,6 +333,13 @@ const Budgets = () => {
                               </button>
 
                               <button
+                                onClick={() => setDeductiModalOpen(true)}
+                                className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all"
+                              >
+                                <MinusCircle className="w-4 h-4 text-gray-400 hover:text-red-400" />
+                              </button>
+
+                              <button
                                 onClick={() => handleRemove(budget.id)}
                                 className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all"
                               >
@@ -419,6 +429,12 @@ const Budgets = () => {
         onSave={HandleSaveBudget}
         onDelete={handleRemove}
         editingBudget={editingBudget}
+      />
+
+      <DeductModal 
+      isOpen={deductModalOpen}
+      close={handleClose}
+      
       />
     </div>
   );
