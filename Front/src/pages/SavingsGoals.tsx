@@ -10,12 +10,13 @@ import {
   Car,
   Trash2,
   Search,
+  Goal,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
 import { SavingsGoalsModal } from "../components/SavingGoalsModal";
-import type { Goalsprops } from "../components/SavingGoalsModal";
+import type { Goalsprops, } from "../components/SavingGoalsModal";
 
 const SavingsGoals = () => {
   const [SavingModal, setSavingModal] = useState(false);
@@ -59,6 +60,7 @@ const SavingsGoals = () => {
     },
   ]);
 
+
   const HandleRemoveGoals = (id: number) => {
     console.log("clicado");
 
@@ -95,6 +97,8 @@ const SavingsGoals = () => {
             <p className="text-gray-400 text-[15px] w-[80%]">
               Visualize e gerencie seus objetivos financeiros de longo prazo.
             </p>
+
+            
           </div>
           <button
             onClick={() => setSavingModal(true)}
@@ -114,8 +118,8 @@ const SavingsGoals = () => {
                   <Wallet className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
-                  <p className="text-[13px] text-gray-400">Total Economizado</p>
-                  <h3 className="text-[24px] font-bold">$48,700.00</h3>
+                    <p className="text-[13px] text-gray-400">Total Economizado</p>
+                    <h3 className="text-[24px] font-bold">R$ {Goals.reduce((total, goal) => total + goal.current, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</h3>
                 </div>
               </div>
             </div>
@@ -125,12 +129,12 @@ const SavingsGoals = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
+                    <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
                   <Target className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Metas Ativas</p>
-                  <h3 className="text-[24px] font-bold">4 Ativas</h3>
+                  <h3 className="text-[24px] font-bold">{Goals.length}</h3>
                 </div>
               </div>
             </div>
@@ -145,7 +149,7 @@ const SavingsGoals = () => {
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Progresso Médio</p>
-                  <h3 className="text-[24px] font-bold">35%</h3>
+                  <h3 className="text-[24px] font-bold">{Goals.length > 0 ?  Math.round(Goals.reduce((a, e) => a + ( e.current / e.target) * 100,0) / Goals.length) : 0} %</h3>
                 </div>
               </div>
             </div>
@@ -153,7 +157,7 @@ const SavingsGoals = () => {
         </div>
 
         <h2 className="text-[20px] font-semibold mb-6">Suas Metas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">  
           {Goals.map((Goal) => {
             const percent = Math.round((Goal.current / Goal.target) * 100);
             const Icon = Goal.icon;
@@ -246,6 +250,7 @@ const SavingsGoals = () => {
                     <span className="text-[14px] text-gray-500">
                       de ${Goal.target.toLocaleString()}
                     </span>
+                    
                   </div>
 
                   <div className="space-y-2">

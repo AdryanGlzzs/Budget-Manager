@@ -20,6 +20,7 @@ type SavingsGoalsModalProps = {
   OnSave: (GoalsProps: Goalsprops ) => void
 };
 
+
 export interface Goalsprops {
   id: number;
   name: string;
