@@ -178,7 +178,6 @@ const Transactions = () => {
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] rounded-2xl border border-white/10 backdrop-blur-sm overflow-hidden">
-                {/* Cabeçalho Desktop - Ajustado para 13 colunas para incluir Ações */}
                 <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 bg-white/5 text-[13px] text-gray-400 font-medium">
                   <div className="col-span-4">Transação</div>
                   <div className="col-span-2">Categoria</div>

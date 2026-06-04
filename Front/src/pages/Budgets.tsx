@@ -14,12 +14,13 @@ import Header from "../components/Header";
 import { useState } from "react";
 import BudgetModal from "../components/BudgetModal";
 import type { BudgetsProps } from "../../src/components/BudgetModal";
-import { DeductModal } from "../components/deductModal";
+import { DeductModal } from "../components/DeductModal";
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
-  const [deductModalOpen, setDeductiModalOpen] = useState(false)
+  const [deductModalOpen, setDeductiModalOpen] = useState(false);
   const [budgetOpen, setBudgetOpen] = useState(false);
+  const [selected, setSelected] = useState<BudgetsProps | null>(null);
   const [editingBudget, setEditingBudget] = useState<BudgetsProps | null>(null);
 
   const [budgets, setBudgets] = useState<BudgetsProps[]>([
@@ -333,7 +334,10 @@ const Budgets = () => {
                               </button>
 
                               <button
-                                onClick={() => setDeductiModalOpen(true)}
+                                onClick={() => {
+                                  setSelected(budget);
+                                  setDeductiModalOpen(true);
+                                }}
                                 className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all"
                               >
                                 <MinusCircle className="w-4 h-4 text-gray-400 hover:text-red-400" />
@@ -431,10 +435,10 @@ const Budgets = () => {
         editingBudget={editingBudget}
       />
 
-      <DeductModal 
-      isOpen={deductModalOpen}
-      close={handleClose}
-      
+      <DeductModal
+        isOpen={deductModalOpen}
+        close={() => setDeductiModalOpen(false)}
+        selectedBudget={selected}
       />
     </div>
   );

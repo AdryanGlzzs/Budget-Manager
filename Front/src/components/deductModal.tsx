@@ -1,11 +1,49 @@
 import { X, Utensils, ChevronDown, ArrowRight } from "lucide-react";
+import React, { useState } from "react";
+import type { BudgetsProps } from "./BudgetModal";
 
-interface DeductModalProps {
+type PaymentCategory = "debito" | "credito" | "dinheiro" | "pix";
+type CategoryType = "Alimentação" | "Lazer" | "Saúde" | "Transporte";
+type ValueChange = number;
+
+export interface DeductModalProps {
   isOpen: boolean;
   close: () => void;
+  selectedBudget: BudgetsProps | null;
 }
 
-export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
+interface PropsModalDeduct {
+  id: number;
+  value: ValueChange;
+  paymentType: PaymentCategory;
+  description: string;
+  category: CategoryType;
+  datestring: string;
+}
+
+export const DeductModal = ({
+  isOpen,
+  close,
+  selectedBudget,
+}: DeductModalProps) => {
+  const [value, setValue] = useState<ValueChange>(0);
+  const [formDeduct, setFormDeduct] = useState<PropsModalDeduct>({
+    id: selectedBudget?.id ?? 0,
+    value: 0,
+    category: "Alimentação",
+    datestring: "",
+    description: "",
+    paymentType: "credito",
+  });
+
+  const AvailableBudget =
+    (selectedBudget?.limit ?? 0) - (selectedBudget?.spent ?? 0);
+
+  const HandleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(parseInt(event.target.value) || 0);
+  };
+
+
   if (!isOpen) return null;
 
   return (
@@ -41,11 +79,15 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
                   <Utensils className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[15px]">Alimentação</h4>
+                  <h4 className="font-bold text-[15px]">
+                    {selectedBudget?.name}
+                  </h4>
                   <p className="text-xs text-gray-400">
                     R${" "}
-                    <span className="text-purple-400 font-medium">450.00</span>{" "}
-                    de R$ 600.00 gastos
+                    <span className="text-purple-400 font-medium">
+                      {selectedBudget?.spent}{" "}
+                    </span>
+                    de R$ {selectedBudget?.limit},00 gastos
                   </p>
                 </div>
               </div>
@@ -75,8 +117,9 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
                     R$
                   </span>
                   <input
+                    onChange={HandleChangeValue}
                     type="number"
-                    defaultValue={150}
+                    defaultValue={0}
                     className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-10 pr-4 py-3 font-bold text-white focus:outline-none focus:border-red-500/50 transition-colors"
                   />
                 </div>
@@ -87,6 +130,7 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
                 </label>
                 <div className="relative">
                   <select
+                    value={formDeduct.paymentType}
                     defaultValue="Débito"
                     className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 appearance-none text-white font-medium focus:outline-none transition-colors"
                   >
@@ -95,7 +139,7 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
                     <option value="Pix">Pix</option>
                     <option value="Dinheiro">Dinheiro</option>
                   </select>
-                  <ChevronDown className="absolute right-4 top-4 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <ChevronDown className="absolute right-4 t  op-4 w-4 h-4 text-gray-400 pointer-events-none" />
                 </div>
               </div>
             </div>
@@ -127,6 +171,7 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
                 </label>
                 <div className="relative">
                   <select
+                    value={formDeduct.category}
                     defaultValue="Alimentação"
                     className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 appearance-none text-white font-medium focus:outline-none transition-colors"
                   >
@@ -146,7 +191,7 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
               <p className="text-[11px] text-gray-500 uppercase font-medium tracking-wider mb-1">
                 A deduzir
               </p>
-              <p className="text-xl font-bold text-red-400">– R$ 150.00</p>
+              <p className="text-xl font-bold text-red-400">– R$ {value}</p>
             </div>
             <ArrowRight className="w-5 h-5 text-gray-600" />
             <div className="text-right">
@@ -154,9 +199,10 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
                 Novo total gasto
               </p>
               <p className="text-base font-bold text-gray-300">
-                R$ 600.00{" "}
+                R$ {((selectedBudget?.spent ?? 0) + value).toFixed(2)}
                 <span className="text-gray-600 text-sm font-normal">
-                  / R$ 600.00
+                  {" "}
+                  / R$ {selectedBudget?.limit}
                 </span>
               </p>
             </div>
@@ -171,6 +217,7 @@ export const DeductModal = ({ isOpen, close }: DeductModalProps) => {
               Cancelar
             </button>
             <button
+              onClick={() => console.log("clicado")}
               type="button"
               className="flex-[2] py-3.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-colors shadow-lg shadow-red-900/20"
             >
