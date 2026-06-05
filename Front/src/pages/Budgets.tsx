@@ -14,11 +14,12 @@ import Header from "../components/Header";
 import { useState } from "react";
 import BudgetModal from "../components/BudgetModal";
 import type { BudgetsProps } from "../../src/components/BudgetModal";
-import { DeductModal } from "../components/DeductModal";
+import { DeductModal,  } from "../components/DeductModal";
+import type { PropsModalDeduct} from '../components/DeductModal'
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
-  const [deductModalOpen, setDeductiModalOpen] = useState(false);
+  const [deductModalOpen, setDeductModalOpen] = useState(false);
   const [budgetOpen, setBudgetOpen] = useState(false);
   const [selected, setSelected] = useState<BudgetsProps | null>(null);
   const [editingBudget, setEditingBudget] = useState<BudgetsProps | null>(null);
@@ -37,6 +38,8 @@ const Budgets = () => {
     },
   ]);
 
+  
+
   const HandleSaveBudget = (newBudget: BudgetsProps) => {
     setBudgets((prev) => {
       const exist = prev.find((b) => b.id === newBudget.id);
@@ -47,6 +50,27 @@ const Budgets = () => {
       }
     });
   };
+
+ const HandleSaveDeduct = (data: PropsModalDeduct) => {
+  if (!selected) return;
+
+  setBudgets((prevBudgets) => 
+    prevBudgets.map((budget) => { 
+      if (budget.id === selected.id) {
+        const newSpent = budget.spent + data.value
+        const newPercentage = Math.round((newSpent / budget.limit) * 100 )
+        return {
+          ...budget,
+          spent: budget.spent + data.value,
+          percentage: newPercentage
+        };
+      }
+      return budget; 
+    })
+  );
+};
+
+ 
 
   const handleRemove = (id: number) => {
     setBudgets((prev) => prev.filter((budget) => budget.id !== id));
@@ -336,7 +360,7 @@ const Budgets = () => {
                               <button
                                 onClick={() => {
                                   setSelected(budget);
-                                  setDeductiModalOpen(true);
+                                  setDeductModalOpen(true);
                                 }}
                                 className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-all"
                               >
@@ -437,8 +461,9 @@ const Budgets = () => {
 
       <DeductModal
         isOpen={deductModalOpen}
-        close={() => setDeductiModalOpen(false)}
+        close={() => setDeductModalOpen(false)}
         selectedBudget={selected}
+        saveDeduct={HandleSaveDeduct}
       />
     </div>
   );

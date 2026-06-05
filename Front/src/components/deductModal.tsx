@@ -5,14 +5,16 @@ import type { BudgetsProps } from "./BudgetModal";
 type PaymentCategory = "debito" | "credito" | "dinheiro" | "pix";
 type CategoryType = "Alimentação" | "Lazer" | "Saúde" | "Transporte";
 type ValueChange = number;
+type DataType = string;
 
 export interface DeductModalProps {
   isOpen: boolean;
   close: () => void;
   selectedBudget: BudgetsProps | null;
+  saveDeduct: (data: PropsModalDeduct) => void;
 }
 
-interface PropsModalDeduct {
+export interface PropsModalDeduct {
   id: number;
   value: ValueChange;
   paymentType: PaymentCategory;
@@ -25,8 +27,10 @@ export const DeductModal = ({
   isOpen,
   close,
   selectedBudget,
+  saveDeduct,
 }: DeductModalProps) => {
   const [value, setValue] = useState<ValueChange>(0);
+  const [data, setData] = useState<DataType>("");
   const [formDeduct, setFormDeduct] = useState<PropsModalDeduct>({
     id: selectedBudget?.id ?? 0,
     value: 0,
@@ -36,13 +40,56 @@ export const DeductModal = ({
     paymentType: "credito",
   });
 
-  const AvailableBudget =
-    (selectedBudget?.limit ?? 0) - (selectedBudget?.spent ?? 0);
+  const CurrentSpent = selectedBudget?.spent ?? 0;
+  const TotalWithNewValue = CurrentSpent + value;
 
+  const BudgetLimit = selectedBudget?.limit ?? 0;
+  
+
+  const FormattedTotal = TotalWithNewValue.toFixed(2);
   const HandleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(parseInt(event.target.value) || 0);
+    const inputValue = parseInt(event.target.value) || 0;
+
+    const WithTotalValue = CurrentSpent + inputValue;
+
+    if (WithTotalValue > BudgetLimit) {
+      alert("passou do orçamento");
+
+      setValue(0);
+
+      return;
+    }
+
+    setValue(inputValue);
   };
 
+  const HandleChangeData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const Value = event.target.value;
+
+    setData(Value);
+  };
+
+  const HandleConfirmDeduct = () => {
+    if (!selectedBudget) return;
+
+    const WithTotalValue = CurrentSpent + value;
+    if (WithTotalValue > BudgetLimit) {
+      alert("passou do orçamento");
+      return;
+    }
+
+    const payload: PropsModalDeduct = {
+      id: selectedBudget.id,
+      value: value,
+      paymentType: formDeduct.paymentType,
+      description: formDeduct.description,
+      category: formDeduct.category,
+      datestring: formDeduct.datestring,
+    };
+
+    saveDeduct(payload);
+    close();
+  };
 
   if (!isOpen) return null;
 
@@ -131,7 +178,12 @@ export const DeductModal = ({
                 <div className="relative">
                   <select
                     value={formDeduct.paymentType}
-                    defaultValue="Débito"
+                    onChange={(e) =>
+                      setFormDeduct((prev) => ({
+                        ...prev,
+                        paymentType: e.target.value as PaymentCategory,
+                      }))
+                    }
                     className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 appearance-none text-white font-medium focus:outline-none transition-colors"
                   >
                     <option value="Débito">Débito</option>
@@ -149,8 +201,14 @@ export const DeductModal = ({
                 Descrição <span className="text-gray-500">(opcional)</span>
               </label>
               <input
+                value={formDeduct.description}
+                onChange={(e) =>
+                  setFormDeduct((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 type="text"
-                defaultValue="Supermercado"
                 className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:outline-none transition-colors"
               />
             </div>
@@ -160,6 +218,7 @@ export const DeductModal = ({
                   Data
                 </label>
                 <input
+                  onChange={HandleChangeData}
                   type="date"
                   defaultValue="2025-05-29"
                   className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:outline-none transition-colors"
@@ -172,7 +231,12 @@ export const DeductModal = ({
                 <div className="relative">
                   <select
                     value={formDeduct.category}
-                    defaultValue="Alimentação"
+                    onChange={(e) =>
+                      setFormDeduct((prev) => ({
+                        ...prev,
+                        category: e.target.value as CategoryType,
+                      }))
+                    }
                     className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 appearance-none text-white font-medium focus:outline-none transition-colors"
                   >
                     <option value="Alimentação">Alimentação</option>
@@ -199,10 +263,10 @@ export const DeductModal = ({
                 Novo total gasto
               </p>
               <p className="text-base font-bold text-gray-300">
-                R$ {((selectedBudget?.spent ?? 0) + value).toFixed(2)}
+                {FormattedTotal}
                 <span className="text-gray-600 text-sm font-normal">
                   {" "}
-                  / R$ {selectedBudget?.limit}
+                  / R$ {selectedBudget?.limit.toFixed(2)}
                 </span>
               </p>
             </div>
@@ -217,7 +281,7 @@ export const DeductModal = ({
               Cancelar
             </button>
             <button
-              onClick={() => console.log("clicado")}
+              onClick={HandleConfirmDeduct}
               type="button"
               className="flex-[2] py-3.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-colors shadow-lg shadow-red-900/20"
             >
