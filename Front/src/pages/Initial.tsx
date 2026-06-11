@@ -396,6 +396,9 @@ const InitialPage = () => {
                               +2.7%
                             </span>
                           </div>
+                          <div className="bg-red-500 text-white text-4xl p-10">
+                            TESTE TAILWIND
+                          </div>
                         </div>
 
                         <ResponsiveContainer width="100%" height={180}>

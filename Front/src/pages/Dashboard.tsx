@@ -30,8 +30,6 @@ const Dashboard = () => {
   const cashFlowData = [{ month: "Jan", income: 4400, expense: 2200 }];
   const categoryData = [{ name: "Alimentação", value: 30, color: "#6366F1" }];
 
-  
-
   const recentTransactions = [
     {
       id: 6,
@@ -160,10 +158,10 @@ const Dashboard = () => {
               </div>
             </section>
 
-            <section className="sm:grid sm:grid-cols-2 sm:gap-6 sm:mb-8">
-              <div className="relative group">
+            <section className="sm:grid sm:grid-cols-2 sm:gap-6 sm:mb-8 sm:items-stretch">
+              <div className="relative group min-w-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all min-w-0">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <div className="text-[18px] font-semibold mb-2">
@@ -240,7 +238,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="relative group mt-5">
+              <div className="relative group min-w-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
@@ -252,23 +250,21 @@ const Dashboard = () => {
 
                   <div className="flex items-center gap-6">
                     <div className="relative w-40 h-40">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={categoryData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={50}
-                            outerRadius={70}
-                            paddingAngle={2}
-                            dataKey="value"
-                          >
-                            {categoryData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                          </Pie>
-                        </PieChart>
-                      </ResponsiveContainer>
+                      <PieChart width={160} height={160}>
+                        <Pie
+                          data={categoryData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={50}
+                          outerRadius={70}
+                          paddingAngle={2}
+                          dataKey="value"
+                        >
+                          {categoryData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                      </PieChart>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <div className="text-[28px] font-bold">100%</div>
                         <div className="text-[11px] text-gray-500">
@@ -400,7 +396,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="relative group mt-5">
+              <div className="relative group">
                 <div className="absolute inset-0 bg-green-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-3 mb-4">
@@ -410,6 +406,8 @@ const Dashboard = () => {
                     <h3 className="text-[16px] font-semibold">
                       Meta de Economia
                     </h3>
+
+                    
                   </div>
 
                   <div className="mb-4">
@@ -438,7 +436,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="relative group mt-5">
+              <div className="relative group">
                 <div className="absolute inset-0 bg-orange-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-3 mb-4">

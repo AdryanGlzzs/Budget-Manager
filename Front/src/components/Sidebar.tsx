@@ -50,7 +50,7 @@ const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
 
   return (
     <aside
-      className={`fixed h-[calc(100vh-89px)] z-[100] top-0 lg:top-[89px] w-64 min-h-screen border-l lg:border-l-0 lg:border-r border-white/10 bg-[#08080f]/90 backdrop-blur-sm p-6 flex flex-col transition-transform duration-300 
+      className={`fixed h-[calc(100vh-89px)] z-[100] top-0 lg:top-[89px] w-64 min-h-screen border-l lg:border-l-0 lg:border-r border-white/10 bg-[#050510]/80 backdrop-blur-xl p-6 flex flex-col transition-transform duration-300 
     ${open ? "translate-x-0" : "translate-x-full lg:translate-x-0"} 
     right-0 lg:right-auto lg:left-0 lg:flex lg:mt-0`}
     >

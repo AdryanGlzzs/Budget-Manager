@@ -95,7 +95,7 @@ const Transactions = () => {
                         Receita Total
                       </div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1">{TotalRevenue}</div>
+                    <div className="text-[32px] font-bold mb-1">{TotalRevenue.toFixed(2)}</div>
                     <div className="text-[13px] text-green-400">Este mês</div>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ const Transactions = () => {
                         Despesas Totais
                       </div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1">{TotalExpense}</div>
+                    <div className="text-[32px] font-bold mb-1">{TotalExpense.toFixed(2)}</div>
                     <div className="text-[13px] text-red-400">Este mês</div>
                   </div>
                 </div>
@@ -125,7 +125,7 @@ const Transactions = () => {
                       </div>
                       <div className="text-[14px] text-gray-400">Saldo</div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1">{TotalBalance}</div>
+                    <div className="text-[32px] font-bold mb-1">{TotalBalance.toFixed(2)}</div>
                     <div className="text-[13px] text-green-400">Este mês</div>
                   </div>
                 </div>
