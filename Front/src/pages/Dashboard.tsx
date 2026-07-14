@@ -56,7 +56,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[  -200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
@@ -75,15 +75,15 @@ const Dashboard = () => {
           <main className="sm:flex-1 p-4 max-w-[1400px] z-10">
             <section className="mb-8 mt-20">
               <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/30 via-purple-600/20 to-blue-600/30 rounded-[40px] blur-[60px] opacity-70"></div>
-                <div className="flex flex-col bg-gradient-to-br from-white/10 to-white/[0.02] p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="absolute -inset-4 bg-linear-to-br from-purple-500/30 via-purple-600/20 to-blue-600/30 rounded-[40px] blur-[60px] opacity-70"></div>
+                <div className="flex flex-col bg-linear-to-br from-white/10 to-white/2 p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex sm:flex-row items-center justify-between gap-4 sm:gap-0 mb-6">
                     <div>
                       <div className="text-[14px] text-gray-400 mb-2 flex items-center gap-2">
                         <DollarSign className="w-4 h-4" />
                         Saldo Total
                       </div>
-                      <div className="mt-5 text-[45px] font-bold leading-none bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-3">
+                      <div className="mt-5 text-[45px] font-bold leading-none bg-linear-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-3">
                         $66,000.00
                       </div>
                       <div className="flex items-center gap-2 text-[14px]">
@@ -108,9 +108,9 @@ const Dashboard = () => {
                   </div>
 
                   <div className="sm:grid sm:grid-cols-2 gap-5 flex flex-col">
-                    <div className=" block sm:relative group/card">
+                    <div className="block sm:relative group/card">
                       <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover/card:opacity-80 transition-opacity"></div>
-                      <div className="relative bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm hover:border-purple-500/50 transition-all">
+                      <div className="relative bg-linear-to-br from-purple-600/20 to-purple-800/10 p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm hover:border-purple-500/50 transition-all">
                         <div className="flex items-center gap-4">
                           <div className="w-14 h-14 bg-purple-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
                             <TrendingUp className="w-7 h-7 text-purple-400" />
@@ -133,7 +133,7 @@ const Dashboard = () => {
 
                     <div className="relative group/card">
                       <div className="absolute inset-0 bg-cyan-600/30 rounded-2xl blur-xl opacity-60 group-hover/card:opacity-80 transition-opacity"></div>
-                      <div className="relative bg-gradient-to-br from-cyan-600/20 to-cyan-800/10 p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm hover:border-cyan-500/50 transition-all">
+                      <div className="relative bg-linear-to-br from-cyan-600/20 to-cyan-800/10 p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm hover:border-cyan-500/50 transition-all">
                         <div className="flex items-center gap-4">
                           <div className="w-14 h-14 bg-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
                             <TrendingDown className="w-7 h-7 text-cyan-400" />
@@ -160,8 +160,8 @@ const Dashboard = () => {
 
             <section className="sm:grid sm:grid-cols-2 sm:gap-6 sm:mb-8 sm:items-stretch">
               <div className="relative group min-w-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all min-w-0">
+                <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all min-w-0">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <div className="text-[18px] font-semibold mb-2">
@@ -239,8 +239,8 @@ const Dashboard = () => {
               </div>
 
               <div className="relative group min-w-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
                     <div className="text-[18px] font-semibold">
                       Gastos por Categoria
@@ -300,8 +300,8 @@ const Dashboard = () => {
 
             <section className="mb-8 mt-5">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-[20px] font-semibold">
                       Transações Recentes
@@ -365,7 +365,7 @@ const Dashboard = () => {
             <section className="sm:grid sm:grid-cols-3 gap-6 mb-8">
               <div className="relative group">
                 <div className="absolute inset-0 bg-purple-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
                       <Target className="w-5 h-5 text-purple-400" />
@@ -389,7 +389,7 @@ const Dashboard = () => {
 
                   <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-purple-600 to-purple-500 h-full rounded-full shadow-lg shadow-purple-600/50 transition-all"
+                      className="bg-linear-to-r from-purple-600 to-purple-500 h-full rounded-full shadow-lg shadow-purple-600/50 transition-all"
                       style={{ width: "64%" }}
                     ></div>
                   </div>
@@ -398,7 +398,7 @@ const Dashboard = () => {
 
               <div className="relative group">
                 <div className="absolute inset-0 bg-green-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
                       <Wallet className="w-5 h-5 text-green-400" />
@@ -406,8 +406,6 @@ const Dashboard = () => {
                     <h3 className="text-[16px] font-semibold">
                       Meta de Economia
                     </h3>
-
-                    
                   </div>
 
                   <div className="mb-4">
@@ -429,7 +427,7 @@ const Dashboard = () => {
 
                   <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-green-600 to-green-500 h-full rounded-full shadow-lg shadow-green-600/50 transition-all"
+                      className="bg-linear-to-r from-green-600 to-green-500 h-full rounded-full shadow-lg shadow-green-600/50 transition-all"
                       style={{ width: "24%" }}
                     ></div>
                   </div>
@@ -438,7 +436,7 @@ const Dashboard = () => {
 
               <div className="relative group">
                 <div className="absolute inset-0 bg-orange-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
                       <Calendar className="w-5 h-5 text-orange-400" />
@@ -483,10 +481,10 @@ const Dashboard = () => {
 
             <section>
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-transparent to-orange-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                <div className="absolute inset-0 bg-linear-to-br from-yellow-500/20 via-transparent to-orange-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/30">
+                    <div className="w-12 h-12 bg-linear-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-500/30">
                       <Zap className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -521,7 +519,7 @@ const Dashboard = () => {
                     ))}
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 py-3 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+                  <button className="w-full bg-linear-to-r from-purple-600 to-purple-500 py-3 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
                     Ver Mais Insights
                     <ChevronRight className="w-4 h-4" />
                   </button>

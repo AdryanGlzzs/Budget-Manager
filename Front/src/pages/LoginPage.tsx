@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff } from "lucide-react";
 import Logo from "../images/logo.png";
-import { useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider, facebookProvider, gitHubProvider } from "../firebase/firebase";
+import {
+  auth,
+  googleProvider,
+  facebookProvider,
+  gitHubProvider,
+} from "../firebase/firebase";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +20,7 @@ const LoginPage = () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
       console.log("Usuário logado:", result.user);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Erro detalhado:", error);
     }
   };
@@ -33,9 +37,9 @@ const LoginPage = () => {
 
   const handleLoginGithub = async () => {
     try {
-      const result = await signInWithPopup(auth, gitHubProvider)
-      const user = result.user
-      
+      const result = await signInWithPopup(auth, gitHubProvider);
+      const user = result.user;
+
       console.log(user.displayName, user.email);
     } catch (error) {
       console.error("Erro:", error);
@@ -67,7 +71,7 @@ const LoginPage = () => {
         </div>
 
         <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-blue-600/50 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+          <div className="absolute -inset-1 bg-linear-to-r from-purple-600/50 to-blue-600/50 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
 
           <div className="relative bg-[#0a0a14]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
             <div className="grid grid-cols-3 gap-4 mb-8">
@@ -148,7 +152,7 @@ const LoginPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="exemplo@email.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required
                   />
                 </div>
@@ -173,7 +177,7 @@ const LoginPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-12 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-12 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required
                   />
                   <button
@@ -192,7 +196,7 @@ const LoginPage = () => {
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-[15px] shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-2"
+                className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-[15px] shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-2"
               >
                 Entrar na Conta
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
