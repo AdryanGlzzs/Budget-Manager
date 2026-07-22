@@ -1,16 +1,20 @@
 import express from 'express'
 import { Request, Response } from 'express'
 import { routes } from './routes/routes'
+import cors from 'cors'
 
 const app = express()
-app.use(express.json)
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+}));
+
+app.use(express.json())
 app.use(routes)
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "API funcionando!"
-  });
-});
+
 
 const PORT = 3000;
 
