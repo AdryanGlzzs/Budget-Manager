@@ -2,23 +2,48 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff, User } from "lucide-react";
 import Logo from "../images/logo.png";
+import { api } from "../services/api";
+
+interface UserProps {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string
+}
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<UserProps>({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const handleRegister = (e: React.FormEvent) => {
-    
-  
+  const handleRegister = async () => {
+    try {
+      if (!formData.name) {
+        alert("Nome inválido");
+        return;
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        alert("Senhas não coincidem");
+        return;
+      }
+
+      const req = await api.post('/register', formData);
+      console.log(req.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   return (

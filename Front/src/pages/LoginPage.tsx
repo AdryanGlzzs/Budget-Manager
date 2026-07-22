@@ -16,6 +16,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+
   const handleLoginFacebook = async () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
