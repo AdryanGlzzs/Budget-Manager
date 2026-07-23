@@ -1,21 +1,45 @@
-import { useState } from "react";
+import { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff } from "lucide-react";
 import Logo from "../images/logo.png";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, } from "firebase/auth";
 import {
   auth,
   googleProvider,
   facebookProvider,
   gitHubProvider,
 } from "../firebase/firebase";
+import { api } from "../services/api";
+
+interface User {
+  email: string;
+  password: string
+}
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [User, setUser] = useState<User>({
+    email: "",
+    password: ""
+  })
 
+  const HandleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    try {
+      const UserData = {
+        email: User.email,
+        password: User.password
+      };
+
+      const response = await api.post("/login", UserData);
+      console.log(response.data);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+    }
+  };
 
   const handleLoginFacebook = async () => {
     try {
@@ -150,8 +174,8 @@ const LoginPage = () => {
                   <Mail className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
                   <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={User.email}
+                    onChange={(e) => setUser({ ...User, email: e.target.value })}
                     placeholder="exemplo@email.com"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required
@@ -175,8 +199,8 @@ const LoginPage = () => {
                   <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
                   <input
                     type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={User.password}
+                    onChange={(e) => setUser({ ...User, password: e.target.value })}
                     placeholder="••••••••"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-12 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required
@@ -197,6 +221,7 @@ const LoginPage = () => {
 
               <button
                 type="submit"
+                onClick={HandleLogin}
                 className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-[15px] shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-2"
               >
                 Entrar na Conta

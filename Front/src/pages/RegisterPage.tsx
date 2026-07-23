@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, type ReactElement} from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff, User } from "lucide-react";
 import Logo from "../images/logo.png";
 import { api } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 interface UserProps {
   name: string;
@@ -19,21 +20,16 @@ const RegisterPage = () => {
     password: "",
     confirmPassword: "",
   });
+  const navigate = useNavigate()
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+
+    e.preventDefault()
+
     try {
-      if (!formData.name) {
-        alert("Nome inválido");
-        return;
-      }
-
-      if (formData.password !== formData.confirmPassword) {
-        alert("Senhas não coincidem");
-        return;
-      }
-
       const req = await api.post('/register', formData);
       console.log(req.data);
+      navigate("/dashboard")
     } catch (error) {
       console.error(error);
     }
