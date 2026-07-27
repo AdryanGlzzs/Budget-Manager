@@ -1,23 +1,21 @@
-import { Router } from "express";
 import { Request, Response } from "express";
 
-export const UserController = Router()
+export class UserController {
+  static signup(req: Request, res: Response) {
+    const { name, email, password, confirmPassword } = req.body;
 
-UserController.post('/register', (req: Request, res: Response) =>{
-    const {name, email, password, confirmPassword} = req.body
-    console.log(req.body)
+    return res.status(201).json({
+      message: "Usuário cadastrado com sucesso!",
+      user: { name, email, password, confirmPassword }
+    });
+  }
+  
+  static login(req: Request, res: Response) {
+    const { email, password } = req.body;
 
-    return res.status(201).send({
-        message: "Usuário cadastrado com sucesso!",
-        user: { name, email, password, confirmPassword }
-    })
-})
-
-UserController.post('/login', (req: Request, res: Response) => {
-    const {email, password} = req.body
-
-    return res.status(201).send({
-        message: "Usuário cadastrado com sucesso!",
-        user: {email, password}
-    })
-})
+    return res.status(200).json({
+      message: "Logado com sucesso!",
+      user: { email, password }
+    });
+  }
+}
