@@ -43,6 +43,8 @@ export const LoginUserMiddleware = (req: Request, res: Response, next: NextFunct
             errors: result.error.issues,
         })
     }
+
+    next()
 }
 
 
