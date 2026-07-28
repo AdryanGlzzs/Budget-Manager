@@ -1,13 +1,22 @@
 import { Request, Response } from "express";
+import {prisma} from '../lib/prisma'
 
 export class UserController {
-  static signup(req: Request, res: Response) {
-    const { name, email, password, confirmPassword } = req.body;
+  static async signup(req: Request, res: Response) {
+    const { name, email, password} = req.body;
+
+    const user = await prisma.user.create({
+      data:{
+        name,
+        email,
+        password,
+      }
+    })
 
     return res.status(201).json({
-      message: "Usuário cadastrado com sucesso!",
-      user: { name, email, password, confirmPassword }
-    });
+      message: "Cliente cadastrado com sucesso",
+      user
+    })
   }
   
   static login(req: Request, res: Response) {

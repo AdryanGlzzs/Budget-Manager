@@ -4,5 +4,4 @@ import { TransactionController } from '../controllers/TransactionController'
 import  routerUser  from "../routes/userRoutes"
 
 export const routes = Router()
-
 routes.use(routerUser)
