@@ -32,8 +32,7 @@ const Transactions = () => {
     setOpenModal(false);
   };
 
-  const HandleRemove = (id: number) => {
-    console.log("clicado")
+  const HandleRemove = (id: string) => {
     setTransactions((prev) =>
       prev.filter((transaction) => transaction.id !== id),
     );

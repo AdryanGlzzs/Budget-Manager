@@ -27,7 +27,7 @@ const RegisterPage = () => {
     e.preventDefault()
 
     try {
-      const req = await api.post('/register', formData);
+      const req = await api.post('/signup', formData);
       console.log(req.data);
       navigate("/dashboard")
     } catch (error) {

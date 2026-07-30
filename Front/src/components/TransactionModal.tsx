@@ -9,9 +9,11 @@ import {
   Utensils,
   Gamepad2,
   Zap,
+  Icon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
+import { api } from "../services/api";
 
 type TransactionModalProps = {
   Isopen: boolean;
@@ -20,27 +22,27 @@ type TransactionModalProps = {
 };
 
 export interface TransactionProps {
-  id: number;
+  id: string;
   name: string;
   category: string;
-  dateString: string;
+  date: string;
   amount: number;
-  icon: LucideIcon;
-  color: string;  
+  icon: string;
+  color: string;
   type: "expense" | "revenue";
   status: boolean;
 }
 
-const IconOptions = [
-  { id: 1, label: "Café", icon: Coffee },
-  { id: 2, label: "Compras", icon: ShoppingCart },
-  { id: 3, label: "Carro", icon: Car },
-  { id: 4, label: "Casa", icon: Home },
-  { id: 5, label: "Saúde", icon: Heart },
-  { id: 6, label: "Trabalho", icon: Briefcase },
-  { id: 7, label: "Comida", icon: Utensils },
-  { id: 8, label: "Lazer", icon: Gamepad2 },
-  { id: 9, label: "Energia", icon: Zap },
+const Options = [
+  { id: 1, label: "Café", icon: "Coffee", component: Coffee },
+  { id: 2, label: "Compras", icon: "ShoppingCart", component: ShoppingCart },
+  { id: 3, label: "Carro", icon: "Car", component: Car },
+  { id: 4, label: "Casa", icon: "Home", component: Home },
+  { id: 5, label: "Saúde", icon: "Heart", component: Heart },
+  { id: 6, label: "Trabalho", icon: "Briefcase", component: Briefcase },
+  { id: 7, label: "Comida", icon: "Utensils", component: Utensils },
+  { id: 8, label: "Lazer", icon: "Gamepad2", component: Gamepad2 },
+  { id: 9, label: "Energia", icon: "Zap", component: Zap },
 ];
 
 const ColorOptions = [
@@ -61,12 +63,12 @@ export const TransactionModal = ({
   onSave,
 }: TransactionModalProps) => {
   const [formProps, setFormProps] = useState<TransactionProps>({
-    id: Math.floor(Math.random() * 1000),
+    id: "",
     name: "",
     category: "Alimentação",
-    dateString: new Date().toISOString().split("T")[0],
+    date: new Date().toISOString().split("T")[0],
     amount: 0,
-    icon: Coffee,
+    icon: "Coffee",
     color: "#6366F1",
     type: "revenue",
     status: true,
@@ -80,31 +82,33 @@ export const TransactionModal = ({
     }));
   };
 
-  const HandleSave = () => {
-    if (!formProps.name || formProps.amount <= 0) return;
+  const HandleSave = async () => {
+    try {
 
-    const FinalAmount = formProps.type === 'expense'
-    ? -Math.abs(formProps.amount)
-    : formProps.amount;
+      const dataTransaction = {
+        name: formProps.name,
+        category: formProps.category,
+        date: formProps.date,
+        amount: formProps.amount,
+        icon: formProps.icon,
+        color: formProps.color,
+        type: formProps.type,
+        status: formProps.status
+      }
 
-    onSave({ ...formProps, amount: FinalAmount });
+      const req = await api.post('/transactions', dataTransaction)
 
-    setFormProps({
-      id: Math.floor(Math.random() * 1000),
-      name: "",
-      category: "Alimentação",
-      dateString: new Date().toISOString().split("T")[0],
-      amount: 0,
-      icon: Coffee,
-      color: "#6366F1",
-      type: "revenue",
-      status: true,
-    });
+      console.log(req)
 
-    close();
+      onSave({ ...formProps })
+
+      close()
+    } catch (error) {
+      console.log(error)
+    }
   };
 
-   
+
 
   if (!Isopen) return null;
 
@@ -124,11 +128,10 @@ export const TransactionModal = ({
                   Nova Transação
                 </h2>
                 <span
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${
-                    formProps.type === "revenue"
-                      ? "bg-emerald-500/20 text-emerald-400"
-                      : "bg-red-500/15 text-red-400"
-                  }`}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${formProps.type === "revenue"
+                    ? "bg-emerald-500/20 text-emerald-400"
+                    : "bg-red-500/15 text-red-400"
+                    }`}
                 >
                   <span className={`text-[11px] font-semibold`}>
                     {formProps.type === "revenue" ? "Receita" : "Despesa"}
@@ -190,7 +193,30 @@ export const TransactionModal = ({
                     Receita
                   </button>
                 </div>
-              </div>  
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                Categoria
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {Options.map(({ label, component: IconOption, id }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => HandleChange("category", label)}
+                    title={label}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${formProps.category === label
+                      ? "border-purple-500 bg-purple-500/20 text-purple-400"
+                      : "border-white/10 bg-white/5 text-gray-400"
+                      }`}
+                  >
+                    <IconOption className="w-4 h-4" />
+                    <span className="text-[12px]">{label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div>
@@ -203,11 +229,10 @@ export const TransactionModal = ({
                     key={color.hex}
                     type="button"
                     onClick={() => HandleChange("color", color.hex)}
-                    className={`w-8 h-8 rounded-full border-2 transition-all ${
-                      formProps.color === color.hex
-                        ? "border-white scale-110"
-                        : "border-transparent"
-                    }`}
+                    className={`w-8 h-8 rounded-full border-2 transition-all ${formProps.color === color.hex
+                      ? "border-white scale-110"
+                      : "border-transparent"
+                      }`}
                     style={{ backgroundColor: color.hex }}
                     title={color.label}
                   />
@@ -220,17 +245,16 @@ export const TransactionModal = ({
                 Ícone
               </label>
               <div className="flex flex-wrap gap-2">
-                {IconOptions.map(({ label, icon: IconOption, id }) => (
+                {Options.map(({ label, icon, component: IconOption, id }) => (
                   <button
                     key={id}
                     type="button"
-                    onClick={() => HandleChange("icon", IconOption)}
+                    onClick={() => HandleChange("icon", icon)}
                     title={label}
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${
-                      formProps.icon === IconOption
-                        ? "border-purple-500 bg-purple-500/20 text-purple-400"
-                        : "border-white/10 bg-white/5 text-gray-400"
-                    }`}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${formProps.icon === icon
+                      ? "border-purple-500 bg-purple-500/20 text-purple-400"
+                      : "border-white/10 bg-white/5 text-gray-400"
+                      }`}
                   >
                     <IconOption className="w-4 h-4" />
                   </button>
