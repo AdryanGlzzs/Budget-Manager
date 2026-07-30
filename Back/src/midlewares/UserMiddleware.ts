@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { email, z } from "zod"
+import { z } from "zod"
 
 const SchemaUserSignUp = z.object({
     name: z.string().min(3, "O nome tem que ter no minimo 3 caracteres").trim(),
@@ -34,11 +34,11 @@ export const SignUpUserMiddleware = (req: Request, res: Response, next: NextFunc
 }
 
 export const LoginUserMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const { email, password} = req.body
+    const { email, password } = req.body
 
     const result = SchemaUserLogin.safeParse(req.body)
 
-    if(!result.success){
+    if (!result.success) {
         res.status(400).json({
             errors: result.error.issues,
         })
