@@ -9,33 +9,57 @@ import {
   ChevronDown,
   Plus,
   Trash2,
+  Coffee,
+  ShoppingCart,
+  Car,
+  Home,
+  Heart,
+  Briefcase,
+  Utensils,
+  Gamepad2,
+  Zap,
+  HelpCircle
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
-import { TransactionModal } from "../components/TransactionModal";  
+import { TransactionModal } from "../components/TransactionModal";
 import type { TransactionProps } from "../components/TransactionModal";
+import { api } from "../services/api";
+
+
 
 const Transactions = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
 
-  const TotalRevenue = transaction.filter(t => t.type === 'revenue').reduce((sun, t) => sun + t.amount , 0)
-  const TotalExpense = transaction.filter(t => t.type === 'expense').reduce((decrease , t) => decrease + t.amount, 0)
-  const TotalBalance = [TotalExpense, TotalRevenue].reduce((total, t) => total + t, 0)
-  console.log(TotalBalance)
+  const TotalRevenue = transaction
+    .filter((t) => t.type === "revenue")
+    .reduce((sun, t) => sun + Number(t.amount || 0), 0);
 
+  const TotalExpense = transaction
+    .filter((t) => t.type === "expense")
+    .reduce((decrease, t) => decrease + Number(t.amount || 0), 0);
+
+  const TotalBalance = TotalRevenue - TotalExpense;
+
+
+  console.log(TotalBalance)
 
   const HandleSaveTransaction = (NewTransaction: TransactionProps) => {
     setTransactions((prev) => [...prev, NewTransaction]);
     setOpenModal(false);
   };
 
-  const HandleRemove = (id: string) => {
-    setTransactions((prev) =>
-      prev.filter((transaction) => transaction.id !== id),
-    );
+  const HandleRemove = async (id: string) => {
+    try {
+      await api.delete(`/transactions/delete/${id}`);
+
+      setTransactions((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar transação:", error);
+    }
   };
 
   const selectedFilter = "Tudo";
@@ -44,6 +68,18 @@ const Transactions = () => {
   const filterOptions = ["Tudo", "Receita", "Despesas", "Pendente"];
 
   const filteredTransactions = transaction;
+
+  const iconMap: Record<string, React.ElementType> = {
+    Coffee,
+    ShoppingCart,
+    Car,
+    Home,
+    Heart,
+    Briefcase,
+    Utensils,
+    Gamepad2,
+    Zap,
+  };
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
@@ -140,11 +176,10 @@ const Transactions = () => {
                       {filterOptions.map((filter) => (
                         <button
                           key={filter}
-                          className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-[13px] sm:text-[14px] font-medium transition-all ${
-                            selectedFilter === filter
-                              ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
-                              : "text-gray-400 hover:text-white hover:bg-white/5"
-                          }`}
+                          className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-[13px] sm:text-[14px] font-medium transition-all ${selectedFilter === filter
+                            ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
+                            : "text-gray-400 hover:text-white hover:bg-white/5"
+                            }`}
                         >
                           {filter}
                         </button>
@@ -188,7 +223,7 @@ const Transactions = () => {
 
                 <div className="divide-y divide-white/5">
                   {filteredTransactions.map((transaction) => {
-                    const Icon = transaction.icon;
+                    const IconComponent = iconMap[transaction.icon] || HelpCircle;
                     return (
                       <div
                         key={transaction.id}
@@ -204,7 +239,7 @@ const Transactions = () => {
                                   boxShadow: `0 4px 12px ${transaction.color}20`,
                                 }}
                               >
-                                <Icon
+                                <IconComponent
                                   className="w-4 h-4"
                                   style={{ color: transaction.color }}
                                 />
@@ -221,11 +256,10 @@ const Transactions = () => {
                             </div>
                             <div className="flex flex-col items-end gap-2">
                               <div
-                                className={`text-[16px] font-bold ${
-                                  transaction.amount > 0
-                                    ? "text-green-400"
-                                    : "text-red-400"
-                                }`}
+                                className={`text-[16px] font-bold ${transaction.amount > 0
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                                  }`}
                               >
                                 {transaction.amount > 0 ? "+" : ""}$
                                 {Math.abs(transaction.amount).toFixed(2)}
@@ -251,14 +285,13 @@ const Transactions = () => {
                               {transaction.category}
                             </div>
                             <div className="text-[12px] text-gray-400 flex-1 text-center px-2">
-                              {transaction.dateString}
+                              {transaction.date}
                             </div>
                             <span
-                              className={`px-2 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap ${
-                                transaction.status === true
-                                  ? "bg-green-400/10 text-green-400"
-                                  : "bg-yellow-400/10 text-yellow-400"
-                              }`}
+                              className={`px-2 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap ${transaction.status === true
+                                ? "bg-green-400/10 text-green-400"
+                                : "bg-yellow-400/10 text-yellow-400"
+                                }`}
                             >
                               {transaction.status === true
                                 ? "Concluído"
@@ -276,7 +309,7 @@ const Transactions = () => {
                                 boxShadow: `0 4px 12px ${transaction.color}20`,
                               }}
                             >
-                              <Icon
+                              <IconComponent
                                 className="w-5 h-5"
                                 style={{ color: transaction.color }}
                               />
@@ -287,7 +320,7 @@ const Transactions = () => {
                               </div>
                               <div className="text-[12px] text-gray-500">
                                 ID: #
-                                {transaction.id.toString().padStart(6, "0")}
+                                {transaction.id ? String(transaction.id).slice(0, 2) : "N/A"}
                               </div>
                             </div>
                           </div>
@@ -306,16 +339,15 @@ const Transactions = () => {
                           </div>
 
                           <div className="col-span-2 text-[14px] text-gray-400">
-                            {transaction.dateString}
+                            {transaction.date}
                           </div>
 
                           <div className="col-span-2 flex justify-center">
                             <span
-                              className={`px-3 py-1.5 rounded-lg text-[12px] font-medium ${
-                                transaction.status === true
-                                  ? "bg-green-400/10 text-green-400"
-                                  : "bg-yellow-400/10 text-yellow-400"
-                              }`}
+                              className={`px-3 py-1.5 rounded-lg text-[12px] font-medium ${transaction.status === true
+                                ? "bg-green-400/10 text-green-400"
+                                : "bg-yellow-400/10 text-yellow-400"
+                                }`}
                             >
                               {transaction.status === true
                                 ? "Concluído"
@@ -325,11 +357,10 @@ const Transactions = () => {
 
                           <div className="col-span-1 text-right">
                             <div
-                              className={`text-[16px] font-bold ${
-                                transaction.amount > 0
-                                  ? "text-green-400"
-                                  : "text-red-400"
-                              }`}
+                              className={`text-[16px] font-bold ${transaction.amount > 0
+                                ? "text-green-400"
+                                : "text-red-400"
+                                }`}
                             >
                               {transaction.amount > 0 ? "+" : "-"}$
                               {Math.abs(transaction.amount).toFixed(2)}

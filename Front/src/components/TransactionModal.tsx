@@ -9,10 +9,8 @@ import {
   Utensils,
   Gamepad2,
   Zap,
-  Icon,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { api } from "../services/api";
 
 type TransactionModalProps = {
@@ -32,6 +30,28 @@ export interface TransactionProps {
   type: "expense" | "revenue";
   status: boolean;
 }
+const iconMap: Record<string, React.ElementType> = {
+  Coffee,
+  ShoppingCart,
+  Car,
+  Home,
+  Heart,
+  Briefcase,
+  Utensils,
+  Gamepad2,
+  Zap,
+}
+const initialForm: TransactionProps = {
+  id: "",
+  name: "",
+  category: "Alimentação",
+  date: new Date().toISOString().split("T")[0],
+  amount: 0,
+  icon: "Coffee",
+  color: "#6366F1",
+  type: "expense",
+  status: true,
+};
 
 const Options = [
   { id: 1, label: "Café", icon: "Coffee", component: Coffee },
@@ -57,22 +77,13 @@ const ColorOptions = [
   { label: "Azul", hex: "#3B82F6" },
 ];
 
+
 export const TransactionModal = ({
   Isopen,
   close,
   onSave,
 }: TransactionModalProps) => {
-  const [formProps, setFormProps] = useState<TransactionProps>({
-    id: "",
-    name: "",
-    category: "Alimentação",
-    date: new Date().toISOString().split("T")[0],
-    amount: 0,
-    icon: "Coffee",
-    color: "#6366F1",
-    type: "revenue",
-    status: true,
-  });
+  const [formProps, setFormProps] = useState<TransactionProps>(initialForm);
 
 
   const HandleChange = (field: keyof TransactionProps, value: any) => {
@@ -100,7 +111,9 @@ export const TransactionModal = ({
 
       console.log(req)
 
-      onSave({ ...formProps })
+      onSave(req.data.data)
+
+      setFormProps(initialForm)
 
       close()
     } catch (error) {
