@@ -22,44 +22,46 @@ type BudgetModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onSave: (budget: BudgetsProps) => void;
-  onDelete?: (id: number) => void;
+  onDelete?: (id: string) => void;
   editingBudget?: BudgetsProps | null;
 };
 
-export interface BudgetsProps {
-  id: number;
-  name: string;
+export const iconOptions: {
+  iconName: string;
   icon: LucideIcon;
+}[] = [
+    { iconName: "Coffee", icon: Coffee },
+    { iconName: "Car", icon: Car },
+    { iconName: "ShoppingBag", icon: ShoppingBag },
+    { iconName: "Zap", icon: Zap },
+    { iconName: "Home", icon: Home },
+    { iconName: "Smartphone", icon: Smartphone },
+    { iconName: "Clapperboard", icon: Clapperboard },
+    { iconName: "Dumbbell", icon: Dumbbell },
+    { iconName: "Plane", icon: Plane },
+    { iconName: "Pill", icon: Pill },
+    { iconName: "BookOpen", icon: BookOpen },
+    { iconName: "PawPrint", icon: PawPrint },
+  ];
+
+export type IconName = keyof typeof iconOptions;
+
+export interface BudgetsProps {
+  id: string;
+  name: string;
+  icon: IconName;
   color: string;
   spent: number;
   limit: number;
   percentage: number;
   trend: string;
   trendType: "Up" | "Down";
-  description?: string;
-  alertThreshold?: number;
-  autoRenew?: boolean;
-  startDate?: string;
-  endDate?: string;
-  period?: string;
+  description: string;
 }
 
 type Errors = Partial<Record<keyof BudgetsProps, string>>;
 
-const iconOptions: LucideIcon[] = [
-  Coffee,
-  Car,
-  ShoppingBag,
-  Zap,
-  Home,
-  Smartphone,
-  Clapperboard,
-  Dumbbell,
-  Plane,
-  Pill,
-  BookOpen,
-  PawPrint,
-];
+
 
 const colors = [
   "#6366F1",
@@ -72,31 +74,7 @@ const colors = [
   "#F97316",
 ];
 
-const PERIOD_OPTIONS = [
-  "Este mês",
-  "Próximo mês",
-  "Trimestral",
-  "Anual",
-  "Personalizado",
-];
 
-const emptyBudget = (): BudgetsProps => ({
-  id: Math.floor(Math.random() * 1_000_000),
-  color: colors[0],
-  icon: Coffee,
-  limit: 0,
-  name: "",
-  percentage: 0,
-  spent: 0,
-  trend: "",
-  trendType: "Up",
-  description: "",
-  alertThreshold: 80,
-  autoRenew: true,
-  startDate: new Date().toISOString().split("T")[0],
-  endDate: "",
-  period: "Este mês",
-});
 
 const BudgetModal = ({
   isOpen,
@@ -107,24 +85,52 @@ const BudgetModal = ({
 }: BudgetModalProps) => {
   const isEditing = !!editingBudget;
 
-  const [budget, setBudget] = useState<BudgetsProps>(emptyBudget());
+  const [budget, setBudget] = useState<BudgetsProps>({
+    id: '',
+    name: '',
+    color: '',
+    icon: iconOptions,  
+    spent: 0,
+    limit: 0,
+    description: '',
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setBudget(editingBudget ? { ...editingBudget } : emptyBudget());
       setErrors({});
       setShowDeleteConfirm(false);
+      if (editingBudget) {
+        setBudget(editingBudget);
+      } else {
+
+      }
     }
   }, [isOpen, editingBudget]);
 
   const handleChange = (field: keyof BudgetsProps, value: any) => {
     setBudget((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  const validate = () => {
+    const newErrors: Errors = {};
+    if (!budget.name.trim()) newErrors.name = "O nome é obrigatório";
+    if (!budget.limit || budget.limit <= 0) newErrors.limit = "Informe um limite válido";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = () => {
-    onSave({ ...budget, limit: Number(budget.limit) });
+    if (!validate()) return;
+    const finalBudget: BudgetsProps = {
+      ...budget,
+      percentage: budget.limit > 0 ? Math.round((budget.spent / budget.limit) * 100) : 0,
+    };
+    onSave(finalBudget);
     onClose();
   };
 
@@ -133,7 +139,9 @@ const BudgetModal = ({
       setShowDeleteConfirm(true);
       return;
     }
-    onDelete?.(budget.id);
+    if (onDelete && budget.id) {
+      onDelete(budget.id);
+    }
     onClose();
   };
 
@@ -179,15 +187,38 @@ const BudgetModal = ({
                 onChange={(e) => handleChange("name", e.target.value)}
                 type="text"
                 placeholder="Ex: Alimentação, Lazer..."
-                className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none transition-colors ${
-                  errors.name
-                    ? "border-red-500/60 focus:border-red-500"
-                    : "border-white/10 focus:border-purple-500/50"
-                }`}
+                className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none transition-colors ${errors.name
+                  ? "border-red-500/60 focus:border-red-500"
+                  : "border-white/10 focus:border-purple-500/50"
+                  }`}
               />
               {errors.name && (
                 <p className="mt-1 text-xs text-red-400">{errors.name}</p>
               )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                Ícone do Orçamento
+              </label>
+              <div className="grid grid-cols-6 gap-2 bg-white/5 p-3 rounded-2xl border border-white/10">
+                {iconOptions.map((({ iconName, icon: iconOptions })) => {
+                  const isSelected = budget.icon === iconName;
+                return (
+                <button
+                  key={iconName}
+                  type="button"
+                  onClick={() => handleChange("icon", iconName)}
+                  className={`p-2.5 rounded-xl flex items-center justify-center transition-all ${isSelected
+                      ? "bg-purple-600/40 border border-purple-500 text-purple-300 shadow-md shadow-purple-500/20"
+                      : "hover:bg-white/10 text-gray-400 border border-transparent hover:text-white"
+                    }`}
+                >
+                  <IconComp className="w-5 h-5" />
+                </button>
+                );
+                })}
+              </div>
             </div>
 
             <div>
@@ -221,159 +252,19 @@ const BudgetModal = ({
                     type="number"
                     min={0}
                     placeholder="0.00"
-                    className={`w-full bg-white/5 border rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none transition-colors ${
-                      errors.limit
-                        ? "border-red-500/60 focus:border-red-500"
-                        : "border-white/10 focus:border-purple-500/50"
-                    }`}
+                    className={`w-full bg-white/5 border rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none transition-colors ${errors.limit
+                      ? "border-red-500/60 focus:border-red-500"
+                      : "border-white/10 focus:border-purple-500/50"
+                      }`}
                   />
                 </div>
                 {errors.limit && (
                   <p className="mt-1 text-xs text-red-400">{errors.limit}</p>
                 )}
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Período
-                </label>
-                <select
-                  value={budget.period}
-                  onChange={(e) => handleChange("period", e.target.value)}
-                  className="w-full bg-[#0a0a1a] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500/50 appearance-none transition-colors"
-                >
-                  {PERIOD_OPTIONS.map((p) => (
-                    <option key={p}>{p}</option>
-                  ))}
-                </select>
-              </div>
             </div>
 
-            {budget.period === "Personalizado" && (
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Data de Início
-                  </label>
-                  <input
-                    type="date"
-                    value={budget.startDate}
-                    onChange={(e) => handleChange("startDate", e.target.value)}
-                    className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white focus:outline-none transition-colors ${
-                      errors.startDate
-                        ? "border-red-500/60"
-                        : "border-white/10 focus:border-purple-500/50"
-                    }`}
-                  />
-                  {errors.startDate && (
-                    <p className="mt-1 text-xs text-red-400">
-                      {errors.startDate}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Data de Fim
-                  </label>
-                  <input
-                    type="date"
-                    value={budget.endDate}
-                    onChange={(e) => handleChange("endDate", e.target.value)}
-                    className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white focus:outline-none transition-colors ${
-                      errors.endDate
-                        ? "border-red-500/60"
-                        : "border-white/10 focus:border-purple-500/50"
-                    }`}
-                  />
-                  {errors.endDate && (
-                    <p className="mt-1 text-xs text-red-400">
-                      {errors.endDate}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
 
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-400">
-                  Alerta de Gasto
-                </label>
-                <span className="text-sm font-semibold text-purple-400">
-                  {budget.alertThreshold}%
-                </span>
-              </div>
-              <input
-                type="range"
-                min={10}
-                max={100}
-                step={5}
-                value={budget.alertThreshold}
-                onChange={(e) =>
-                  handleChange("alertThreshold", Number(e.target.value))
-                }
-                className="w-full accent-purple-500 cursor-pointer"
-              />
-              <p className="mt-1 text-xs text-gray-600">
-                Você será alertado ao atingir {budget.alertThreshold}% do limite
-                (R${" "}
-                {budget.limit
-                  ? (
-                      (Number(budget.limit) * (budget.alertThreshold ?? 80)) /
-                      100
-                    ).toFixed(2)
-                  : "0,00"}
-                )
-              </p>
-            </div>
-            <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3">
-              <div>
-                <p className="text-sm font-medium text-white">
-                  Renovação Automática
-                </p>
-                <p className="text-xs text-gray-500">
-                  Reinicia o limite automaticamente a cada período
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleChange("autoRenew", !budget.autoRenew)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  budget.autoRenew ? "bg-purple-600" : "bg-white/10"
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
-                    budget.autoRenew ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
-              </button>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Ícone
-              </label>
-              <div className="grid grid-cols-6 gap-2">
-                {iconOptions.map((Icon, i) => {
-                  const isSelected = budget.icon === Icon;
-                  return (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => handleChange("icon", Icon)}
-                      className={`aspect-square rounded-xl flex items-center justify-center border transition-all ${
-                        isSelected
-                          ? "bg-purple-500/20 border-purple-500/60 text-white"
-                          : "bg-white/5 border-white/10 hover:bg-purple-500/10 hover:border-purple-500/40 text-gray-300 hover:text-white"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
@@ -408,11 +299,10 @@ const BudgetModal = ({
                 <button
                   type="button"
                   onClick={handleDelete}
-                  className={`px-4 py-3.5 rounded-xl font-semibold border transition-all flex items-center gap-2 ${
-                    showDeleteConfirm
-                      ? "bg-red-600 border-red-500 text-white hover:bg-red-700"
-                      : "bg-white/5 border-white/10 text-red-400 hover:bg-red-500/10 hover:border-red-500/30"
-                  }`}
+                  className={`px-4 py-3.5 rounded-xl font-semibold border transition-all flex items-center gap-2 ${showDeleteConfirm
+                    ? "bg-red-600 border-red-500 text-white hover:bg-red-700"
+                    : "bg-white/5 border-white/10 text-red-400 hover:bg-red-500/10 hover:border-red-500/30"
+                    }`}
                 >
                   <Trash2 className="w-4 h-4" />
                   {showDeleteConfirm ? "Confirmar" : "Excluir"}

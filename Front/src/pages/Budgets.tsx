@@ -12,10 +12,10 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
-import BudgetModal from "../components/BudgetModal";
+import BudgetModal, { iconOptions } from "../components/BudgetModal";
 import type { BudgetsProps } from "../../src/components/BudgetModal";
-import { DeductModal,  } from "../components/DeductModal";
-import type { PropsModalDeduct} from '../components/DeductModal'
+import { DeductModal,  } from "../components/deductModal";
+import type { PropsModalDeduct} from '../components/deductModal'
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
@@ -26,10 +26,11 @@ const Budgets = () => {
 
   const [budgets, setBudgets] = useState<BudgetsProps[]>([
     {
-      id: 1,
+      id: "1",
       name: "Alimentação",
-      icon: Coffee,
+      icon: "BookOpen",
       color: "#6366F1",
+      description: '',
       spent: 450,
       limit: 600,
       percentage: 75,
@@ -72,7 +73,7 @@ const Budgets = () => {
 
  
 
-  const handleRemove = (id: number) => {
+  const handleRemove = (id: string) => {
     setBudgets((prev) => prev.filter((budget) => budget.id !== id));
   };
 
@@ -293,7 +294,7 @@ const Budgets = () => {
 
                 <div className="grid grid-cols-1 gap-4 md:gap-5">
                   {budgets.map((budget) => {
-                    const Icon = budget.icon;
+                    const Icon = iconOptions[budget.icon] || Target;
                     const isOverBudget = budget.percentage > 100;
                     const isWarning =
                       budget.percentage >= 80 && budget.percentage <= 100;
@@ -328,7 +329,7 @@ const Budgets = () => {
                             >
                               <Icon
                                 className="w-5 h-5 md:w-7 md:h-7"
-                                style={{ color: budget.color }}
+                                color={budget.color || "#6366F1"}
                               />
                             </div>
                             <div className="flex-1 min-w-0">

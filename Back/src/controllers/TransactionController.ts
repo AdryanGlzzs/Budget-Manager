@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 
-
-
-
 export class TransactionController {
+    
     static async HandleSaveTransaction(req: Request, res: Response) {
         try {
             const { name, category, date, amount, icon, color, type, status } = req.body;

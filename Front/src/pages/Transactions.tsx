@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TransactionModal } from "../components/TransactionModal";
 import type { TransactionProps } from "../components/TransactionModal";
 import { api } from "../services/api";
@@ -34,6 +34,7 @@ const Transactions = () => {
   const [openModal, setOpenModal] = useState(false);
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
 
+  
   const TotalRevenue = transaction
     .filter((t) => t.type === "revenue")
     .reduce((sun, t) => sun + Number(t.amount || 0), 0);

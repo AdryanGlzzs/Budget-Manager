@@ -13,7 +13,7 @@ const SchemaTransaction = z.object({
 })
 
 const schemaDeleteTransaction = z.object({
-    id: z.uuid("Id da transição invalida")
+    id: z.string().uuid()
 })
 
 export const TransactionMiddleware = (req: Request, res: Response, next: NextFunction) => {
