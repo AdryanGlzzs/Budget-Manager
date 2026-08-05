@@ -2,24 +2,28 @@ import z, { string } from "zod";
 import { Request, Response, NextFunction } from "express";
 
 const schemaBudget = z.object({
-    name: z.string().min(4, "O minimo de caracteres são 4").trim().max(20),
-    icon: z.string(),
-    color: z.string(),
-    spent: z.number().min(2),
-    limit: z.number().min(2),
-    description: z.string().min(10, "Minimo 10 caracteres").max(100).trim(),
-})
+    name: z.string().trim().min(4, "O mínimo de caracteres são 4").max(20, "O máximo de caracteres são 20"),
+    icon: z.string().trim(),
+    color: z.string().trim(),
+    spent: z.coerce.number().min(0, "O valor gasto não pode ser negativo"),
+    limit: z.coerce.number().min(1, "O limite deve ser maior que zero"),
+    description: z.string().trim().min(10, "Mínimo de 10 caracteres").max(100, "Máximo de 100 caracteres"),
+});
+
 
 export const BudgetMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const result = schemaBudget.safeParse(req.body);
 
-    const {} = req.body
-
-    const result = schemaBudget.safeParse(req.body)
-
-    if(!result.success){
+    if (!result.success) {
         return res.status(400).json({
-            message: "Dados invalidos",
-            errors: result.error.issues
-        })
+            message: "Dados inválidos.",
+            errors: result.error.issues.map((issue) => ({
+                field: issue.path.join("."),
+                message: issue.message,
+            })),
+        });
     }
-}
+
+    req.body = result.data;
+    next();
+};
