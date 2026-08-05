@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TransactionModal } from "../components/TransactionModal";
 import type { TransactionProps } from "../components/TransactionModal";
 import { api } from "../services/api";
