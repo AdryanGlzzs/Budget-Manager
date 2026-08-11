@@ -18,7 +18,8 @@ import {
   ChevronDown
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { api } from "../services/api";
 
 type BudgetModalProps = {
   isOpen: boolean;
@@ -47,7 +48,7 @@ export type IconName = keyof typeof iconOptions
 
 export interface BudgetsProps {
   name: string;
-  icon: LucideIcon;
+  icon: string;
   color: string;
   spent: number;
   limit: number;
@@ -84,10 +85,11 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
   const [errors, setErrors] = useState<Errors>({});
   const [isEditing, setIsEditing] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [selectedColor, setSelectedColor] = useState("")
   const [selectedIcon, setSelectedIcon] = useState<IconName>("BookOpen")
   const [budget, setBudget] = useState<BudgetsProps>({
     name: "",
-    icon: BookOpen,
+    icon: "BookOpen",
     color: "",
     spent: 0,
     limit: 0,
@@ -102,13 +104,39 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
     onClose();
   };
 
+  const handleSave = async (newBudget: BudgetsProps) => {
+    try {
 
-  const handleSubmit = () => {
-    onClose();
+      console.log(budget.name)
+      console.log(budget.color)
+      console.log(budget.description)
+      console.log(budget.limit)
+      console.log(budget.period)
+      console.log(budget.spent)
+      console.log(budget.icon)
+
+      const { data } = await api.post("/budgets", newBudget);
+
+      console.log("Enviando:", newBudget);
+
+      onSave({ ...newBudget, ...data });
+      onClose();  
+    } catch (error) {
+      console.error("Erro:", error);
+    }
   };
 
-  const handleChange = () => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 
+    console.log(e.target.name, e.target.value);
+
+
+    const { name, value } = e.target
+
+    setBudget((prev) => ({
+      ...prev,
+      [name]: name === 'limit' || name === "spent" ? Number(value) : value
+    }))
   };
 
 
@@ -155,10 +183,11 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                 Nome da Categoria
               </label>
               <input
+                name="name"
                 value={budget.name}
-                onChange={(e) => e.target.value}
+                onChange={handleChange}
                 type="text"
-                placeholder="Ex: Aliment  ação, Lazer..."
+                placeholder="Ex: Alimentação, Lazer..."
                 className={`w-full bg-white/5   border rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none transition-colors ${errors.name
                   ? "border-red-500/60 focus:border-red-500"
                   : "border-white/10 focus:border-purple-500/50"
@@ -175,8 +204,9 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                 <span className="text-gray-600 font-normal">(opcional)</span>
               </label>
               <textarea
+                name="description"
                 value={budget.description}
-                onChange={(e) => e.target.value}
+                onChange={handleChange}
                 rows={2}
                 placeholder="Adicione uma nota sobre este orçamento..."
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-purple-500/50 transition-colors resize-none"
@@ -195,10 +225,11 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                   </span>
 
                   <input
-                    value={budget.limit || ""}
-                    onChange={(e) => e.target.value}
+                    name="limit"
+                    value={budget.limit === 0 ? "" : budget.limit}
+                    onChange={handleChange}
                     type="number"
-                    min={0}
+                    min={""}
                     placeholder="0.00"
                     className={`w-full bg-white/5 border rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none transition-colors ${errors.limit
                       ? "border-red-500/60 focus:border-red-500"
@@ -211,6 +242,8 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                   <p className="mt-1 text-xs text-red-400">{errors.limit}</p>
                 )}
               </div>
+
+
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-2">
                   Período
@@ -218,7 +251,9 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                 <div className="relative">
                   <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
                   <select
+                    name="period"
                     value={budget.period || "current-month"}
+                    onChange={handleChange}
                     className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-10 py-3 text-white focus:outline-none focus:border-purple-500/50 transition-colors appearance-none cursor-pointer"
                   >
                     {PERIOD_OPTIONS.map(option => (
@@ -233,6 +268,34 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                 </div>
 
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">
+                  Gasto Atual
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                    R$
+                  </span>
+                  <input
+                    name="spent"
+                    value={budget.spent === 0 ? "" : budget.spent}
+                    onChange={handleChange}
+                    type="number"
+                    min="0"
+                    placeholder="0.00"
+                    className={`w-full bg-white/5 border rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none transition-colors ${errors.spent
+                      ? "border-red-500/60 focus:border-red-500"
+                      : "border-white/10 focus:border-purple-500/50"
+                      }`}
+                  />
+                </div>
+                {errors.spent && (
+                  <p className="mt-1 text-xs text-red-400">{errors.spent}</p>
+                )}
+              </div>
+
+              <div></div>
               <div>
               </div>
 
@@ -242,15 +305,23 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                 </label>
                 <div className="grid grid-cols-6 gap-2">
                   {Object.entries(iconOptions).map(([iconName, IconComponent]) => {
-                    const isSelected = selectedIcon === iconName;
+                    const isSelected = selectedIcon === iconName
 
                     return (
                       <button
+                        name="icon"
                         key={iconName}
+                        value={iconName}
                         type="button"
                         onClick={() => {
                           setSelectedIcon(iconName as IconName);
 
+                          setBudget((prev) => ({
+                            ...prev,
+                            icon: iconName
+                          }))
+
+                          console.log(iconName)
                         }}
                         className={`aspect-square rounded-xl flex items-center justify-center border transition-all ${isSelected
                           ? "bg-purple-500/20 border-purple-500/60 text-white"
@@ -275,12 +346,22 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
             </label>
             <div className="flex gap-3 flex-wrap">
               {colors.map((color) => {
-                const isSelected = budget.color === color;
+                const isSelected = selectedColor === color;
                 return (
                   <button
+                    value={budget.color}
+                    name="color"
                     key={color}
                     type="button"
-                    onClick={() => console.log('foi')}
+                    onClick={() => {
+                      setSelectedColor(color);
+                      setBudget((prev) => ({
+                        ...prev,
+                        color
+                      }));
+
+                      console.log(budget.color);
+                    }}
                     className="w-7 h-7 rounded-full hover:scale-110 transition-all border-2 flex items-center justify-center"
                     style={{
                       background: color,
@@ -322,7 +403,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
 
             <button
               type="button"
-              onClick={handleSubmit}
+              onClick={() => handleSave(budget)}
               className="flex-[2] px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 text-white font-bold hover:shadow-lg hover:shadow-purple-600/30 transition-all active:scale-95"
             >
               {isEditing ? "Atualizar" : "Salvar Orçamento"}

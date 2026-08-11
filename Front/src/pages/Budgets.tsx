@@ -11,15 +11,16 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useState, type ChangeEvent, type ReactElement } from "react";
 import BudgetModal, { iconOptions } from "../components/BudgetModal";
 import type { BudgetsProps } from "../../src/components/BudgetModal";
 import { DeductModal, } from "../components/deductModal";
 import type { PropsModalDeduct } from '../components/deductModal'
+import { api } from "../services/api";
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
-  
+
   const [deductModalOpen, setDeductModalOpen] = useState(false);
   const [budgetOpen, setBudgetOpen] = useState(false);
   const [selected, setSelected] = useState<BudgetsProps | null>(null);
@@ -28,7 +29,7 @@ const Budgets = () => {
   const [budgets, setBudgets] = useState<BudgetsProps[]>([
     {
       name: "Alimentação",
-      icon: AlertCircle,
+      icon: "Car",
       color: "#6366F1",
       description: '',
       period: '',
@@ -41,9 +42,8 @@ const Budgets = () => {
 
 
 
-
   const HandleSaveBudget = (newBudget: BudgetsProps) => {
-
+    setBudgets((prev) => [...prev, newBudget]);
   };
 
   const HandleSaveDeduct = (data: PropsModalDeduct) => {
@@ -203,7 +203,7 @@ const Budgets = () => {
                   </select>
                 </div>
 
-                {FilterBudgets.length === 0 && (
+                {FilterBudgets.length === 0 ? (
                   <div className="py-20 text-center">
                     <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Search className="w-10 h-10 text-gray-500" />
@@ -215,8 +215,114 @@ const Budgets = () => {
                       Tente ajustar seus filtros
                     </div>
                   </div>
-                )}
+                ) : (
+                  <div className="flex flex-col gap-4 w-full">
+                    {FilterBudgets.map((item, index) => {
+                      const iconKey = item.icon
+                        ? ((item.icon.charAt(0).toUpperCase() + item.icon.slice(1)) as keyof typeof iconOptions)
+                        : "BookOpen";
+                      const IconComponent = iconOptions[iconKey] || iconOptions[item.icon as keyof typeof iconOptions] || Coffee;
+                      const percentage =
+                        item.limit > 0
+                          ? Math.round((item.spent / item.limit) * 100)
+                          : 0;
+                      const isOverBudget = percentage > 100;
+                      const isWarning = percentage >= 80 && percentage <= 100;
 
+                      return (
+                        <div
+                          key={index}
+                          className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between"
+                        >
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                                style={{
+                                  backgroundColor: `${item.color}20`,
+                                  color: item.color,
+                                }}
+                              >
+                                <IconComponent className="w-5 h-5" />
+                              </div>
+                              <div>
+                                <h3 className="font-semibold text-lg">
+                                  {item.name}
+                                </h3>
+                                {item.description && (
+                                  <p className="text-xs text-gray-400">
+                                    {item.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleEdit(item)}
+                                className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-baseline gap-2 mb-3">
+                              <span
+                                className={`text-[22px] md:text-[28px] font-bold ${isOverBudget ? "text-red-400" : "text-white"
+                                  }`}
+                              >
+                                R${item.spent}
+                              </span>
+                              <span className="text-[14px] md:text-[16px] text-gray-500">
+                                de R${item.limit}
+                              </span>
+                              <span
+                                className={`text-[13px] md:text-[14px] ml-auto font-medium ${isOverBudget
+                                  ? "text-red-400"
+                                  : isWarning
+                                    ? "text-yellow-400"
+                                    : "text-green-400"
+                                  }`}
+                              >
+                                {percentage}%
+                              </span>
+                            </div>
+
+                            <div className="w-full bg-white/5 rounded-full h-2.5 md:h-3 overflow-hidden">
+                              <div
+                                className={`h-full rounded-full shadow-lg transition-all ${isOverBudget
+                                  ? "bg-gradient-to-r from-red-600 to-red-500 shadow-red-600/50"
+                                  : isWarning
+                                    ? "bg-gradient-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
+                                    : "bg-gradient-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
+                                  }`}
+                                style={{
+                                  width: `${Math.min(percentage, 100)}%`,
+                                }}
+                              ></div>
+                            </div>
+
+                            <div className="mt-2.5 md:mt-3 text-[12px] md:text-[13px] text-gray-400">
+                              R$
+                              {item.limit - item.spent > 0
+                                ? item.limit - item.spent
+                                : 0}{" "}
+                              restante
+                              {isOverBudget && (
+                                <span className="text-red-400 ml-2">
+                                  • R${item.spent - item.limit} acima do
+                                  orçamento
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </main>

@@ -15,7 +15,6 @@ export interface DeductModalProps {
 }
 
 export interface PropsModalDeduct {
-  id: number;
   value: ValueChange;
   paymentType: PaymentCategory;
   description: string;
@@ -32,7 +31,7 @@ export const DeductModal = ({
   const [value, setValue] = useState<ValueChange>(0);
   const [data, setData] = useState<DataType>("");
   const [formDeduct, setFormDeduct] = useState<PropsModalDeduct>({
-    id: selectedBudget?.id ?? 0,
+  
     value: 0,
     category: "Alimentação",
     datestring: "",
@@ -44,7 +43,7 @@ export const DeductModal = ({
   const TotalWithNewValue = CurrentSpent + value;
 
   const BudgetLimit = selectedBudget?.limit ?? 0;
-  
+
 
   const FormattedTotal = TotalWithNewValue.toFixed(2);
   const HandleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +78,7 @@ export const DeductModal = ({
     }
 
     const payload: PropsModalDeduct = {
-      id: selectedBudget.id,
+    
       value: value,
       paymentType: formDeduct.paymentType,
       description: formDeduct.description,
