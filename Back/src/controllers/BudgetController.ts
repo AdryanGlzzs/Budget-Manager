@@ -32,4 +32,29 @@ export class BudgetController {
         }
 
     }
+
+    static async DeleteBudget(req: Request, res: Response) {
+
+        const id = String(req.params.id);
+
+        try {
+            const deleteBudget = await prisma.budget.delete({
+                where: {
+                    id
+                }
+            });
+
+            return res.status(200).json({
+                message: "Orçamento deletado com sucesso",
+                budget: deleteBudget
+            });
+
+        } catch (error) {
+            console.error(error);
+
+            return res.status(500).json({
+                message: "Erro ao deletar orçamento"
+            });
+        }
+    }
 }

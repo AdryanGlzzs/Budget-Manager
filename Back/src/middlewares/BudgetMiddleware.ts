@@ -10,6 +10,10 @@ const schemaBudget = z.object({
     description: z.string().trim().min(10, "Mínimo de 10 caracteres").max(100, "Máximo de 100 caracteres"),
 });
 
+const schemaDeleteBudget = z.object({
+    id: z.string().uuid("ID do orçamento inválido")
+})
+
 
 export const BudgetMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const result = schemaBudget.safeParse(req.body);
@@ -25,5 +29,22 @@ export const BudgetMiddleware = (req: Request, res: Response, next: NextFunction
     }
 
     req.body = result.data;
+    next();
+};
+
+export const DeleteBudgetMiddleware = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const result = schemaDeleteBudget.safeParse(req.params);
+
+    if (!result.success) {
+        return res.status(400).json({
+            message: "ID do orçamento inválido",
+            errors: result.error.issues
+        });
+    }
+
     next();
 };
