@@ -17,7 +17,6 @@ import {
   Calendar,
   ChevronDown
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import React, { useState } from "react";
 import { api } from "../services/api";
 
@@ -47,6 +46,7 @@ export const iconOptions = {
 export type IconName = keyof typeof iconOptions
 
 export interface BudgetsProps {
+  id: string;
   name: string;
   icon: string;
   color: string;
@@ -88,6 +88,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
   const [selectedColor, setSelectedColor] = useState("")
   const [selectedIcon, setSelectedIcon] = useState<IconName>("BookOpen")
   const [budget, setBudget] = useState<BudgetsProps>({
+    id: '',
     name: "",
     icon: "BookOpen",
     color: "",
@@ -96,40 +97,38 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
     description: '',
     period: ''
   })
+  
   const handleDelete = () => {
     if (!showDeleteConfirm) {
       setShowDeleteConfirm(true);
       return;
     }
+
+
     onClose();
   };
 
   const handleSave = async (newBudget: BudgetsProps) => {
     try {
 
-      console.log(budget.name)
-      console.log(budget.color)
-      console.log(budget.description)
-      console.log(budget.limit)
-      console.log(budget.period)
-      console.log(budget.spent)
-      console.log(budget.icon)
-
       const { data } = await api.post("/budgets", newBudget);
 
       console.log("Enviando:", newBudget);
 
-      onSave({ ...newBudget, ...data });
-      onClose();  
+
+      if(data.budget){
+        onSave(data.budget)
+      }else{
+        onSave({...newBudget, ...data})
+      }
+
+      onClose();
     } catch (error) {
       console.error("Erro:", error);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-
-    console.log(e.target.name, e.target.value);
-
 
     const { name, value } = e.target
 
@@ -138,9 +137,6 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
       [name]: name === 'limit' || name === "spent" ? Number(value) : value
     }))
   };
-
-
-
 
   if (!isOpen) {
     return null

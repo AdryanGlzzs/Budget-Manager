@@ -28,6 +28,7 @@ const Budgets = () => {
 
   const [budgets, setBudgets] = useState<BudgetsProps[]>([
     {
+      id: '1',
       name: "Alimentação",
       icon: "Car",
       color: "#6366F1",
@@ -52,9 +53,21 @@ const Budgets = () => {
 
 
 
-  const handleRemove = (id: string) => {
+  const handleRemove = async (id: string) => {
 
 
+    try {
+
+      const removeBudget = await api.delete(`/budgets/delete/${id}`)
+
+      console.log(removeBudget)
+
+      setBudgets((prev) => prev.filter((budget) => budget.id !== id))
+
+
+    } catch (error) {
+
+    }
   };
 
 
@@ -257,13 +270,23 @@ const Budgets = () => {
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={() => handleEdit(item)}
-                                className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </button>
+                            <div className="flex">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleEdit(item)}
+                                  className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white"
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <div className="gap-2">
+                                <button
+                                  onClick={() => handleRemove(item.id)}
+                                  className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
                             </div>
                           </div>
 
