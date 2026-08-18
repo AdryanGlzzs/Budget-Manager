@@ -4,7 +4,7 @@ import { TransactionController } from '../controllers/TransactionController'
 import { TransactionMiddleware, TransactionMiddlewareDelete } from '../middlewares/TransactionMiddleware'
 import { UserController } from '../controllers/UserController'
 import { BudgetController } from '../controllers/BudgetController'
-import { BudgetMiddleware, DeleteBudgetMiddleware } from '../middlewares/BudgetMiddleware'
+import { BudgetMiddleware, DeleteBudgetMiddleware, EditBudget } from '../middlewares/BudgetMiddleware'
 
 export const routes = Router()
 
@@ -16,3 +16,5 @@ routes.delete('/transactions/delete/:id', TransactionMiddlewareDelete, Transacti
 
 routes.post('/budgets', BudgetMiddleware ,BudgetController.CreateBudget)
 routes.delete('/budgets/delete/:id', DeleteBudgetMiddleware, BudgetController.DeleteBudget)
+routes.put('/budgets/edit/:id', EditBudget, BudgetController.EditBudget)
+routes.get('/budgets', BudgetController.getBudgets)

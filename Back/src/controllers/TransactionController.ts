@@ -5,7 +5,7 @@ export class TransactionController {
     
     static async HandleSaveTransaction(req: Request, res: Response) {
         try {
-            const { name, category, date, amount, icon, color, type, status } = req.body;
+            const { name, category, date, amount,  color, type, status } = req.body;
             
 
             const transaction = await prisma.transaction.create({
@@ -14,7 +14,6 @@ export class TransactionController {
                     category,
                     date: new Date(date),
                     amount,
-                    icon,
                     color,
                     type,
                     status

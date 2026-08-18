@@ -22,7 +22,6 @@ model Transaction {
   category   String
   date       DateTime
   amount     Decimal  @db.Decimal(10,2)
-  icon       String
   color      String
   type       String
   status     Boolean
@@ -33,11 +32,11 @@ model Transaction {
 model Budget {
   id         String   @id @default(uuid())
   name       String
-  icon       String
   color      String
   spent      Decimal  @db.Decimal(10,2)
   limit      Decimal  @db.Decimal(10,2)
   description String
+  period     String   @default("monthly")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

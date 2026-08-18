@@ -6,7 +6,6 @@ const SchemaTransaction = z.object({
     category: z.string().trim().min(1, "Categoria é obrigatoria"),
     date: z.string().trim(),
     amount: z.coerce.number().min(1, "Valor é obrigatorio"),
-    icon: z.string().trim(),
     color: z.string().trim().min(1, "Cor obrigatoria"),
     type: z.string().trim().min(1, "Tipo obrigatorio"),
     status: z.boolean()
@@ -16,8 +15,10 @@ const schemaDeleteTransaction = z.object({
     id: z.string().uuid()
 })
 
+
+
 export const TransactionMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const { name, category, date, amount, icon, color, type, status } = req.body
+    const { name, category, date, amount, color, type, status } = req.body
 
     const result = SchemaTransaction.safeParse(req.body)
 
@@ -37,7 +38,7 @@ export const TransactionMiddlewareDelete = (req: Request, res: Response, next: N
 
     const result = schemaDeleteTransaction.safeParse(req.params)
 
-    
+
 
     if (!result.success) {
         return res.status(400).json({
@@ -48,3 +49,4 @@ export const TransactionMiddlewareDelete = (req: Request, res: Response, next: N
 
     next()
 }
+
