@@ -25,45 +25,22 @@ export interface TransactionProps {
   category: string;
   date: string;
   amount: number;
-  icon: string;
   color: string;
   type: "expense" | "revenue";
   status: boolean;
 }
-const iconMap: Record<string, React.ElementType> = {
-  Coffee,
-  ShoppingCart,
-  Car,
-  Home,
-  Heart,
-  Briefcase,
-  Utensils,
-  Gamepad2,
-  Zap,
-}
+
 const initialForm: TransactionProps = {
   id: "",
   name: "",
   category: "Alimentação",
   date: new Date().toISOString().split("T")[0],
   amount: 0,
-  icon: "Coffee",
   color: "#6366F1",
   type: "expense",
   status: true,
 };
 
-const Options = [
-  { id: 1, label: "Café", icon: "Coffee", component: Coffee },
-  { id: 2, label: "Compras", icon: "ShoppingCart", component: ShoppingCart },
-  { id: 3, label: "Carro", icon: "Car", component: Car },
-  { id: 4, label: "Casa", icon: "Home", component: Home },
-  { id: 5, label: "Saúde", icon: "Heart", component: Heart },
-  { id: 6, label: "Trabalho", icon: "Briefcase", component: Briefcase },
-  { id: 7, label: "Comida", icon: "Utensils", component: Utensils },
-  { id: 8, label: "Lazer", icon: "Gamepad2", component: Gamepad2 },
-  { id: 9, label: "Energia", icon: "Zap", component: Zap },
-];
 
 const ColorOptions = [
   { label: "Indigo", hex: "#6366F1" },
@@ -95,29 +72,27 @@ export const TransactionModal = ({
 
   const HandleSave = async () => {
     try {
-
       const dataTransaction = {
-        name: formProps.name,
-        category: formProps.category,
-        date: formProps.date,
-        amount: formProps.amount,
-        icon: formProps.icon,
-        color: formProps.color,
-        type: formProps.type,
-        status: formProps.status
-      }
+        name: formProps.name.trim(),
+        category: formProps.category || "Geral",
+        date: formProps.date || new Date().toISOString().split("T")[0],
+        amount: Number(formProps.amount) || 0,
+        color: formProps.color || "#6366F1",
+        type: formProps.type || "expense",
+        status: typeof formProps.status === "boolean" ? formProps.status : true,
+      };
 
-      const req = await api.post('/transactions', dataTransaction)
+      const req = await api.post('/transactions', dataTransaction);
 
-      console.log(req)
+      console.log(req);
 
-      onSave(req.data.data)
+      onSave(req.data.data);
 
-      setFormProps(initialForm)
+      setFormProps(initialForm);
 
-      close()
+      close();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -163,7 +138,7 @@ export const TransactionModal = ({
           <div className="space-y-5">
             <div>
               <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
-                Descrição
+                Nome
               </label>
               <input
                 value={formProps.name}
@@ -180,7 +155,7 @@ export const TransactionModal = ({
                 </label>
                 <input
                   type="number"
-                  value={formProps.amount}
+                  value={formProps.amount === 0 ? "" : formProps.amount}
                   onChange={(e) =>
                     HandleChange("amount", Number(e.target.value))
 
@@ -213,22 +188,47 @@ export const TransactionModal = ({
               <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
                 Categoria
               </label>
-              <div className="flex flex-wrap gap-2">
-                {Options.map(({ label, component: IconOption, id }) => (
+              <input
+                type="text"
+                value={formProps.category}
+                onChange={(e) => HandleChange("category", e.target.value)}
+                placeholder="Ex: Alimentação, Lazer..."
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-purple-500/50"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                  Data
+                </label>
+                <input
+                  type="date"
+                  value={formProps.date}
+                  onChange={(e) => HandleChange("date", e.target.value)}
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500/50"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
+                  Status
+                </label>
+                <div className="flex bg-white/[0.04] border border-white/[0.08] rounded-xl p-1">
                   <button
-                    key={id}
                     type="button"
-                    onClick={() => HandleChange("category", label)}
-                    title={label}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${formProps.category === label
-                      ? "border-purple-500 bg-purple-500/20 text-purple-400"
-                      : "border-white/10 bg-white/5 text-gray-400"
-                      }`}
+                    onClick={() => HandleChange("status", true)}
+                    className={`flex-1 py-2 rounded-lg text-[12px] transition-colors ${formProps.status === true ? "bg-emerald-500/20 text-emerald-400 font-semibold" : "text-gray-500"}`}
                   >
-                    <IconOption className="w-4 h-4" />
-                    <span className="text-[12px]">{label}</span>
+                    Concluído
                   </button>
-                ))}
+                  <button
+                    type="button"
+                    onClick={() => HandleChange("status", false)}
+                    className={`flex-1 py-2 rounded-lg text-[12px] transition-colors ${formProps.status === false ? "bg-amber-500/20 text-amber-400 font-semibold" : "text-gray-500"}`}
+                  >
+                    Pendente
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -249,28 +249,6 @@ export const TransactionModal = ({
                     style={{ backgroundColor: color.hex }}
                     title={color.label}
                   />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
-                Ícone
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {Options.map(({ label, icon, component: IconOption, id }) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => HandleChange("icon", icon)}
-                    title={label}
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${formProps.icon === icon
-                      ? "border-purple-500 bg-purple-500/20 text-purple-400"
-                      : "border-white/10 bg-white/5 text-gray-400"
-                      }`}
-                  >
-                    <IconOption className="w-4 h-4" />
-                  </button>
                 ))}
               </div>
             </div>

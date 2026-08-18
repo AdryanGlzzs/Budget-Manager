@@ -34,7 +34,7 @@ const Transactions = () => {
   const [openModal, setOpenModal] = useState(false);
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
 
-  
+
   const TotalRevenue = transaction
     .filter((t) => t.type === "revenue")
     .reduce((sun, t) => sun + Number(t.amount || 0), 0);
@@ -70,17 +70,7 @@ const Transactions = () => {
 
   const filteredTransactions = transaction;
 
-  const iconMap: Record<string, React.ElementType> = {
-    Coffee,
-    ShoppingCart,
-    Car,
-    Home,
-    Heart,
-    Briefcase,
-    Utensils,
-    Gamepad2,
-    Zap,
-  };
+
 
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
@@ -224,7 +214,7 @@ const Transactions = () => {
 
                 <div className="divide-y divide-white/5">
                   {filteredTransactions.map((transaction) => {
-                    const IconComponent = iconMap[transaction.icon] || HelpCircle;
+
                     return (
                       <div
                         key={transaction.id}
@@ -233,18 +223,6 @@ const Transactions = () => {
                         <div className="flex flex-col gap-4 sm:hidden">
                           <div className="flex justify-between items-start">
                             <div className="flex items-center gap-3">
-                              <div
-                                className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
-                                style={{
-                                  backgroundColor: `${transaction.color}20`,
-                                  boxShadow: `0 4px 12px ${transaction.color}20`,
-                                }}
-                              >
-                                <IconComponent
-                                  className="w-4 h-4"
-                                  style={{ color: transaction.color }}
-                                />
-                              </div>
                               <div>
                                 <div className="text-[14px] font-medium mb-0.5">
                                   {transaction.name}
@@ -303,18 +281,6 @@ const Transactions = () => {
 
                         <div className="hidden sm:grid grid-cols-12 gap-4 items-center">
                           <div className="col-span-4 flex items-center gap-4">
-                            <div
-                              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
-                              style={{
-                                backgroundColor: `${transaction.color}20`,
-                                boxShadow: `0 4px 12px ${transaction.color}20`,
-                              }}
-                            >
-                              <IconComponent
-                                className="w-5 h-5"
-                                style={{ color: transaction.color }}
-                              />
-                            </div>
                             <div>
                               <div className="text-[15px] font-medium mb-1">
                                 {transaction.name}

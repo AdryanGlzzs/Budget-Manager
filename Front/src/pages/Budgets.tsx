@@ -2,17 +2,14 @@ import {
   Plus,
   Target,
   TrendingUp,
-  Coffee,
-  AlertCircle,
   Edit,
   Trash2,
   Search,
-  MinusCircle,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState, type ChangeEvent, type ReactElement } from "react";
-import BudgetModal, { iconOptions } from "../components/BudgetModal";
+import { useEffect, useState } from "react";
+import BudgetModal from "../components/BudgetModal";
 import type { BudgetsProps } from "../../src/components/BudgetModal";
 import { DeductModal, } from "../components/deductModal";
 import type { PropsModalDeduct } from '../components/deductModal'
@@ -26,11 +23,11 @@ const Budgets = () => {
   const [selected, setSelected] = useState<BudgetsProps | null>(null);
   const [editingBudget, setEditingBudget] = useState<BudgetsProps | null>(null);
 
+
   const [budgets, setBudgets] = useState<BudgetsProps[]>([
     {
       id: '1',
       name: "Alimentação",
-      icon: "Car",
       color: "#6366F1",
       description: '',
       period: '',
@@ -39,12 +36,30 @@ const Budgets = () => {
     },
   ]);
 
+  const getBudgets = async () => {
+    try {
+      const response = await api.get('/budgets')
 
+      if (!response) {
+        throw new Error("Falha ao buscar os dados do servidor")
+      }
+
+      setBudgets(response.data.data)
+
+      console.log(response)
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    getBudgets()
+  }, [])
 
 
 
   const HandleSaveBudget = (newBudget: BudgetsProps) => {
-    setBudgets((prev) => [...prev, newBudget]);
+    getBudgets()
   };
 
   const HandleSaveDeduct = (data: PropsModalDeduct) => {
@@ -54,27 +69,26 @@ const Budgets = () => {
 
 
   const handleRemove = async (id: string) => {
-
-
     try {
-
       const removeBudget = await api.delete(`/budgets/delete/${id}`)
-
       console.log(removeBudget)
 
-      setBudgets((prev) => prev.filter((budget) => budget.id !== id))
-
-
+      getBudgets()
     } catch (error) {
-
+      console.log(error)
     }
   };
 
 
 
   const handleEdit = (budget: BudgetsProps) => {
+
     setEditingBudget(budget);
     setBudgetOpen(true);
+
+    console.log("=== EDITAR BUDGET ===");
+    console.log("Budget recebido:", budget);
+    console.log("ID recebido:", budget.id);
   };
 
   const handleClose = () => {
@@ -231,10 +245,6 @@ const Budgets = () => {
                 ) : (
                   <div className="flex flex-col gap-4 w-full">
                     {FilterBudgets.map((item, index) => {
-                      const iconKey = item.icon
-                        ? ((item.icon.charAt(0).toUpperCase() + item.icon.slice(1)) as keyof typeof iconOptions)
-                        : "BookOpen";
-                      const IconComponent = iconOptions[iconKey] || iconOptions[item.icon as keyof typeof iconOptions] || Coffee;
                       const percentage =
                         item.limit > 0
                           ? Math.round((item.spent / item.limit) * 100)
@@ -249,15 +259,7 @@ const Budgets = () => {
                         >
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">
-                              <div
-                                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                                style={{
-                                  backgroundColor: `${item.color}20`,
-                                  color: item.color,
-                                }}
-                              >
-                                <IconComponent className="w-5 h-5" />
-                              </div>
+
                               <div>
                                 <h3 className="font-semibold text-lg">
                                   {item.name}

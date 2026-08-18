@@ -17,7 +17,7 @@ import {
   Calendar,
   ChevronDown
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../services/api";
 
 type BudgetModalProps = {
@@ -48,7 +48,6 @@ export type IconName = keyof typeof iconOptions
 export interface BudgetsProps {
   id: string;
   name: string;
-  icon: string;
   color: string;
   spent: number;
   limit: number;
@@ -81,23 +80,41 @@ const PERIOD_OPTIONS = [
 
 
 
-const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) => {
+const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: BudgetModalProps) => {
   const [errors, setErrors] = useState<Errors>({});
-  const [isEditing, setIsEditing] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [selectedColor, setSelectedColor] = useState("")
-  const [selectedIcon, setSelectedIcon] = useState<IconName>("BookOpen")
   const [budget, setBudget] = useState<BudgetsProps>({
     id: '',
     name: "",
-    icon: "BookOpen",
     color: "",
     spent: 0,
     limit: 0,
     description: '',
     period: ''
   })
-  
+
+  useEffect(() => {
+    if (editingBudget) {
+      setBudget(editingBudget)
+
+      setSelectedColor(editingBudget.color || "")
+    } else {
+
+      setBudget({
+        id: "",
+        name: "",
+        color: "",
+        spent: 0,
+        limit: 0,
+        description: "",
+        period: ""
+      });
+      setSelectedColor("");
+
+    }
+  }, [editingBudget, isOpen])
+
   const handleDelete = () => {
     if (!showDeleteConfirm) {
       setShowDeleteConfirm(true);
@@ -108,24 +125,31 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
     onClose();
   };
 
+
+  const isEditing = Boolean(editingBudget)
+
+
+
   const handleSave = async (newBudget: BudgetsProps) => {
+
     try {
+      if (newBudget.id) {
+        const data = await api.put(`/budgets/edit/${newBudget.id}`, newBudget);
 
-      const { data } = await api.post("/budgets", newBudget);
+        console.log("Caiu em edição", data)
+      } else {
+        const data = await api.post("/budgets", newBudget);
 
-      console.log("Enviando:", newBudget);
-
-
-      if(data.budget){
-        onSave(data.budget)
-      }else{
-        onSave({...newBudget, ...data})
+        console.log("caiu em criar", data)
       }
+
+      onSave(newBudget)
 
       onClose();
     } catch (error) {
       console.error("Erro:", error);
     }
+
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -290,8 +314,6 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                   <p className="mt-1 text-xs text-red-400">{errors.spent}</p>
                 )}
               </div>
-
-              <div></div>
               <div>
               </div>
 
@@ -299,36 +321,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete }: BudgetModalProps) =>
                 <label className="block text-sm font-medium text-gray-400 mb-2">
                   Ícone
                 </label>
-                <div className="grid grid-cols-6 gap-2">
-                  {Object.entries(iconOptions).map(([iconName, IconComponent]) => {
-                    const isSelected = selectedIcon === iconName
 
-                    return (
-                      <button
-                        name="icon"
-                        key={iconName}
-                        value={iconName}
-                        type="button"
-                        onClick={() => {
-                          setSelectedIcon(iconName as IconName);
-
-                          setBudget((prev) => ({
-                            ...prev,
-                            icon: iconName
-                          }))
-
-                          console.log(iconName)
-                        }}
-                        className={`aspect-square rounded-xl flex items-center justify-center border transition-all ${isSelected
-                          ? "bg-purple-500/20 border-purple-500/60 text-white"
-                          : "bg-white/5 border-white/10 hover:bg-purple-500/10 hover:border-purple-500/40 text-gray-300 hover:text-white"
-                          }`}
-                      >
-                        <IconComponent className="w-5 h-5" />
-                      </button>
-                    );
-                  })}
-                </div>
               </div>
               {errors.limit && (
                 <p className="mt-1 text-xs text-red-400">{errors.limit}</p>
