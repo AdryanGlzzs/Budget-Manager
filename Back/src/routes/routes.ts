@@ -11,6 +11,7 @@ export const routes = Router()
 routes.post('/login', LoginUserMiddleware , UserController.login)
 routes.post('/signup', SignUpUserMiddleware, UserController.signup)
 
+routes.get('/transactions', TransactionController.getTransaction)
 routes.post('/transactions', TransactionMiddleware, TransactionController.HandleSaveTransaction)
 routes.delete('/transactions/delete/:id', TransactionMiddlewareDelete, TransactionController.HandleDeleteTransaction)
 

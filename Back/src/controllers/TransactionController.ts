@@ -62,4 +62,20 @@ export class TransactionController {
             })
         }
     }
+
+    static async getTransaction(req: Request, res: Response) {
+        try {
+            const response = await prisma.transaction.findMany()
+
+            return res.status(200).json({
+                message: "Transações Puxadas",
+                data: response
+            })
+        } catch (error) {
+            res.status(400).json({
+                message: "Error",
+                data: error
+            })
+        }
+    }
 }
