@@ -98,7 +98,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
     if (editingBudget) {
       setBudget(editingBudget)
 
-      setSelectedColor(editingBudget.color || "")
+      setSelectedColor(editingBudget.color)
     } else {
 
       setBudget({

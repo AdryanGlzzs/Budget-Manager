@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TransactionModal } from "../components/TransactionModal";
 import type { TransactionProps } from "../components/TransactionModal";
 import { api } from "../services/api";
@@ -33,6 +33,21 @@ const Transactions = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
+
+  const getTransactions = async () => {
+    const response = await api.get('/transactions')
+
+    if (!response) {
+      throw new Error("Erro ao puxar os dados de transações")
+    }
+
+    setTransactions(response.data.data)
+
+  }
+
+  useEffect(() => {
+    getTransactions()
+  })
 
 
   const TotalRevenue = transaction
