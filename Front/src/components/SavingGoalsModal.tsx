@@ -1,23 +1,14 @@
 import {
-  ShieldCheck,
-  Car,
-  Plane,
-  PiggyBank,
   X,
-  type LucideIcon,
-  Coffee,
   Check,
-  Home,
-  GraduationCap,
-  Laptop,
-  TrendingUp,
+  Calendar,
 } from "lucide-react";
 import { useState } from "react";
 
 type SavingsGoalsModalProps = {
   IsOpen: boolean;
   OnClose: () => void;
-  OnSave: (GoalsProps: Goalsprops ) => void
+  OnSave: (GoalsProps: Goalsprops) => void
 };
 
 
@@ -27,20 +18,9 @@ export interface Goalsprops {
   target: number;
   current: number;
   color: string;
-  icon: LucideIcon;
   deadline: string;
 }
 
-const IconOptions = [
-  ShieldCheck,
-  Car,
-  Plane,
-  PiggyBank,
-  Home,
-  GraduationCap,
-  Laptop,
-  TrendingUp,
-];
 
 const colors = [
   "#6366F1",
@@ -64,7 +44,6 @@ export const SavingsGoalsModal = ({
     target: 0,
     current: 0,
     color: "",
-    icon: Coffee,
     deadline: "",
   });
 
@@ -73,7 +52,7 @@ export const SavingsGoalsModal = ({
   };
 
   const HandleSubmit = () => {
-    OnSave({...GoalsProps})
+    OnSave({ ...GoalsProps })
     console.log(OnSave)
     OnClose()
   }
@@ -144,41 +123,19 @@ export const SavingsGoalsModal = ({
         </div>
 
         <div className="mb-5">
-          <label className="text-[12px] text-white/45 block mb-2">Prazo</label>
-          <input
-            onChange={(e) => HandleChangeGoals("deadline", e.target.value)}
-            value={GoalsProps.deadline}
-            type="text"
-            placeholder="Ex: Dez 2026"
-            className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
-          />
-        </div>
-
-        <div className="mb-5">
-          <label className="text-[12px] text-white/45 block mb-3">
-            Ícone da meta
-          </label>
-          <div className="flex flex-wrap gap-3">
-            {IconOptions.map((IconOption, i) => {
-              const active = GoalsProps.icon === IconOption;
-              return (
-                <div
-                  key={i}
-                  onClick={() => HandleChangeGoals("icon", IconOption)}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all ${
-                    active
-                      ? "bg-purple-500/25 border-2 border-purple-500/60"
-                      : "bg-white/[0.04] border border-white/10 hover:bg-white/10"
-                  }`}
-                >
-                  <IconOption
-                    className={`w-[18px] h-[18px] ${active ? "text-purple-400" : "text-white/40"}`}
-                  />
-                </div>
-              );
-            })}
+          <label className="text-[12px] text-white/45 block mb-2">Prazo da Meta</label>
+          <div className="relative">
+            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-4 h-4 pointer-events-none" />
+            <input
+              onChange={(e) => HandleChangeGoals("deadline", e.target.value)}
+              value={GoalsProps.deadline}
+              type="date"
+              className="w-full bg-white/[0.04] border border-white/10 rounded-xl pl-11 pr-4 py-3 text-[14px] text-white/85 outline-none focus:border-purple-500/50 transition-colors [color-scheme:dark]"
+            />
           </div>
         </div>
+
+
 
         <div className="mb-7">
           <label className="text-[12px] text-white/45 block mb-3">
@@ -215,7 +172,7 @@ export const SavingsGoalsModal = ({
             Cancelar
           </button>
           <button className="flex-[2] py-3 bg-gradient-to-r from-purple-700 to-purple-500 rounded-xl text-[14px] font-semibold text-white shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 hover:scale-[1.02] transition-all"
-          onClick={() => HandleSubmit()}
+            onClick={() => HandleSubmit()}
           >
             Criar Meta
           </button>

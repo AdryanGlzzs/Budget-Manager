@@ -17,60 +17,37 @@ import Header from "../components/Header";
 import { useState } from "react";
 import { SavingsGoalsModal } from "../components/SavingGoalsModal";
 import type { Goalsprops, } from "../components/SavingGoalsModal";
+import { api } from "../services/api";
 
 const SavingsGoals = () => {
   const [SavingModal, setSavingModal] = useState(false);
   const [open, setOpen] = useState(false);
-  const [Goals, setGoals] = useState<Goalsprops[]>([
-    {
-      id: 1,
-      name: "Fundo de Emergência",
-      target: 15000,
-      current: 8500,
-      color: "purple",
-      icon: ShieldCheck,
-      deadline: "Dez 2026",
-    },
-    {
-      id: 2,
-      name: "Carro Novo",
-      target: 45000,
-      current: 12000,
-      color: "cyan",
-      icon: Car,
-      deadline: "Ago 2027",
-    },
-    {
-      id: 3,
-      name: "Viagem dos Sonhos",
-      target: 8000,
-      current: 3200,
-      color: "pink",
-      icon: Plane,
-      deadline: "Jul 2026",
-    },
-    {
-      id: 4,
-      name: "Entrada da Casa",
-      target: 100000,
-      current: 25000,
-      color: "green",
-      icon: PiggyBank,
-      deadline: "Jan 2030",
-    },
-  ]);
+  const [Goals, setGoals] = useState<Goalsprops[]>([]);
 
 
   const HandleRemoveGoals = (id: number) => {
-    console.log("clicado");
 
     setGoals((prev) => prev.filter((goals) => goals.id !== id));
   };
 
-  const HandleSaveGoals = (NewGoals: Goalsprops) => {
+  const HandleSaveGoals = async (newGoals: Goalsprops) => {
+
+    const response = await api.post('/savings-goals', newGoals)
+
+    console.log("Meta Criada", {
+      id: newGoals.id,
+      name: newGoals.name,
+      target: newGoals.target,
+      current: newGoals.current,
+      color: newGoals.color,
+      deadline: newGoals.deadline
+    })
+
+    console.log(response)
+
     setGoals((prev) => {
-      return [...prev, NewGoals];
-    });
+      return [...prev, newGoals]
+    })
   };
 
   const GoalsLength = Goals;
@@ -98,7 +75,7 @@ const SavingsGoals = () => {
               Visualize e gerencie seus objetivos financeiros de longo prazo.
             </p>
 
-            
+
           </div>
           <button
             onClick={() => setSavingModal(true)}
@@ -118,8 +95,8 @@ const SavingsGoals = () => {
                   <Wallet className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
-                    <p className="text-[13px] text-gray-400">Total Economizado</p>
-                    <h3 className="text-[24px] font-bold">R$ {Goals.reduce((total, goal) => total + goal.current, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</h3>
+                  <p className="text-[13px] text-gray-400">Total Economizado</p>
+                  <h3 className="text-[24px] font-bold">R$ {Goals.reduce((total, goal) => total + goal.current, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</h3>
                 </div>
               </div>
             </div>
@@ -129,7 +106,7 @@ const SavingsGoals = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
+                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
                   <Target className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
@@ -149,7 +126,7 @@ const SavingsGoals = () => {
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Progresso Médio</p>
-                  <h3 className="text-[24px] font-bold">{Goals.length > 0 ?  Math.round(Goals.reduce((a, e) => a + ( e.current / e.target) * 100,0) / Goals.length) : 0} %</h3>
+                  <h3 className="text-[24px] font-bold">{Goals.length > 0 ? Math.round(Goals.reduce((a, e) => a + (e.current / e.target) * 100, 0) / Goals.length) : 0} %</h3>
                 </div>
               </div>
             </div>
@@ -157,10 +134,10 @@ const SavingsGoals = () => {
         </div>
 
         <h2 className="text-[20px] font-semibold mb-6">Suas Metas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">  
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Goals.map((Goal) => {
             const percent = Math.round((Goal.current / Goal.target) * 100);
-            const Icon = Goal.icon;
+
 
             const getColorClasses = (color: string) => {
               switch (color) {
@@ -229,18 +206,6 @@ const SavingsGoals = () => {
                     <Trash2 className="w-4 h-4" />
                   </button>
 
-                  <div className="flex justify-between items-start mb-6">
-                    <div
-                      className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center shadow-lg ${colors.shadow}`}
-                    >
-                      <Icon className={`w-6 h-6 ${colors.text}`} />
-                    </div>
-
-                    <div className="bg-white/5 px-3 py-1 rounded-lg text-[12px] text-gray-400 border border-white/5 mr-8">
-                      {Goal.deadline}
-                    </div>
-                  </div>
-
                   <h3 className="text-[18px] font-bold mb-2">{Goal.name}</h3>
 
                   <div className="flex items-baseline gap-2 mb-4">
@@ -250,7 +215,7 @@ const SavingsGoals = () => {
                     <span className="text-[14px] text-gray-500">
                       de ${Goal.target.toLocaleString()}
                     </span>
-                    
+
                   </div>
 
                   <div className="space-y-2">
