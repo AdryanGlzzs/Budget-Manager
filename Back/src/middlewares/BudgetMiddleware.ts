@@ -42,11 +42,7 @@ export const BudgetMiddleware = (req: Request, res: Response, next: NextFunction
     next();
 };
 
-export const DeleteBudgetMiddleware = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+export const DeleteBudgetMiddleware = ( req: Request, res: Response, next: NextFunction ) => {
     const result = schemaDeleteBudget.safeParse(req.params);
 
     if (!result.success) {

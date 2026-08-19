@@ -40,3 +40,12 @@ model Budget {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+model savingGoals {
+  id String  @id @default(uuid())
+  name String
+  target  Decimal  @db.Decimal(10,2)
+  current Decimal  @db.Decimal(10,2)
+  color  String
+  deadline  String
+}
