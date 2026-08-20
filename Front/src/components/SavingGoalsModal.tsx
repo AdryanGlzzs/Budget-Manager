@@ -100,7 +100,7 @@ export const SavingsGoalsModal = ({
               onChange={(e) =>
                 HandleChangeGoals("target", e.target.value || "")
               }
-              value={GoalsProps.target}
+              value={GoalsProps.target === 0 ? "" : GoalsProps.target}
               type="text"
               placeholder="0,00"
               className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
@@ -111,7 +111,7 @@ export const SavingsGoalsModal = ({
               Valor inicial (R$)
             </label>
             <input
-              value={GoalsProps.current}
+              value={GoalsProps.current === 0 ? "" : GoalsProps.current}
               onChange={(e) =>
                 HandleChangeGoals("current", e.target.value || "")
               }

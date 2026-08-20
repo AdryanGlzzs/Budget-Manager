@@ -73,6 +73,8 @@ const Transactions = () => {
       await api.delete(`/transactions/delete/${id}`);
 
       setTransactions((prev) => prev.filter((item) => item.id !== id));
+
+      getTransactions()
     } catch (error) {
       console.error("Erro ao deletar transação:", error);
     }

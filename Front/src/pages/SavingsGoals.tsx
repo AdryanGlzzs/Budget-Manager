@@ -11,10 +11,11 @@ import {
   Trash2,
   Search,
   Goal,
+  Edit,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SavingsGoalsModal } from "../components/SavingGoalsModal";
 import type { Goalsprops, } from "../components/SavingGoalsModal";
 import { api } from "../services/api";
@@ -24,10 +25,28 @@ const SavingsGoals = () => {
   const [open, setOpen] = useState(false);
   const [Goals, setGoals] = useState<Goalsprops[]>([]);
 
+  useEffect(() => {
+    getSavingGoals()    
+  }, [])
+
+  const getSavingGoals = async () => {
+    const response = await api.get('/savings-goals')
+
+    if(!response){
+      throw new Error("Erro interno")
+    }
+
+    console.log(response)
+
+    setGoals(response.data.data)
+  }
+
 
   const HandleRemoveGoals = (id: number) => {
 
-    setGoals((prev) => prev.filter((goals) => goals.id !== id));
+    setGoals((prev) => prev.filter((goals) => goals.id !== id))
+
+    getSavingGoals()
   };
 
   const HandleSaveGoals = async (newGoals: Goalsprops) => {
@@ -45,9 +64,7 @@ const SavingsGoals = () => {
 
     console.log(response)
 
-    setGoals((prev) => {
-      return [...prev, newGoals]
-    })
+    getSavingGoals()
   };
 
   const GoalsLength = Goals;
@@ -198,13 +215,23 @@ const SavingsGoals = () => {
                 ></div>
 
                 <div className="relative bg-[#0a0a14]/60 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all hover:translate-y-[-4px]">
-                  <button
-                    className="absolute top -4 right-4 p-2 rounded-lg text-gray-500 hover:bg-red-500/10 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10"
-                    title="Remover meta"
-                    onClick={() => HandleRemoveGoals(Goal.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10">
+                    <button
+                      className="p-2 rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-all"
+                      title="Editar meta"
+                      onClick={() => HandleRemoveGoals(Goal.id)}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      className="p-2 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
+                      title="Remover meta"
+                      onClick={() => HandleRemoveGoals(Goal.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
 
                   <h3 className="text-[18px] font-bold mb-2">{Goal.name}</h3>
 
@@ -215,7 +242,6 @@ const SavingsGoals = () => {
                     <span className="text-[14px] text-gray-500">
                       de ${Goal.target.toLocaleString()}
                     </span>
-
                   </div>
 
                   <div className="space-y-2">
@@ -245,27 +271,29 @@ const SavingsGoals = () => {
           })}
         </div>
 
-        {GoalsLength.length === 0 && (
-          <div className="py-20 text-center">
-            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-10 h-10 text-gray-500" />
+        {
+          GoalsLength.length === 0 && (
+            <div className="py-20 text-center">
+              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-10 h-10 text-gray-500" />
+              </div>
+              <div className="text-[18px] font-semibold mb-2">
+                Nenhuma meta encontrada
+              </div>
+              <div className="text-[14px] text-gray-500">
+                Tente ajustar seus filtros
+              </div>
             </div>
-            <div className="text-[18px] font-semibold mb-2">
-              Nenhuma meta encontrada
-            </div>
-            <div className="text-[14px] text-gray-500">
-              Tente ajustar seus filtros
-            </div>
-          </div>
-        )}
-      </main>
+          )
+        }
+      </main >
 
       <SavingsGoalsModal
         IsOpen={SavingModal}
         OnClose={() => setSavingModal(false)}
         OnSave={HandleSaveGoals}
       />
-    </div>
+    </div >
   );
 };
 
