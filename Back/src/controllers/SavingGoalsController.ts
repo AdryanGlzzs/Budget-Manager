@@ -46,4 +46,34 @@ export class SavingGoalsController {
     }
 
   }
+
+  static async deleteGoal(req: Request, res: Response) {
+    const id = String(req.params.id)
+
+    try {
+
+      if (Array.isArray(id)) {
+        res.status(404).json({
+          message: "ID invalido",
+        })
+      }
+
+      const deleteGoal = await prisma.savingGoals.delete({
+        where: {
+          id
+        }
+      })
+
+      res.status(201).json({
+        message: "Meta deletada",
+        data: deleteGoal
+      })
+
+    } catch (error) {
+      res.status(404).json({
+        message: "Erro interno",
+        error
+      })
+    }
+  }
 }  
