@@ -28,4 +28,22 @@ export class SavingGoalsController {
 
     }
   }
-}
+
+  static async getGoals(req: Request, res: Response) {
+
+    const response = await prisma.savingGoals.findMany()
+
+    try {
+      res.status(200).json({
+        message: "Dados puxados",
+        data: response
+      })
+    } catch (error) {
+      res.status(500).json({
+        message: "Erro interno",
+        data: error
+      })
+    }
+
+  }
+}  

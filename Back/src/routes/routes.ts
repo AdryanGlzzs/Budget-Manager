@@ -22,4 +22,5 @@ routes.delete('/budgets/delete/:id', DeleteBudgetMiddleware, BudgetController.De
 routes.put('/budgets/edit/:id', EditBudget, BudgetController.EditBudget)
 routes.get('/budgets', BudgetController.getBudgets)
 
+routes.get('/savings-goals', SavingGoalsController.getGoals)
 routes.post('/savings-goals', CreateSavingGoalsMiddleware, SavingGoalsController.CreateGoal)
