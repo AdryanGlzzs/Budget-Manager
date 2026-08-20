@@ -42,7 +42,11 @@ const SavingsGoals = () => {
   }
 
 
-  const HandleRemoveGoals = (id: number) => {
+  const HandleRemoveGoals = async (id: number) => {
+
+    const deleteGoals = await api.delete(`/savings-goals/delete/${id}`)
+
+    console.log(deleteGoals)
 
     setGoals((prev) => prev.filter((goals) => goals.id !== id))
 
