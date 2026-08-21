@@ -76,4 +76,39 @@ export class SavingGoalsController {
       })
     }
   }
+
+  static async EditGoal(req: Request, res: Response) {
+    const id = req.params.id
+    const { name, target, current, color, deadline } = req.body
+
+    if (!id) {
+      throw new Error("Id invalido")
+    }
+
+    try {
+      const editResponse = await prisma.savingGoals.update({
+        where: {
+          id: String(id)
+        },
+        data: {
+          name,
+          target,
+          current,
+          color,
+          deadline
+        }
+      }
+      )
+
+      res.status(201).json({
+        message: "Orçamento Editado",
+        data: editResponse
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: "Orçamento não encontrado",
+        data: error
+      })
+    }
+  }
 }  
