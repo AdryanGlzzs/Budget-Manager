@@ -24,15 +24,16 @@ const SavingsGoals = () => {
   const [SavingModal, setSavingModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [Goals, setGoals] = useState<Goalsprops[]>([]);
+  const [editing, setEditing] = useState<Goalsprops | null>()
 
   useEffect(() => {
-    getSavingGoals()    
+    getSavingGoals()
   }, [])
 
   const getSavingGoals = async () => {
     const response = await api.get('/savings-goals')
 
-    if(!response){
+    if (!response) {
       throw new Error("Erro interno")
     }
 
@@ -41,8 +42,7 @@ const SavingsGoals = () => {
     setGoals(response.data.data)
   }
 
-
-  const HandleRemoveGoals = async (id: number) => {
+  const HandleRemoveGoals = async (id: string) => {
 
     const deleteGoals = await api.delete(`/savings-goals/delete/${id}`)
 
@@ -55,20 +55,46 @@ const SavingsGoals = () => {
 
   const HandleSaveGoals = async (newGoals: Goalsprops) => {
 
-    const response = await api.post('/savings-goals', newGoals)
+    try {
+      if (newGoals.id) {
 
-    console.log("Meta Criada", {
-      id: newGoals.id,
-      name: newGoals.name,
-      target: newGoals.target,
-      current: newGoals.current,
-      color: newGoals.color,
-      deadline: newGoals.deadline
-    })
+        const response = await api.put(`/savings-goals/edit/${newGoals.id}`, newGoals)
 
-    console.log(response)
+        console.log("Meta Editada", {
+          id: newGoals.id,
+          name: newGoals.name,
+          target: newGoals.target,
+          current: newGoals.current,
+          color: newGoals.color,
+          deadline: newGoals.deadline
+        })
 
-    getSavingGoals()
+        console.log(response)
+
+        getSavingGoals()
+
+      } else {
+
+        const response = await api.post('/savings-goals', newGoals)
+
+        console.log("Meta Criada", {
+          id: newGoals.id,
+          name: newGoals.name,
+          target: newGoals.target,
+          current: newGoals.current,
+          color: newGoals.color,
+          deadline: newGoals.deadline
+        })
+
+        console.log(response)
+
+        getSavingGoals()
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   const GoalsLength = Goals;
@@ -99,7 +125,10 @@ const SavingsGoals = () => {
 
           </div>
           <button
-            onClick={() => setSavingModal(true)}
+            onClick={() => {
+              setEditing(null);
+              setSavingModal(true);
+            }}
             className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2"
           >
             <Plus className="w-5 h-5" />
@@ -113,7 +142,7 @@ const SavingsGoals = () => {
             <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
-                  <Wallet className="w-6 h-6 text-green-400"  />
+                  <Wallet className="w-6 h-6 text-green-400" />
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Total Economizado</p>
@@ -223,7 +252,10 @@ const SavingsGoals = () => {
                     <button
                       className="p-2 rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-all"
                       title="Editar meta"
-                      onClick={() => HandleRemoveGoals(Goal.id)}
+                      onClick={() => {
+                        setEditing(Goal);
+                        setSavingModal(true);
+                      }}
                     >
                       <Edit className="w-4 h-4" />
                     </button>
@@ -296,6 +328,7 @@ const SavingsGoals = () => {
         IsOpen={SavingModal}
         OnClose={() => setSavingModal(false)}
         OnSave={HandleSaveGoals}
+        EditingGoals={editing}
       />
     </div >
   );

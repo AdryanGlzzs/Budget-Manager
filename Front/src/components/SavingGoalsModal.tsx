@@ -3,17 +3,18 @@ import {
   Check,
   Calendar,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type SavingsGoalsModalProps = {
   IsOpen: boolean;
   OnClose: () => void;
   OnSave: (GoalsProps: Goalsprops) => void
+  EditingGoals?: Goalsprops | null
 };
 
 
 export interface Goalsprops {
-  id: number;
+  id: string;
   name: string;
   target: number;
   current: number;
@@ -36,16 +37,34 @@ const colors = [
 export const SavingsGoalsModal = ({
   IsOpen,
   OnClose,
-  OnSave
+  OnSave,
+  EditingGoals
 }: SavingsGoalsModalProps) => {
   const [GoalsProps, setGoalsProps] = useState<Goalsprops>({
-    id: Math.floor(Math.random() * 1000),
+    id: "",
     name: "",
     target: 0,
     current: 0,
     color: "",
     deadline: "",
   });
+
+  useEffect(() => {
+    if (EditingGoals) {
+      setGoalsProps(EditingGoals);
+    } else {
+      setGoalsProps({
+        id: "",
+        name: "",
+        target: 0,
+        current: 0,
+        color: "#10b981",
+        deadline: "",
+      });
+    }
+  }, [EditingGoals, IsOpen]);
+
+  const IsEditing = Boolean(EditingGoals)
 
   const HandleChangeGoals = (field: keyof Goalsprops, value: any) => {
     setGoalsProps((prev) => ({ ...prev, [field]: value }));
@@ -64,10 +83,10 @@ export const SavingsGoalsModal = ({
         <div className="flex justify-between items-center mb-6">
           <div>
             <p className="text-[11px] text-white/40 uppercase tracking-widest mb-1">
-              Nova meta
+              {IsEditing ? "Editar Meta" : "Nova meta"}
             </p>
             <h2 className="text-[18px] font-semibold text-white">
-              Criar objetivo financeiro
+              {IsEditing ? "Editar objetivo financeiro" : "Criar objetivo financeiro"}
             </h2>
           </div>
           <button
