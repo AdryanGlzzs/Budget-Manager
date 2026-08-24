@@ -168,7 +168,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
 
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
@@ -393,7 +393,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
             <button
               type="button"
               onClick={() => handleSave(budget)}
-              className="flex-[2] px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 text-white font-bold hover:shadow-lg hover:shadow-purple-600/30 transition-all active:scale-95"
+              className="flex-2 px-6 py-3.5 rounded-xl bg-linear-to-r from-purple-600 to-purple-500 text-white font-bold hover:shadow-lg hover:shadow-purple-600/30 transition-all active:scale-95"
             >
               {isEditing ? "Atualizar" : "Salvar Orçamento"}
             </button>

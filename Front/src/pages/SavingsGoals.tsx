@@ -297,7 +297,7 @@ const SavingsGoals = () => {
 
                   <div className="mt-6 pt-4 border-t border-white/5 flex justify-end">
                     <button className="text-[13px] text-gray-400 hover:text-white flex items-center gap-1 transition-colors group/btn">
-                      Ver Detalhes
+                      Ver Detalhes  
                       <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                   </div>

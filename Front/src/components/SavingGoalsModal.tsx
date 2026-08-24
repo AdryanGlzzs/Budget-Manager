@@ -78,8 +78,8 @@ export const SavingsGoalsModal = ({
 
   if (!IsOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100]">
-      <div className="bg-[#0a0a18] border border-white/10 rounded-2xl p-7 w-full max-w-[480px] mx-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-100">
+      <div className="bg-[#0a0a18] border border-white/10 rounded-2xl p-7 w-full max-w-120 mx-4">
         <div className="flex justify-between items-center mb-6">
           <div>
             <p className="text-[11px] text-white/40 uppercase tracking-widest mb-1">
@@ -106,7 +106,7 @@ export const SavingsGoalsModal = ({
             value={GoalsProps.name}
             type="text"
             placeholder="Ex: Fundo de emergência"
-            className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
+            className="w-full bg-white/4 border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
           />
         </div>
 
@@ -122,7 +122,7 @@ export const SavingsGoalsModal = ({
               value={GoalsProps.target === 0 ? "" : GoalsProps.target}
               type="text"
               placeholder="0,00"
-              className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
+              className="w-full bg-white/4 border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
             />
           </div>
           <div>
@@ -136,7 +136,7 @@ export const SavingsGoalsModal = ({
               }
               type="text"
               placeholder="0,00"
-              className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
+              className="w-full bg-white/4 border border-white/10 rounded-xl px-4 py-3 text-[14px] text-white/85 placeholder:text-white/20 outline-none focus:border-white/20 transition-colors"
             />
           </div>
         </div>
@@ -149,7 +149,7 @@ export const SavingsGoalsModal = ({
               onChange={(e) => HandleChangeGoals("deadline", e.target.value)}
               value={GoalsProps.deadline}
               type="date"
-              className="w-full bg-white/[0.04] border border-white/10 rounded-xl pl-11 pr-4 py-3 text-[14px] text-white/85 outline-none focus:border-purple-500/50 transition-colors [color-scheme:dark]"
+              className="w-full bg-white/4 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-[14px] text-white/85 outline-none focus:border-purple-500/50 transition-colors scheme-dark"
             />
           </div>
         </div>
@@ -190,7 +190,7 @@ export const SavingsGoalsModal = ({
           >
             Cancelar
           </button>
-          <button className="flex-[2] py-3 bg-gradient-to-r from-purple-700 to-purple-500 rounded-xl text-[14px] font-semibold text-white shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 hover:scale-[1.02] transition-all"
+          <button className="flex-2 py-3 bg-linear-to-r from-purple-700 to-purple-500 rounded-xl text-[14px] font-semibold text-white shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 hover:scale-[1.02] transition-all"
             onClick={() => HandleSubmit()}
           >
             Criar Meta
