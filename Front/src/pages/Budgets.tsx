@@ -107,10 +107,10 @@ const Budgets = () => {
   return (
     <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className="absolute -left-50 -top-50 w-150 h-150 bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className="absolute -right-50 -top-50 w-150 h-150 bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className="absolute -left-50 -bottom-50 w-150 h-150 bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className="absolute -right-50 -bottom-50 w-150 h-150 bg-purple-600/30 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="relative z-10">
@@ -123,7 +123,7 @@ const Budgets = () => {
             <Sidebar open={open} setOpen={setOpen} />
           </div>
 
-          <main className="flex-1 w-full p-4 sm:p-6 md:p-8 max-w-[1400px] overflow-x-hidden">
+          <main className="flex-1 w-full p-4 sm:p-6 md:p-8 max-w-350 overflow-x-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
               <div>
                 <h1 className="text-[28px] sm:text-[34px] md:text-[42px] font-bold mb-2 md:mb-3">
@@ -136,7 +136,7 @@ const Budgets = () => {
               </div>
 
               <button
-                className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0"
+                className="flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-linear-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] md:text-[15px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto shrink-0"
                 onClick={() => {
                   setEditingBudget(null);
                   setBudgetOpen(true);
@@ -150,7 +150,7 @@ const Budgets = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
               <div className="relative group">
                 <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-5 md:p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
+                <div className="relative bg-linear-to-br from-purple-600/20 to-purple-800/10 p-5 md:p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-3 md:mb-4">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
                       <Target className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
@@ -170,7 +170,7 @@ const Budgets = () => {
 
               <div className="relative group">
                 <div className="absolute inset-0 bg-cyan-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-cyan-600/20 to-cyan-800/10 p-5 md:p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm">
+                <div className="relative bg-linear-to-br from-cyan-600/20 to-cyan-800/10 p-5 md:p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-3 md:mb-4">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
                       <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" />
@@ -192,7 +192,7 @@ const Budgets = () => {
 
               <div className="relative group">
                 <div className="absolute inset-0 bg-green-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-gradient-to-br from-green-600/20 to-green-800/10 p-5 md:p-6 rounded-2xl border border-green-500/30 backdrop-blur-sm">
+                <div className="relative bg-linear-to-br from-green-600/20 to-green-800/10 p-5 md:p-6 rounded-2xl border border-green-500/30 backdrop-blur-sm">
                   <div className="flex items-center gap-3 mb-3 md:mb-4">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-green-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
                       <Target className="w-5 h-5 md:w-6 md:h-6 text-green-400" />
@@ -214,8 +214,8 @@ const Budgets = () => {
 
 
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-              <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-4 md:p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+              <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+              <div className="relative bg-linear-to-br from-white/10 to-white/2 p-4 md:p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 md:mb-6">
                   <h2 className="text-[18px] md:text-[20px] font-semibold">
                     Categorias de Orçamento
@@ -318,10 +318,10 @@ const Budgets = () => {
                             <div className="w-full bg-white/5 rounded-full h-2.5 md:h-3 overflow-hidden">
                               <div
                                 className={`h-full rounded-full shadow-lg transition-all ${isOverBudget
-                                  ? "bg-gradient-to-r from-red-600 to-red-500 shadow-red-600/50"
+                                  ? "bg-linear-to-r from-red-600 to-red-500 shadow-red-600/50"
                                   : isWarning
-                                    ? "bg-gradient-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
-                                    : "bg-gradient-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
+                                    ? "bg-linear-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
+                                    : "bg-linear-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
                                   }`}
                                 style={{
                                   width: `${Math.min(percentage, 100)}%`,

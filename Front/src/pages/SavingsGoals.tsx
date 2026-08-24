@@ -4,13 +4,8 @@ import {
   TrendingUp,
   Plus,
   ArrowRight,
-  PiggyBank,
-  ShieldCheck,
-  Plane,
-  Car,
   Trash2,
   Search,
-  Goal,
   Edit,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
@@ -102,8 +97,8 @@ const SavingsGoals = () => {
   return (
     <div className="flex min-h-screen bg-[#050510] text-white overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]"></div>
+        <div className="absolute -left-50 -top-50 w-150 h-150 bg-purple-600/20 rounded-full blur-[120px]"></div>
+        <div className="absolute -right-50 -bottom-50 w-150 h-150 bg-blue-600/20 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="pb-0">
@@ -114,7 +109,7 @@ const SavingsGoals = () => {
         <Sidebar open={open} setOpen={setOpen} />
       </div>
 
-      <main className="flex-1 p-8 max-w-[1400px] relative z-10 overflow-y-auto h-screen mt-15">
+      <main className="flex-1 p-8 max-w-350 relative z-10 overflow-y-auto h-screen mt-15">
         <header className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-[28px] font-bold mb-2">Metas de Economia</h1>
@@ -129,7 +124,7 @@ const SavingsGoals = () => {
               setEditing(null);
               setSavingModal(true);
             }}
-            className="bg-gradient-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2"
+            className="bg-linear-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2"
           >
             <Plus className="w-5 h-5" />
             Nova Meta
@@ -138,8 +133,8 @@ const SavingsGoals = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" >
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-            <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+            <div className="absolute inset-0 bg-linear-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
                   <Wallet className="w-6 h-6 text-green-400" />
@@ -153,8 +148,8 @@ const SavingsGoals = () => {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-            <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+            <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
                   <Target className="w-6 h-6 text-purple-400" />
@@ -168,8 +163,8 @@ const SavingsGoals = () => {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-            <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+            <div className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
                   <TrendingUp className="w-6 h-6 text-cyan-400" />
@@ -247,7 +242,7 @@ const SavingsGoals = () => {
                   className={`absolute inset-0 bg-${Goal.color}-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}
                 ></div>
 
-                <div className="relative bg-[#0a0a14]/60 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all hover:translate-y-[-4px]">
+                <div className="relative bg-[#0a0a14]/60 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all -hover:translate-y-1">
                   <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10">
                     <button
                       className="p-2 rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-all"
@@ -289,7 +284,7 @@ const SavingsGoals = () => {
                     </div>
                     <div className="w-full bg-white/5 rounded-full h-2.5 overflow-hidden">
                       <div
-                        className={`bg-gradient-to-r ${colors.barFrom} ${colors.barTo} h-full rounded-full shadow-lg ${colors.barShadow} transition-all duration-1000 ease-out`}
+                        className={`bg-linear-to-r ${colors.barFrom} ${colors.barTo} h-full rounded-full shadow-lg ${colors.barShadow} transition-all duration-1000 ease-out`}
                         style={{ width: `${percent}%` }}
                       ></div>
                     </div>
@@ -297,7 +292,7 @@ const SavingsGoals = () => {
 
                   <div className="mt-6 pt-4 border-t border-white/5 flex justify-end">
                     <button className="text-[13px] text-gray-400 hover:text-white flex items-center gap-1 transition-colors group/btn">
-                      Ver Detalhes  
+                      Ver Detalhes
                       <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                   </div>
