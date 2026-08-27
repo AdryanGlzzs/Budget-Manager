@@ -10,6 +10,7 @@ const SavingsGoals = lazy(() => import("../pages/SavingsGoals"));
 const Pricing = lazy(() => import("../pages/Pricing"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 const RegisterPage = lazy(() => import("../pages/RegisterPage"));
+const NotFound = lazy(() => import("../pages/NotFound"));
 
 export const ROUTES = {
   Home: "/",
@@ -22,7 +23,7 @@ export const ROUTES = {
   Pricing: "/pricing",
   Login: "/login",
   Register: "/signup",
-  
+  NotFound: "*",
 };
 
 export const routeConfig = [
@@ -36,4 +37,6 @@ export const routeConfig = [
   { path: ROUTES.Pricing, element: <Pricing /> },
   { path: ROUTES.Login, element: <LoginPage /> },
   { path: ROUTES.Register, element: <RegisterPage /> },
+  { path: ROUTES.NotFound, element: <NotFound /> },
 ];
+

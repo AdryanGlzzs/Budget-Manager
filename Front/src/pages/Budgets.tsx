@@ -24,17 +24,7 @@ const Budgets = () => {
   const [editingBudget, setEditingBudget] = useState<BudgetsProps | null>(null);
 
 
-  const [budgets, setBudgets] = useState<BudgetsProps[]>([
-    {
-      id: '1',
-      name: "Alimentação",
-      color: "#6366F1",
-      description: '',
-      period: '',
-      spent: 450,
-      limit: 600,
-    },
-  ]);
+  const [budgets, setBudgets] = useState<BudgetsProps[]>([]);
 
   const getBudgets = async () => {
     try {

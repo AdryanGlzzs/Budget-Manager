@@ -21,6 +21,8 @@ const SavingsGoals = () => {
   const [Goals, setGoals] = useState<Goalsprops[]>([]);
   const [editing, setEditing] = useState<Goalsprops | null>()
 
+  const goalReduce = Goals.reduce((total, goal) => total + Number(goal.current) , 0)
+
   useEffect(() => {
     getSavingGoals()
   }, [])
@@ -141,7 +143,7 @@ const SavingsGoals = () => {
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Total Economizado</p>
-                  <h3 className="text-[24px] font-bold">R$ {Goals.reduce((total, goal) => total + goal.current, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</h3>
+                  <h3 className="text-[24px] font-bold">R$ {goalReduce}</h3>
                 </div>
               </div>
             </div>
