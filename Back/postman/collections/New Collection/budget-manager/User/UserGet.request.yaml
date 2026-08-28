@@ -1,0 +1,9 @@
+$kind: http-request
+name: UserGet
+url: http://localhost:3000/users/me
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZTViZjEwLWJhNTUtNDgzMC1iMjQ1LTJkZDQ4MWNlZDM1ZCIsImlhdCI6MTc4NzkzMzg0NywiZXhwIjoxNzg4NTM4NjQ3fQ.P6Emc8d3-R2vF7xwWvYbverA_tNdoMyfxBw7ocg88Lg
+order: 1787924506162

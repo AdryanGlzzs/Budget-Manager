@@ -1,0 +1,18 @@
+$kind: http-request
+name: CreateUser
+url: http://localhost:3000/signup
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \   \"name\": \"Adryan\",\r
+
+    \  \"email\": \"testeeeEE@email.com\",\r
+
+    \  \"password\": \"senha123password\",\r
+
+    \    \"confirmPassword\": \"senha123password\"\r
+
+    }"
+order: 910654249552161
