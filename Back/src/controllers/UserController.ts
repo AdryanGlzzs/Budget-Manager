@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
-import jwt  from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+
+interface TokenPayload {
+  id: string
+}
 
 
 export class UserController {
@@ -33,15 +37,15 @@ export class UserController {
 
     const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
 
-    if(!secret){
+    if (!secret) {
       return res.status(401).json({
         message: "Não autorizado"
       })
     }
     const token = jwt.sign(
-      {id: user.id}, secret , {
-        expiresIn: '7d'
-      }
+      { id: user.id }, secret, {
+      expiresIn: '7d'
+    }
     )
 
     return res.status(201).json({
@@ -85,17 +89,24 @@ export class UserController {
 
       const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
 
-      if(!secret){
+      if (!secret) {
         return res.status(401).json({
           message: "Não autorizado"
         })
       }
 
       const token = jwt.sign(
-        {id: userLogin.id}, 
+        { id: userLogin.id },
         secret,
-        {expiresIn: "7d"}
+        { expiresIn: "7d" }
       )
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
 
       return res.status(200).json({
         message: "Login realizado com sucesso!",
@@ -146,11 +157,51 @@ export class UserController {
 
       return res.status(200).json(user);
     }
-    catch(error) {
+    catch (error) {
       console.log(error);
       return res.status(500).json({
         message: "Erro interno do servidor"
       });
+    }
+  }
+
+  static async MeController(req: Request, res: Response) {
+
+    const token = req.cookies?.token
+
+    const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
+
+    if (!token) {
+      return res.status(401).json({ message: "Não autorizado" });
+    }
+
+    if (!secret) {
+      return res.status(500).json({ message: "Chave secreta não configurada" });
+    }
+
+    try {
+      const decoded = jwt.verify(token, secret) as TokenPayload
+
+      const user = await prisma.user.findUnique({
+        where: {id: decoded.id},
+        select:{
+          id: true,
+          name: true,
+          email: true,
+        }
+      })
+
+      if (!user) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      return res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      });
+    } catch (error) {
+      return res.status(401).json({ message: "Token inválido ou expirado" });
     }
   }
 }

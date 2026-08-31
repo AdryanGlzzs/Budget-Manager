@@ -21,7 +21,7 @@ const SchemaUserLogin = z.object({
 
 export const SignUpUserMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const { name, email, password, confirmPassword } = req.body
-
+    
     const result = SchemaUserSignUp.safeParse(req.body)
 
     if (!result.success) {
