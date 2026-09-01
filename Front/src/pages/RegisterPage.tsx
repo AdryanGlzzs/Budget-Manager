@@ -1,4 +1,4 @@
-import { useState, type ReactElement} from "react";
+import { useState, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff, User } from "lucide-react";
 import Logo from "../images/logo.png";
@@ -23,17 +23,23 @@ const RegisterPage = () => {
   const navigate = useNavigate()
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    e.preventDefault()
+    if (formData.password !== formData.confirmPassword) {
+      alert("As senhas não coincidem!");
+      return;
+    }
 
     try {
-      const req = await api.post('/signup', formData);
+      const { name, email, password, confirmPassword } = formData;
+      const req = await api.post('/signup', { name, email, password, confirmPassword });
       console.log(req.data);
-      navigate("/dashboard")
+      navigate("/dashboard");
     } catch (error) {
-      console.error(error);
+      console.error("Erro no cadastro:", error);
     }
   };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -44,14 +50,14 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-[#050510] text-white flex items-center justify-center p-6 relative overflow-hidden">
-  
+
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
         <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]"></div>
       </div>
 
       <div className="w-full max-w-[480px] relative z-10 animate-in fade-in zoom-in duration-500 my-8">
-       
+
         <div className="flex flex-col items-center mb-10">
           <Link to="/">
             <img
@@ -72,7 +78,7 @@ const RegisterPage = () => {
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-blue-600/50 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
 
           <div className="relative bg-[#0a0a14]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
-           
+
             <div className="grid grid-cols-2 gap-4 mb-8">
               <button className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 py-3 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -247,7 +253,7 @@ const RegisterPage = () => {
           .
         </p>
       </div>
- 
+
       <div className="absolute top-1/2 -translate-y-1/2 -right-24 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute top-1/2 -translate-y-1/2 -left-24 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
     </div>

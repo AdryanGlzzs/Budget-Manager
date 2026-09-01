@@ -10,6 +10,7 @@ import {
   gitHubProvider,
 } from "../firebase/firebase";
 import { api } from "../services/api";
+import { useAuth } from "../services/authContext";
 
 interface User {
   email: string;
@@ -19,22 +20,17 @@ interface User {
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const [User, setUser] = useState<User>({
+  const { Login } = useAuth();
+  const [user, setUser] = useState<User>({
     email: "",
     password: ""
-  })
+  });
 
   const HandleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     try {
-      const UserData = {
-        email: User.email,
-        password: User.password
-      };
-
-      const response = await api.post("/login", UserData);
-      console.log(response.data);
+      await Login(user.email, user.password);
       navigate('/dashboard');
     } catch (error) {
       console.error("Erro ao fazer login:", error);
@@ -174,8 +170,8 @@ const LoginPage = () => {
                   <Mail className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
                   <input
                     type="email"
-                    value={User.email}
-                    onChange={(e) => setUser({ ...User, email: e.target.value })}
+                    value={user.email}
+                    onChange={(e) => setUser({ ...user, email: e.target.value })}
                     placeholder="exemplo@email.com"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required
@@ -199,8 +195,8 @@ const LoginPage = () => {
                   <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-purple-400 transition-colors" />
                   <input
                     type={showPassword ? "text" : "password"}
-                    value={User.password}
-                    onChange={(e) => setUser({ ...User, password: e.target.value })}
+                    value={user.password}
+                    onChange={(e) => setUser({ ...user, password: e.target.value })}
                     placeholder="••••••••"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-12 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required

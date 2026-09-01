@@ -2,13 +2,13 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { AppRoutes } from './routes/Routes'
-import { ThemeProvider } from './contexts/AuthContext'
+import { AuthContextProvider } from './services/authContext'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider>
-      <AppRoutes />
-    </ThemeProvider>
+    <AuthContextProvider>
+        <AppRoutes />
+    </AuthContextProvider>
   </StrictMode>,
 )
 

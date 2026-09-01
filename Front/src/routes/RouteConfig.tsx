@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 const InitialPage = lazy(() => import("../pages/Initial"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
@@ -28,12 +29,12 @@ export const ROUTES = {
 
 export const routeConfig = [
   { path: ROUTES.Home, element: <InitialPage /> },
-  { path: ROUTES.Dashboard, element: <Dashboard /> },
-  { path: ROUTES.Transactions, element: <Transactions /> },
-  { path: ROUTES.Settings, element: <Settings /> },
-  { path: ROUTES.Analytics, element: <Analytics /> },
-  { path: ROUTES.Budgets, element: <Budgets /> },
-  { path: ROUTES.SavingsGoals, element: <SavingsGoals /> },
+  { path: ROUTES.Dashboard, element: <ProtectedRoute><Dashboard /></ProtectedRoute> },
+  { path: ROUTES.Transactions, element: <ProtectedRoute><Transactions /></ProtectedRoute> },
+  { path: ROUTES.Settings, element: <ProtectedRoute><Settings /></ProtectedRoute> },
+  { path: ROUTES.Analytics, element: <ProtectedRoute><Analytics /></ProtectedRoute> },
+  { path: ROUTES.Budgets, element: <ProtectedRoute><Budgets /></ProtectedRoute> },
+  { path: ROUTES.SavingsGoals, element: <ProtectedRoute><SavingsGoals /></ProtectedRoute> },
   { path: ROUTES.Pricing, element: <Pricing /> },
   { path: ROUTES.Login, element: <LoginPage /> },
   { path: ROUTES.Register, element: <RegisterPage /> },
