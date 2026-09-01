@@ -9,7 +9,6 @@ import {
   facebookProvider,
   gitHubProvider,
 } from "../firebase/firebase";
-import { api } from "../services/api";
 import { useAuth } from "../services/authContext";
 
 interface User {
@@ -70,11 +69,11 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-[#050510] text-white flex items-center justify-center p-6 relative overflow-hidden">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]"></div>
+        <div className="absolute -left-50 -top-50 w-150 h-150 bg-purple-600/20 rounded-full blur-[120px]"></div>
+        <div className="absolute -right-50 -bottom-50 w-150 h-150 bg-blue-600/20 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="w-full max-w-[440px] relative z-10 animate-in fade-in zoom-in duration-500">
+      <div className="w-full max-w-110 relative z-10 animate-in fade-in zoom-in duration-500">
         <div className="flex flex-col items-center mb-10">
           <Link to="/">
             <img
@@ -218,7 +217,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 onClick={HandleLogin}
-                className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-[15px] shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-2"
+                className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-base shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-2"
               >
                 Entrar na Conta
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -239,7 +238,7 @@ const LoginPage = () => {
           </div>
         </div>
 
-        <p className="text-center text-gray-600 text-[12px] mt-10">
+        <p className="text-center text-gray-600 text-xs mt-10">
           Ao entrar, você concorda com nossos <br />
           <Link to="/terms" className="underline hover:text-gray-400">
             Termos de Serviço

@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff, User } from "lucide-react";
 import Logo from "../images/logo.png";
@@ -15,7 +15,7 @@ interface UserProps {
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<UserProps>({
-    name: "",
+    name: "", 
     email: "",
     password: "",
     confirmPassword: "",
@@ -52,11 +52,11 @@ const RegisterPage = () => {
     <div className="min-h-screen bg-[#050510] text-white flex items-center justify-center p-6 relative overflow-hidden">
 
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px]"></div>
+        <div className="absolute -left-50 -top-50 w-150 h-150 bg-purple-600/20 rounded-full blur-[120px]"></div>
+        <div className="absolute -right-50 -bottom-50 w-150 h-150 bg-blue-600/20 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="w-full max-w-[480px] relative z-10 animate-in fade-in zoom-in duration-500 my-8">
+      <div className="w-full max-w-120 relative z-10 animate-in fade-in zoom-in duration-500 my-8">
 
         <div className="flex flex-col items-center mb-10">
           <Link to="/">
@@ -75,7 +75,7 @@ const RegisterPage = () => {
         </div>
 
         <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-blue-600/50 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+          <div className="absolute -inset-1 bg-linear-to-r from-purple-600/50 to-blue-600/50 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
 
           <div className="relative bg-[#0a0a14]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
 
@@ -138,7 +138,7 @@ const RegisterPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="João Silva"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required
                   />
                 </div>
@@ -156,7 +156,7 @@ const RegisterPage = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="exemplo@email.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                     required
                   />
                 </div>
@@ -175,7 +175,7 @@ const RegisterPage = () => {
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="••••••••"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                       required
                     />
                   </div>
@@ -193,7 +193,7 @@ const RegisterPage = () => {
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       placeholder="••••••••"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-600"
+                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:border-purple-500/50 focus:bg-white/8 transition-all placeholder:text-gray-600"
                       required
                     />
                   </div>
@@ -220,7 +220,7 @@ const RegisterPage = () => {
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-[15px] shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-4"
+                className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 py-4 rounded-2xl font-bold text-base shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 group mt-4"
               >
                 Criar Conta Grátis
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -241,7 +241,7 @@ const RegisterPage = () => {
           </div>
         </div>
 
-        <p className="text-center text-gray-600 text-[12px] mt-10">
+        <p className="text-center text-gray-600 text-xs mt-10">
           Ao se cadastrar, você concorda com nossos <br />
           <Link to="/terms" className="underline hover:text-gray-400">
             Termos de Serviço
