@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff } from "lucide-react";
 import Logo from "../images/logo.png";
@@ -8,8 +8,10 @@ import {
   googleProvider,
   facebookProvider,
   gitHubProvider,
+
 } from "../firebase/firebase";
-import { useAuth } from "../services/authContext";
+import { useAuth } from "../contexts/authContext";
+import { api } from "../services/api";
 
 interface User {
   email: string;
@@ -47,11 +49,29 @@ const LoginPage = () => {
 
   const handleLoginGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const provider = googleProvider
+      const result = await signInWithPopup(auth, provider);
+
+      const user = result.user
+
+      const idToken = await user.getIdToken()
+
+      const response = await api.post('/auth/google', { token: idToken });
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+
+
       navigate("/dashboard");
+
       console.log(result.user);
+
+      return response.data
+
     } catch (error) {
-      console.log(error);
+      console.log("Autenticação com google não realizada", error);
+      throw error
     }
   };
 
