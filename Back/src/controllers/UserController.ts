@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { verify } from "jsonwebtoken";
+import { authAdmin } from "../firebase/firebase";
 
 interface TokenPayload {
   id: string
@@ -183,8 +184,8 @@ export class UserController {
       const decoded = jwt.verify(token, secret) as TokenPayload
 
       const user = await prisma.user.findUnique({
-        where: {id: decoded.id},
-        select:{
+        where: { id: decoded.id },
+        select: {
           id: true,
           name: true,
           email: true,
@@ -201,6 +202,77 @@ export class UserController {
         email: user.email,
       });
     } catch (error) {
+      return res.status(401).json({ message: "Token inválido ou expirado" });
+    }
+  }
+
+  static async GoogleLoginController(req: Request, res: Response) {
+    const { token } = req.body
+
+    if (!token) {
+      return res.status(400).json({
+        message: "Token ausente"
+      })
+    }
+
+    try {
+      const decodedToken = await authAdmin.verifyIdToken(token)
+      const { name, email } = decodedToken
+
+      if (!email) {
+        return res.status(400).json({
+          message: "Email não fornecido com o Google"
+        })
+      }
+
+      let user = await prisma.user.findUnique({
+        where: {
+          email
+        }
+      })
+
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            name: name || "Usuario Google",
+            email,
+            password: ""
+          }
+        })
+      }
+
+      const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
+
+      if (!secret) {
+        return res.status(500).json({
+          message: "Chave secreta não configurada"
+        });
+      }
+
+      const appToken = jwt.sign({ id: user.id },
+        secret,
+        { expiresIn: "7d" }
+      )
+
+      res.cookie("token", appToken, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
+
+      return res.status(200).json({
+        message: "Login com Google realizado com sucesso!",
+        token: appToken,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email
+        }
+      });
+
+    } catch (error) {
+      console.error("Erro no GoogleLoginController:", error);
       return res.status(401).json({ message: "Token inválido ou expirado" });
     }
   }
