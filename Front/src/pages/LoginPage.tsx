@@ -40,8 +40,24 @@ const LoginPage = () => {
 
   const handleLoginFacebook = async () => {
     try {
-      const result = await signInWithPopup(auth, facebookProvider);
-      console.log("Usuário logado:", result.user);
+      const provider = facebookProvider
+      const result = await signInWithPopup(auth, provider)
+
+      const user = result.user
+
+      const idToken = await user.getIdToken()
+
+      const response = await api.post('/auth/facebook', {token: idToken})
+      
+      if(response.data.token){
+        localStorage.setItem("token", response.data.token)
+      }
+
+      navigate("/dashboard")
+
+      console.log(result.user)
+
+      return response.data
     } catch (error) {
       console.error("Erro detalhado:", error);
     }
