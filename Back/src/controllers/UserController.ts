@@ -276,4 +276,74 @@ export class UserController {
       return res.status(401).json({ message: "Token inválido ou expirado" });
     }
   }
+
+  static async FacebookLoginController(req: Request, res: Response) {
+
+    const { token } = req.body
+
+    if (!token) {
+      return res.status(400).json({
+        message: "Token ausente"
+      })
+    }
+
+    try {
+      const decodedToken = await authAdmin.verifyIdToken(token)
+      const { name, email } = decodedToken
+
+      if (!email) {
+        return res.status(400).json({
+          message: "Email não fornecido com o Facebook"
+        })
+      }
+
+      let user = await prisma.user.findUnique({
+        where: {
+          email
+        }
+      })
+
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            name: name || "Usuario Facebook",
+            email,
+            password: ""
+          }
+        })
+      }
+
+      const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
+
+      if (!secret) {
+        return res.status(500).json({
+          message: "Chave secreta não configurada"
+        });
+      }
+
+      const appToken = jwt.sign({ id: user.id }, secret, { expiresIn: "7d" })
+
+      res.cookie("token", appToken, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production"
+      })
+
+      return res.status(200).json({
+        message: "Login com Facebook  realizado com sucesso!",
+        token: appToken,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email
+        }
+      });
+    } catch (error) {
+      res.status(404).json({
+        message: "Houve um erro",
+        data: error
+      })
+    }
+  }
 }

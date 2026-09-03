@@ -15,6 +15,7 @@ routes.post('/login', LoginUserMiddleware, UserController.login)
 routes.post('/signup', SignUpUserMiddleware, UserController.signup)
 routes.get('/users/me', AuthMiddleware,  UserController.GetUsers)
 routes.post("/auth/google", UserController.GoogleLoginController);
+routes.post('/auth/facebook', UserController.FacebookLoginController)
 
 routes.get('/transactions', TransactionController.getTransaction)
 routes.post('/transactions', TransactionMiddleware, TransactionController.HandleSaveTransaction)
