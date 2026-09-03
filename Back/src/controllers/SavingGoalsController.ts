@@ -12,6 +12,7 @@ export class SavingGoalsController {
           current,
           color,
           deadline
+          
         }
       })
 
