@@ -13,6 +13,8 @@ interface AuthContextType {
     Loading: boolean;
     Login: (email: string, password: string) => Promise<void>;
     Logout: () => Promise<void>;
+    ValidateToken: () => Promise<void>;
+    setUser: (user: User | null) => void;
 }
 
 interface AuthContextProps {
@@ -63,7 +65,7 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) =>
     }
 
     return (
-        <AuthContext.Provider value={{ Login, Logout, User: isUser, Loading: loading }}>
+        <AuthContext.Provider value={{ Login, Logout, User: isUser, Loading: loading, ValidateToken, setUser: setIsUser }}>
             {children}
         </AuthContext.Provider>
     )

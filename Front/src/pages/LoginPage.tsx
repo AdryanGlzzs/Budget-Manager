@@ -21,7 +21,7 @@ interface User {
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { Login } = useAuth();
+  const { Login, ValidateToken, setUser: setAuthUser } = useAuth();
   const [user, setUser] = useState<User>({
     email: "",
     password: ""
@@ -47,10 +47,16 @@ const LoginPage = () => {
 
       const idToken = await user.getIdToken()
 
-      const response = await api.post('/auth/facebook', {token: idToken})
-      
-      if(response.data.token){
+      const response = await api.post('/auth/facebook', { token: idToken })
+
+      if (response.data.token) {
         localStorage.setItem("token", response.data.token)
+      }
+
+      if (response.data.user) {
+        setAuthUser(response.data.user);
+      } else {
+        await ValidateToken();
       }
 
       navigate("/dashboard")
@@ -78,6 +84,11 @@ const LoginPage = () => {
         localStorage.setItem("token", response.data.token);
       }
 
+      if (response.data.user) {
+        setAuthUser(response.data.user);
+      } else {
+        await ValidateToken();
+      }
 
       navigate("/dashboard");
 
@@ -93,12 +104,34 @@ const LoginPage = () => {
 
   const handleLoginGithub = async () => {
     try {
-      const result = await signInWithPopup(auth, gitHubProvider);
-      const user = result.user;
+      const provider = gitHubProvider
+      const result = await signInWithPopup(auth, provider);
 
-      console.log(user.displayName, user.email);
+      const user = result.user
+
+      const idToken = await user.getIdToken()
+
+      const response = await api.post("/auth/github", { token: idToken })
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token)
+      }
+
+      if (response.data.user) {
+        setAuthUser(response.data.user);
+      } else {
+        await ValidateToken();
+      }
+
+      navigate("/dashboard");
+
+      console.log(result.user);
+
+      return response.data
+
     } catch (error) {
-      console.error("Erro:", error);
+
+      console.log("Autenticação com o github não realizada", error);
     }
   };
 
