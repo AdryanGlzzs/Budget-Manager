@@ -346,4 +346,70 @@ export class UserController {
       })
     }
   }
+
+  static async GitHubLoginController(req: Request, res: Response) {
+    const { token } = req.body
+
+      if(!token){
+        return res.status(401).json({
+          message: "Token não encontrado"
+        })
+      }
+
+      try {
+        const decodedToken = await authAdmin.verifyIdToken(token)
+
+        const {name, email} = decodedToken
+
+        if(!email){
+          return res.status(404).json({
+            message: "Email não fornecido pelo git hub"
+          })
+        }
+
+        let user = await prisma.user.findUnique({
+          where:{
+            email
+          }
+        })
+
+        if(!user){
+          user = await prisma.user.create({
+            data:{
+              name: name || "Usuario GitHub",
+              email ,
+              password: ""
+            }
+          })
+        }
+
+        const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
+
+        if(!secret){
+          return res.status(500).json({
+            message: "Chave secreta não declarada"
+          })
+        }
+
+        const appToken = jwt.sign({id: user.id}, secret, {expiresIn: "7d"})
+
+        res.cookie("token", appToken, {
+          httpOnly: true,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+          sameSite: 'lax',
+          secure: process.env.NODE_ENV === "Production"           
+        })
+
+        res.status(200).json({
+          message: "Login GitHub realizado com sucesso",
+          data: {
+            id: user.id,
+            name: user.name,
+            email: user.email
+          }
+        })
+      } catch (error) {
+        
+      }
+  }
 }
