@@ -8,6 +8,7 @@ import { BudgetMiddleware, DeleteBudgetMiddleware, EditBudget } from '../middlew
 import { CreateSavingGoalsMiddleware } from '../middlewares/SavingGoalsMiddleware'
 import { SavingGoalsController } from '../controllers/SavingGoalsController'
 import { AuthMiddleware } from '../middlewares/AuthMiddleware'
+import { PaymentController } from '../controllers/PaymentController'
 
 export const routes = Router()
 
@@ -31,3 +32,6 @@ routes.get('/savings-goals', SavingGoalsController.getGoals)
 routes.post('/savings-goals', CreateSavingGoalsMiddleware, SavingGoalsController.CreateGoal)
 routes.delete('/savings-goals/delete/:id', SavingGoalsController.deleteGoal)
 routes.put('/savings-goals/edit/:id', SavingGoalsController.EditGoal)
+
+routes.post('/process_payment', PaymentController.processPayment)
+
