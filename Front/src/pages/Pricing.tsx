@@ -1,12 +1,21 @@
 import { Check, Star } from "lucide-react";
+import MarketPaidCheckout from "../components/checkout";
+import { useState } from "react";
+
+type PlansOptions = "Free" | "Business" | "Pro" | null
 
 const Pricing = () => {
   const billingCycle = "monthly";
 
+  const [open, setOpen] = useState(false)
+  const [Plans, setPlans] = useState<PlansOptions>(null)
+
+
+
   const plans = [
     {
       name: "Free",
-      price: 0,
+      price: 0, 
       description: "Perfeito para começar a organizar suas finanças.",
       features: [
         "Acesso ao Dashboard Básico",
@@ -20,9 +29,9 @@ const Pricing = () => {
     },
     {
       name: "Pro",
-      price: billingCycle === "monthly" ? 12 : 10,
+      price: billingCycle === "monthly",
       description: "Tudo o que você precisa para controle total.",
-      features: [ 
+      features: [
         "Tudo no plano Free",
         "Contas ilimitadas",
         "Metas de economia ilimitadas",
@@ -35,7 +44,7 @@ const Pricing = () => {
     },
     {
       name: "Business",
-      price: billingCycle === "monthly" ? 29 : 24,
+      price: billingCycle === "monthly",
       description: "Para freelancers e pequenos negócios.",
       features: [
         "Tudo no plano Pro",
@@ -69,11 +78,10 @@ const Pricing = () => {
         </div>
         <div className="flex items-center gap-4 bg-white/5 p-1 rounded-xl border border-white/10 mb-8">
           <button
-            className={`px-6 py-2.5 rounded-lg text-[14px] font-medium transition-all ${
-              billingCycle === "monthly"
-                ? "bg-white/10 text-white shadow-lg"
-                : "text-gray-400 hover:text-white"
-            }`}
+            className={`px-6 py-2.5 rounded-lg text-[14px] font-medium transition-all ${billingCycle === "monthly"
+              ? "bg-white/10 text-white shadow-lg"
+              : "text-gray-400 hover:text-white"
+              }`}
           >
             Mensal
           </button>
@@ -102,11 +110,10 @@ const Pricing = () => {
               <div
                 className={`
                         relative h-full p-8 rounded-3xl border backdrop-blur-sm transition-all duration-300
-                        ${
-                          plan.popular
-                            ? "bg-[#0a0a14]/80 border-purple-500/50 shadow-2xl shadow-purple-900/20 hover:border-purple-500/80 hover:shadow-purple-900/40 translate-y-[-8px]"
-                            : "bg-[#0a0a14]/40 border-white/10 hover:border-white/20 hover:bg-[#0a0a14]/60"
-                        }
+                        ${plan.popular
+                    ? "bg-[#0a0a14]/80 border-purple-500/50 shadow-2xl shadow-purple-900/20 hover:border-purple-500/80 hover:shadow-purple-900/40 translate-y-[-8px]"
+                    : "bg-[#0a0a14]/40 border-white/10 hover:border-white/20 hover:bg-[#0a0a14]/60"
+                  }
                     `}
               >
                 {plan.popular && (
@@ -120,7 +127,7 @@ const Pricing = () => {
                   <div className="flex items-baseline gap-1 mb-4">
                     <span className="text-[42px] font-bold">${plan.price}</span>
                     <span className="text-gray-500">
-                      /{billingCycle === "monthly" ? "mês" : "ano"}
+                      /{billingCycle === "monthly"}
                     </span>
                   </div>
                   <p className="text-gray-400 text-[14px] h-10">
@@ -132,7 +139,7 @@ const Pricing = () => {
                   {plan.features.map((feature) => (
                     <li
                       key={feature}
-                      className="flex items-start gap-3 text-[14px] text-gray-300"
+                     className="flex items-start gap-3 text-[14px] text-gray-300"
                     >
                       <div
                         className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${plan.popular ? "bg-purple-500/20 text-purple-400" : "bg-white/10 text-gray-400"}`}
@@ -145,13 +152,13 @@ const Pricing = () => {
                 </ul>
 
                 <button
+                onClick={() => {setPlans(plan.name as PlansOptions),setOpen(true)}}
                   className={`
                             w-full py-4 rounded-xl text-[14px] font-bold transition-all
-                            ${
-                              plan.popular
-                                ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:shadow-lg hover:shadow-purple-600/40 hover:scale-[1.02]"
-                                : "bg-white text-slate-900 hover:bg-gray-100 hover:scale-[1.02]"
-                            }
+                            ${plan.popular
+                      ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:shadow-lg hover:shadow-purple-600/40 hover:scale-[1.02]"
+                      : "bg-white text-slate-900 hover:bg-gray-100 hover:scale-[1.02]"
+                    }
                         `}
                 >
                   {plan.cta}
@@ -175,8 +182,13 @@ const Pricing = () => {
           </a>
         </div>
       </main>
+
+      <div>
+        <MarketPaidCheckout isOpen={open} onClose={() => setOpen(false)} planName={Plans} />
+      </div>
     </div>
   );
+
 };
 
 export default Pricing;
