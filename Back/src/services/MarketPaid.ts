@@ -2,7 +2,8 @@ import 'dotenv/config';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 interface CreatePaymentDTO {
-    transactionAmount: number
+    transactionAmount: number,
+    planName: string
     description: string
     email: string
     payerFirstName?: string
