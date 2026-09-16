@@ -18,14 +18,7 @@ export interface SidebarMobileMenuProps {
 
 const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
   const { pathname } = useLocation();
-  const { accentColor } = useThemeColors()
-
-  const activeGradients: Record<accentColor, string> = {
-    purple: "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30",
-    blue: "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/30",
-    emerald: "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-600/30",
-    pink: "bg-gradient-to-r from-pink-600 to-pink-500 text-white shadow-lg shadow-pink-600/30",
-  };
+  const { accentColor, themeAccentColors } = useThemeColors()
 
   const menuItems = [
     {
@@ -59,7 +52,8 @@ const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
 
   return (
     <aside
-      className={`fixed h-[calc(100vh-89px)] z-[100] top-0 lg:top-[89px] w-64 min-h-screen border-l lg:border-l-0 lg:border-r border-white/10 bg-[#050510]/80 backdrop-blur-xl p-6 flex flex-col transition-transform duration-300 
+      className={`fixed h-[calc(100vh-89px)] z-[100] top-0 lg:top-[89px] w-64 min-h-screen border-l lg:border-l-0 lg:border-r ${themeAccentColors[accentColor].bgLight} ${themeAccentColors[accentColor].bg
+        } p-6 flex flex-col transition-transform duration-300 
     ${open ? "translate-x-0" : "translate-x-full lg:translate-x-0"} 
     right-0 lg:right-auto lg:left-0 lg:flex lg:mt-0`}
     >
@@ -84,7 +78,7 @@ const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
               key={item.id}
               to={item.path}
               className={`flex items-center gap-3 px-4 py-4.5 rounded-xl font-medium text-[14px] transition-all ${isActive
-                ? activeGradients[accentColor]
+                ? themeAccentColors[accentColor].activeBg
                 : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
             >
