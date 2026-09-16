@@ -9,6 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useThemeColors, type accentColor } from "../contexts/ThemeContext";
 
 export interface SidebarMobileMenuProps {
   open: boolean;
@@ -17,6 +18,14 @@ export interface SidebarMobileMenuProps {
 
 const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
   const { pathname } = useLocation();
+  const { accentColor } = useThemeColors()
+
+  const activeGradients: Record<accentColor, string> = {
+    purple: "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30",
+    blue: "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/30",
+    emerald: "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-600/30",
+    pink: "bg-gradient-to-r from-pink-600 to-pink-500 text-white shadow-lg shadow-pink-600/30",
+  };
 
   const menuItems = [
     {
@@ -74,11 +83,10 @@ const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
             <Link
               key={item.id}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-4.5 rounded-xl font-medium text-[14px] transition-all ${
-                isActive
-                  ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
-                  : "text-gray-400 hover:text-white hover:bg-white/5"
-              }`}
+              className={`flex items-center gap-3 px-4 py-4.5 rounded-xl font-medium text-[14px] transition-all ${isActive
+                ? activeGradients[accentColor]
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+                }`}
             >
               <Icon className="w-4 h-4" />
               {item.label}

@@ -176,7 +176,7 @@ const Settings = () => {
           </div>
 
           <main className="flex-1 max-w-[1400px] p-4 sm:p-8 mt-20">
-            {/* Header */}
+           
             <section className="mb-8">
               <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
                 Configurações
@@ -189,7 +189,7 @@ const Settings = () => {
             </section>
 
             <div className="flex flex-col md:flex-row gap-8">
-              {/* Sidebar Tabs */}
+             
               <aside className="w-full md:w-56 shrink-0">
                 <div className="md:sticky md:top-28 flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-x-visible pb-3 md:pb-0 scrollbar-none border-b border-white/5 md:border-none">
                   {tabs.map((tab) => {

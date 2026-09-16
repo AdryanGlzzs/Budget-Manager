@@ -37,28 +37,7 @@ export const Preferences = () => {
     pink: "Rosa",
   };
 
-  const themeAccentColors = {
-    purple: {
-      bg: "bg-purple-500",
-      border: "border-purple-500",
-      activeBg: "bg-purple-500/10",
-    },
-    blue: {
-      bg: "bg-blue-500",
-      border: "border-blue-500",
-      activeBg: "bg-blue-500/10",
-    },
-    emerald: {
-      bg: "bg-emerald-500",
-      border: "border-emerald-500",
-      activeBg: "bg-emerald-500/10",
-    },
-    pink: {
-      bg: "bg-pink-500",
-      border: "border-pink-500",
-      activeBg: "bg-pink-500/10",
-    },
-  };
+  
 
   const preferencesFields = [
     {
@@ -178,3 +157,4 @@ export const Preferences = () => {
     </section>
   );
 };
+3
