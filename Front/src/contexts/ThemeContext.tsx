@@ -26,7 +26,7 @@ const ThemeContext = createContext<ThemeContextType | null>(null)
 
 export const ThemeContextProvider: React.FC<ThemeProps> = ({ children }) => {
 
-    const [accentColor, setAccentColor] = useState<accentColor>("blue")
+    const [accentColor, setAccentColor] = useState<accentColor>("purple")
 
     const themeAccentColors = {
         purple: {

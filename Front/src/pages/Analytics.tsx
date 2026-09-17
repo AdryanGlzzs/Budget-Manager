@@ -22,10 +22,12 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
-import Footer from "../components/Footer";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 const Analytics = () => {
   const [open, setOpen] = useState(false);
+  const { accentColor, themeAccentColors } = useThemeColors();
+  const theme = themeAccentColors[accentColor];
 
   const selectedPeriod = "Últimos 6 Meses";
   const selectedView = "visão geral";
@@ -89,12 +91,12 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
+    <div className={`min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className={`absolute -left-50 -top-50 w-150 h-150 bg-linear-to-br ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -right-50 -top-50 w-150 h-150 bg-linear-to-bl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -left-50 -bottom-50 w-150 h-150 bg-linear-to-tr ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -right-50 -bottom-50 w-150 h-150 bg-linear-to-tl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
       </div>
 
       <div className="relative z-10">
@@ -107,7 +109,7 @@ const Analytics = () => {
             <Sidebar open={open} setOpen={setOpen} />
           </div>
 
-          <main className="flex-1 p-4 md:p-8 max-w-[1400px] mt-20">
+          <main className="flex-1 p-4 md:p-8 max-w-350 mt-20">
             <div className="mb-8">
               <h1 className="text-[24px] md:text-[35px] font-bold mb-3">
                 Análise Financeira
@@ -134,11 +136,10 @@ const Analytics = () => {
                   {["visão geral", "receita", "despesas"].map((view) => (
                     <button
                       key={view}
-                      className={`px-3 md:px-4 py-2 rounded-lg text-[13px] md:text-[14px] font-medium capitalize transition-all flex-1 sm:flex-none ${
-                        selectedView === view
-                          ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
-                          : "text-gray-400 hover:text-white hover:bg-white/5"
-                      }`}
+                      className={`px-3 md:px-4 py-2 rounded-lg text-[13px] md:text-[14px] font-medium capitalize transition-all flex-1 sm:flex-none ${selectedView === view
+                        ? theme.activeBg
+                        : "text-gray-400 hover:text-white hover:bg-white/5"
+                        }`}
                     >
                       {view}
                     </button>
@@ -146,7 +147,7 @@ const Analytics = () => {
                 </div>
               </div>
 
-              <button className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all w-full sm:w-auto">
+              <button className={`flex items-center justify-center gap-2 px-5 py-2.5 ${theme.activeBg} rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] w-full sm:w-auto`}>
                 <Download className="w-4 h-4" />
                 Exportar Relatório
               </button>
@@ -155,7 +156,7 @@ const Analytics = () => {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mb-8">
               {stats.map((stat, index) => (
                 <div key={index} className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-blue-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                  <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
                   <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                     <div className="text-[13px] text-gray-400 mb-2">
                       {stat.label}
@@ -164,13 +165,12 @@ const Analytics = () => {
                       {stat.value}
                     </div>
                     <div
-                      className={`text-[13px] flex items-center gap-1 ${
-                        stat.trend === "up"
-                          ? "text-green-400"
-                          : stat.trend === "down"
-                            ? "text-red-400"
-                            : "text-gray-400"
-                      }`}
+                      className={`text-[13px] flex items-center gap-1 ${stat.trend === "up"
+                        ? "text-green-400"
+                        : stat.trend === "down"
+                          ? "text-red-400"
+                          : "text-gray-400"
+                        }`}
                     >
                       {stat.trend === "up" ? (
                         <ArrowUpRight className="w-3 h-3" />
@@ -521,7 +521,7 @@ const Analytics = () => {
         </div>
       </div>
 
-      
+
     </div>
   );
 };
