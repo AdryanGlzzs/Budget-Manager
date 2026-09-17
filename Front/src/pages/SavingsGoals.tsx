@@ -14,12 +14,15 @@ import { useEffect, useState } from "react";
 import { SavingsGoalsModal } from "../components/SavingGoalsModal";
 import type { Goalsprops, } from "../components/SavingGoalsModal";
 import { api } from "../services/api";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 const SavingsGoals = () => {
   const [SavingModal, setSavingModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [Goals, setGoals] = useState<Goalsprops[]>([]);
-  const [editing, setEditing] = useState<Goalsprops | null>()
+  const [editing, setEditing] = useState<Goalsprops | null>();
+  const { accentColor, themeAccentColors } = useThemeColors();
+  const theme = themeAccentColors[accentColor];
 
   const goalReduce = Goals.reduce((total, goal) => total + Number(goal.current) , 0)
 
@@ -28,15 +31,19 @@ const SavingsGoals = () => {
   }, [])
 
   const getSavingGoals = async () => {
-    const response = await api.get('/savings-goals')
+    try {
+      const response = await api.get('/savings-goals')
 
-    if (!response) {
-      throw new Error("Erro interno")
+      if (!response) {
+        throw new Error("Erro interno")
+      }
+
+      console.log(response)
+
+      setGoals(response.data.data)
+    } catch (error) {
+      console.error("Erro ao carregar metas:", error);
     }
-
-    console.log(response)
-
-    setGoals(response.data.data)
   }
 
   const HandleRemoveGoals = async (id: string) => {
@@ -97,10 +104,10 @@ const SavingsGoals = () => {
   const GoalsLength = Goals;
 
   return (
-    <div className="flex min-h-screen bg-[#050510] text-white overflow-hidden">
+    <div className={`flex min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -left-50 -top-50 w-150 h-150 bg-purple-600/20 rounded-full blur-[120px]"></div>
-        <div className="absolute -right-50 -bottom-50 w-150 h-150 bg-blue-600/20 rounded-full blur-[120px]"></div>
+        <div className={`absolute -left-50 -top-50 w-150 h-150 bg-linear-to-br ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -right-50 -bottom-50 w-150 h-150 bg-linear-to-bl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
       </div>
 
       <div className="pb-0">
@@ -126,7 +133,7 @@ const SavingsGoals = () => {
               setEditing(null);
               setSavingModal(true);
             }}
-            className="bg-linear-to-r from-purple-600 to-purple-500 text-white px-5 py-3 rounded-xl text-[14px] font-semibold shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] flex items-center gap-2"
+            className={`${theme.activeBg} text-white px-5 py-3 rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] flex items-center gap-2`}
           >
             <Plus className="w-5 h-5" />
             Nova Meta
@@ -135,7 +142,7 @@ const SavingsGoals = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" >
           <div className="relative group">
-            <div className="absolute inset-0 bg-linear-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
             <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
@@ -150,7 +157,7 @@ const SavingsGoals = () => {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
             <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
@@ -165,7 +172,7 @@ const SavingsGoals = () => {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+            <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
             <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
