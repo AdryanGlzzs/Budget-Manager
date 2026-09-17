@@ -30,70 +30,63 @@ export const ThemeContextProvider = ({ children }: ThemeProps) => {
 
     const themeAccentColors = {
         purple: {
-            bg: "bg-purple-500",
-            border: "border-purple-500",
-            activeBg:
-                "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30",
+            bg: "bg-[#0e0717]/95",
+            bgLight: "bg-purple-500/10",
+            border: "border-purple-500/20",
+            activeBg: "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30",
             primary: "from-purple-600 to-purple-500",
-            primaryHover:
-                "hover:shadow-purple-600/40 bg-gradient-to-r from-purple-600 to-purple-500",
+            primaryHover: "hover:shadow-purple-600/40 bg-gradient-to-r from-purple-600 to-purple-500",
             focus: "focus:border-purple-500/50 focus:ring-purple-500/10",
             text: "text-purple-400",
             textMuted: "text-purple-300",
-            bgLight: "bg-purple-500/10 border-purple-500/20",
             ring: "ring-purple-500",
-            shadow: "shadow-purple-500/20",
-            glow: "from-purple-500/10 via-transparent to-blue-500/10",
+            shadow: "shadow-purple-500/10",
+            glow: "from-purple-500/35 via-indigo-500/25 to-purple-800/20",
         },
         blue: {
+            bg: "bg-[#060c1e]/95",
+            bgLight: "bg-blue-500/10",
+            border: "border-blue-500/20",
             primary: "from-blue-600 to-blue-500",
-            primaryHover:
-                "hover:shadow-blue-600/40 bg-gradient-to-r from-blue-600 to-blue-500",
+            primaryHover: "hover:shadow-blue-600/40 bg-gradient-to-r from-blue-600 to-blue-500",
             focus: "focus:border-blue-500/50 focus:ring-blue-500/10",
             text: "text-blue-400",
             textMuted: "text-blue-300",
-            bg: "bg-blue-500/20",
-            bgLight: "bg-blue-500/10 border-blue-500/20",
-            border: "border-blue-500/30",
             ring: "ring-blue-500",
-            shadow: "shadow-blue-500/20",
-            glow: "from-blue-500/10 via-transparent to-purple-500/10",
-            activeBg:
-                "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/30",
+            shadow: "shadow-blue-500/10",
+            glow: "from-blue-500/35 via-cyan-500/25 to-indigo-800/20",
+            activeBg: "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/30",
         },
         emerald: {
+            bg: "bg-[#051610]/90",
+            bgLight: "bg-emerald-500/10",
+            border: "border-emerald-500/20",
             primary: "from-emerald-600 to-emerald-500",
-            primaryHover:
-                "hover:shadow-emerald-600/40 bg-gradient-to-r from-emerald-600 to-emerald-500",
+            primaryHover: "hover:shadow-emerald-600/40 bg-gradient-to-r from-emerald-600 to-emerald-500",
             focus: "focus:border-emerald-500/50 focus:ring-emerald-500/10",
             text: "text-emerald-400",
             textMuted: "text-emerald-300",
-            bg: "bg-emerald-500/20",
-            bgLight: "bg-emerald-500/10 border-emerald-500/20",
-            border: "border-emerald-500/30",
             ring: "ring-emerald-500",
-            shadow: "shadow-emerald-500/20",
-            glow: "from-emerald-500/10 via-transparent to-teal-500/10",
-            activeBg:
-                "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-600/30",
+            shadow: "shadow-emerald-500/10",
+            glow: "from-emerald-500/35 via-teal-500/25 to-emerald-800/20",
+            activeBg: "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-600/30",
         },
         pink: {
+            bg: "bg-[#180614]/95",
+            bgLight: "bg-pink-500/10",
+            border: "border-pink-500/20",
             primary: "from-pink-600 to-pink-500",
-            primaryHover:
-                "hover:shadow-pink-600/40 bg-gradient-to-r from-pink-600 to-pink-500",
+            primaryHover: "hover:shadow-pink-600/40 bg-gradient-to-r from-pink-600 to-pink-500",
             focus: "focus:border-pink-500/50 focus:ring-pink-500/10",
             text: "text-pink-400",
             textMuted: "text-pink-300",
-            bg: "bg-pink-500/20",
-            bgLight: "bg-pink-500/10 border-pink-500/20",
-            border: "border-pink-500/30",
             ring: "ring-pink-500",
-            shadow: "shadow-pink-500/20",
-            glow: "from-pink-500/10 via-transparent to-rose-500/10",
-            activeBg:
-                "bg-gradient-to-r from-pink-600 to-pink-500 text-white shadow-lg shadow-pink-600/30",
+            shadow: "shadow-pink-500/10",
+            glow: "from-pink-500/35 via-rose-500/25 to-purple-800/20",
+            activeBg: "bg-gradient-to-r from-pink-600 to-pink-500 text-white shadow-lg shadow-pink-600/30",
         },
     };
+
 
     const theme = themes[accentColor] ?? themes.purple;
 
