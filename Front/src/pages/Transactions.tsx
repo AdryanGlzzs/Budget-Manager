@@ -9,16 +9,6 @@ import {
   ChevronDown,
   Plus,
   Trash2,
-  Coffee,
-  ShoppingCart,
-  Car,
-  Home,
-  Heart,
-  Briefcase,
-  Utensils,
-  Gamepad2,
-  Zap,
-  HelpCircle
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
@@ -26,28 +16,29 @@ import { useEffect, useState } from "react";
 import { TransactionModal } from "../components/TransactionModal";
 import type { TransactionProps } from "../components/TransactionModal";
 import { api } from "../services/api";
-
-
+import { useThemeColors } from "../contexts/ThemeContext";
 
 const Transactions = () => {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
+  const { accentColor, themeAccentColors } = useThemeColors();
+  const theme = themeAccentColors[accentColor];
 
   const getTransactions = async () => {
-    const response = await api.get('/transactions')
-
-    if (!response) {
-      throw new Error("Erro ao puxar os dados de transações")
+    try {
+      const response = await api.get('/transactions');
+      if (response?.data?.data) {
+        setTransactions(response.data.data);
+      }
+    } catch (error) {
+      console.error("Erro ao puxar os dados de transações:", error);
     }
-
-    setTransactions(response.data.data)
-
-  }
+  };
 
   useEffect(() => {
-    getTransactions()
-  })
+    getTransactions();
+  }, []);
 
 
   const TotalRevenue = transaction
@@ -90,12 +81,12 @@ const Transactions = () => {
 
 
   return (
-    <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
+    <div className={`min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className={`absolute -left-50 -top-50 w-150 h-150 bg-linear-to-br ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -right-50 -top-50 w-150 h-150 bg-linear-to-bl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -left-50 -bottom-50 w-150 h-150 bg-linear-to-tr ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -right-50 -bottom-50 w-150 h-150 bg-linear-to-tl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
       </div>
 
       <div className="relative z-10">
@@ -108,7 +99,7 @@ const Transactions = () => {
             <Sidebar open={open} setOpen={setOpen} />
           </div>
 
-          <main className="flex-1 w-full p-4 sm:p-8 max-w-[1400px] overflow-x-hidden">
+          <main className="flex-1 w-full p-4 sm:p-8 max-w-350 overflow-x-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
               <div>
                 <h1 className="text-[42px] font-bold mb-3 mt-20">Transações</h1>
@@ -117,7 +108,7 @@ const Transactions = () => {
                 </p>
               </div>
               <button
-                className="flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] w-full sm:w-auto flex-shrink-0 sm:mt-20 z-[20]"
+                className={`flex items-center justify-center gap-2 px-5 py-3 ${theme.activeBg} rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] w-full sm:w-auto shrink-0 sm:mt-20 z-[20]`}
                 onClick={() => setOpenModal(true)}
               >
                 <Plus className="w-5 h-5" />
@@ -128,7 +119,7 @@ const Transactions = () => {
             <section className="flex flex-col items-center justify-center w-full">
               <div className="w-full p-4 sm:p-10 grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
                 <div className="relative group w-full">
-                  <div className="absolute inset-0 bg-purple-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                  <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity`}></div>
                   <div className="relative bg-gradient-to-br from-purple-600/20 to-purple-800/10 p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
@@ -144,7 +135,7 @@ const Transactions = () => {
                 </div>
 
                 <div className="relative group w-full">
-                  <div className="absolute inset-0 bg-cyan-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                  <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity`}></div>
                   <div className="relative bg-gradient-to-br from-cyan-600/20 to-cyan-800/10 p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
@@ -160,7 +151,7 @@ const Transactions = () => {
                 </div>
 
                 <div className="relative group w-full">
-                  <div className="absolute inset-0 bg-green-600/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                  <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity`}></div>
                   <div className="relative bg-gradient-to-br from-green-600/20 to-green-800/10 p-6 rounded-2xl border border-green-500/30 backdrop-blur-sm">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 bg-green-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
@@ -176,7 +167,7 @@ const Transactions = () => {
             </section>
 
             <div className="relative group mb-6">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+              <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
@@ -185,7 +176,7 @@ const Transactions = () => {
                         <button
                           key={filter}
                           className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-[13px] sm:text-[14px] font-medium transition-all ${selectedFilter === filter
-                            ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-600/30"
+                            ? theme.activeBg
                             : "text-gray-400 hover:text-white hover:bg-white/5"
                             }`}
                         >
@@ -208,7 +199,7 @@ const Transactions = () => {
                       <ChevronDown className="w-4 h-4" />
                     </button>
 
-                    <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl text-[13px] sm:text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all">
+                    <button className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 ${theme.activeBg} rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all hover:scale-[1.02]`}>
                       <Download className="w-4 h-4 sm:ml-1" />
                       Exportar
                     </button>
@@ -218,7 +209,7 @@ const Transactions = () => {
             </div>
 
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+              <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] rounded-2xl border border-white/10 backdrop-blur-sm overflow-hidden">
                 <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 bg-white/5 text-[13px] text-gray-400 font-medium">
                   <div className="col-span-4">Transação</div>
