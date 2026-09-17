@@ -1,4 +1,4 @@
-import { useContext, createContext, type ReactNode, useState } from "react";
+import React, { useContext, createContext, type ReactNode, useState } from "react";
 import { themes } from "../themes/themes";
 
 export type accentColor = "purple" | "blue" | "emerald" | "pink"
@@ -24,9 +24,9 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | null>(null)
 
 
-export const ThemeContextProvider = ({ children }: ThemeProps) => {
+export const ThemeContextProvider: React.FC<ThemeProps> = ({ children }) => {
 
-    const [accentColor, setAccentColor] = useState<accentColor>("blue")
+    const [accentColor, setAccentColor] = useState<accentColor>("emerald")
 
     const themeAccentColors = {
         purple: {

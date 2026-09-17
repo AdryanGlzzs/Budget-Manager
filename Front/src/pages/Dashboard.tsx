@@ -24,9 +24,12 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  const { accentColor, themeAccentColors } = useThemeColors();
+  const theme = themeAccentColors[accentColor];
   const cashFlowData = [{ month: "Jan", income: 4400, expense: 2200 }];
   const categoryData = [{ name: "Alimentação", value: 30, color: "#6366F1" }];
 
@@ -54,12 +57,12 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050510] text-white overflow-hidden">
+    <div className={`min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] top-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute left-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute right-[-200px] bottom-[-200px] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"></div>
+        <div className={`absolute -left-50 -top-50 w-150 h-150 bg-linear-to-br ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -right-50 -top-50 w-150 h-150 bg-linear-to-bl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -left-50 -bottom-50 w-150 h-150 bg-linear-to-tr ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div className={`absolute -right-50 -bottom-50 w-150 h-150 bg-linear-to-tl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
       </div>
 
       <div>
@@ -72,10 +75,10 @@ const Dashboard = () => {
             <Sidebar open={open} setOpen={setOpen} />
           </div>
 
-          <main className="sm:flex-1 p-4 max-w-[1400px] z-10">
+          <main className="sm:flex-1 p-4 max-w-350 z-10">
             <section className="mb-8 mt-20">
               <div className="relative group">
-                <div className="absolute -inset-4 bg-linear-to-br from-purple-500/30 via-purple-600/20 to-blue-600/30 rounded-[40px] blur-[60px] opacity-70"></div>
+                <div className={`absolute -inset-4 bg-linear-to-br ${theme.glow} rounded-[40px] blur-[60px] opacity-80 transition-all duration-700`}></div>
                 <div className="flex flex-col bg-linear-to-br from-white/10 to-white/2 p-8 rounded-3xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex sm:flex-row items-center justify-between gap-4 sm:gap-0 mb-6">
                     <div>
