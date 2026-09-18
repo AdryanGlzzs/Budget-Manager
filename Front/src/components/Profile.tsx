@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { themes } from "../themes/themes";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useThemeColors } from "../contexts/ThemeContext";
 import {
   Camera,
   UserCircle,
@@ -7,15 +7,126 @@ import {
   AlertTriangle,
   FileDown,
 } from "lucide-react";
-export const Profile = () => {
+import { api } from "../services/api";
+import { useAuth } from "../contexts/authContext";
+
+interface PhotoProps {
+  currentPhotoUrl?: string;
+  onPhotoChange: (file: File, previewUrl: string) => void
+  maxSizeMB: number;
+  acceptTypes?: string[];
+  size?: number
+}
+
+const TypesPhoto = ['image/jpeg', 'image/png', 'image/webp']
+
+export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto, size = 120 }: PhotoProps) => {
   const [name, setName] = useState("Adryan Gomes");
   const [email, setEmail] = useState("adryan.gomes@email.com");
   const [phone, setPhone] = useState("+1 (555) 123-4567");
   const [birthdate, setBirthdate] = useState("1995-03-15");
-  const currency = "USD - Dólar Americano";
-  const language = "Português (BR)";
-  const timezone = "GMT-3 (Horário de Brasília)";
-  const dateFormat = "DD/MM/YYYY";
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const { User, setUser } = useAuth()
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(previewUrl)
+      }
+    }
+  }, [previewUrl])
+
+  const validatedFile = useCallback((file: File): string | null => {
+    if (!acceptTypes.includes(file.type)) {
+      return `Formato de imagem não suportado. Use ${acceptTypes.map((t) => t.split("/")[1]).join(", ")}.`
+    }
+
+    const MaxBytes = maxSizeMB * 1024 * 1024
+
+    if (file.size > MaxBytes) {
+      return `A imagem deve ter no máximo ${maxSizeMB}`
+    }
+
+    return null
+  }, [acceptTypes, maxSizeMB])
+
+  const handleAvatarClick = () => {
+    inputRef.current?.click();
+  }
+
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key == "Enter" || event.key === " ") {
+      event.preventDefault()
+      handleAvatarClick()
+    }
+  }
+
+
+  const HandleSelectFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ""
+
+    if (!file) return;
+
+    const validationError = validatedFile(file);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setError(null)
+
+    const newPreviewUrl = URL.createObjectURL(file)
+    setPreviewUrl(newPreviewUrl)
+    onPhotoChange?.(file, newPreviewUrl)
+
+    if (User) {
+      setUser({
+        ...User,
+        avatar: newPreviewUrl
+      })
+    }
+
+    setUploading(true)
+    try {
+      const data = await uploadFoto(file, "/profile/photo");
+
+      if (data.url) {
+        setPreviewUrl(data.url)
+
+        if (User) {
+          setUser({ ...User, avatar: data.url })
+        }
+      }
+
+    } catch (err) {
+      setError("Não foi possível enviar a foto. Tente novamente.");
+    } finally {
+      setUploading(false);
+    }
+
+  }
+
+  const uploadFoto = async (file: File, endpoint: string) => {
+    const formData = new FormData();
+    formData.append("photo", file)
+
+    const response = await api.post(endpoint, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
+
+    if (!response) {
+      throw new Error(`Falha no upload`)
+    }
+
+    return response.data
+
+  }
 
   const [toasts, setToasts] = useState<
     { id: string; message: string; type: "success" | "info" | "error" }[]
@@ -34,8 +145,7 @@ export const Profile = () => {
     new: "",
     confirm: "",
   });
-  const [showPwd, setShowPwd] = useState<Record<string, boolean>>({});
-  const accentColor = "purple";
+  const { accentColor, themeAccentColors } = useThemeColors();
 
   const [modalConfig, setModalConfig] = useState<{
     isOpen: boolean;
@@ -46,7 +156,6 @@ export const Profile = () => {
     type: "danger" | "warning" | "info";
     onConfirm: () => void;
   } | null>(null);
-
   const steps = [
     { key: "name", label: "Nome adicionado", done: name.trim().length > 0 },
     {
@@ -118,47 +227,6 @@ export const Profile = () => {
     showToast("Informações pessoais salvas com sucesso!", "success");
   };
 
-  const handleExportData = () => {
-    confirmAction({
-      title: "Exportar Dados da Conta?",
-      description:
-        "Será gerado um arquivo de dados no formato JSON com todas as suas configurações atuais de perfil e preferências gerais.",
-      confirmText: "Exportar Dados",
-      cancelText: "Cancelar",
-      type: "info",
-      onConfirm: () => {
-        const dataStr =
-          "data:text/json;charset=utf-8," +
-          encodeURIComponent(
-            JSON.stringify(
-              {
-                name,
-                email,
-                phone,
-                birthdate,
-                address,
-                preferences: {
-                  theme: accentColor,
-                  currency,
-                  language,
-                  timezone,
-                  dateFormat,
-                },
-              },
-              null,
-              2,
-            ),
-          );
-        const downloadAnchor = document.createElement("a");
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "budget_manager_settings.json");
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-        showToast("Dados exportados com sucesso!", "success");
-      },
-    });
-  };
 
   const handleDeleteAccount = () => {
     confirmAction({
@@ -178,7 +246,7 @@ export const Profile = () => {
     });
   };
 
-  const theme = themes[accentColor];
+  const theme = themeAccentColors[accentColor];
 
   const cardGlow = `absolute inset-0 bg-gradient-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none`;
 
@@ -206,9 +274,9 @@ export const Profile = () => {
           <div className="px-6 pb-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-5 -mt-10 text-center sm:text-left">
               <div className="relative">
-                {avatar.hasPhoto && avatar.photoUrl ? (
+                {previewUrl || User?.avatar ? (
                   <img
-                    src={avatar.photoUrl}
+                    src={previewUrl || User?.avatar}
                     alt="Profile"
                     className={`w-20 h-20 rounded-full object-cover shadow-xl ${theme.shadow} ring-4 ring-[#050510]`}
                   />
@@ -218,32 +286,26 @@ export const Profile = () => {
                   >
                     {name
                       ? name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()
-                          .slice(0, 2)
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                        .slice(0, 2)
                       : "U"}
                   </div>
                 )}
                 <input
                   type="file"
-                  ref={fileInputRef}
-                  onChange={handleAvatarChange}
+                  ref={inputRef}
+                  onChange={HandleSelectFile}
                   className="hidden"
                   accept="image/*"
                 />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`absolute bottom-0 right-0 w-7 h-7 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all border border-[#050510] bg-gradient-to-r ${theme.primary} cursor-pointer`}
-                >
-                  <Camera className="w-3.5 h-3.5" />
-                </button>
               </div>
               <div className="pb-1 flex-1">
                 <div className="flex flex-col sm:flex-row items-center gap-2.5">
                   <h2 className="text-xl font-bold tracking-tight">
-                    {name || "Usuário"}
+                    {name}
                   </h2>
                   <span
                     className={`px-2 py-0.5 bg-gradient-to-r ${theme.primary} text-white rounded-md text-xs font-bold border ${theme.border} tracking-wide`}
@@ -257,7 +319,7 @@ export const Profile = () => {
               </div>
               <div className="flex gap-2 pb-1 w-full sm:w-auto justify-center">
                 <button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => handleAvatarClick()}
                   className={secondaryBtn}
                 >
                   Alterar Foto
@@ -390,7 +452,7 @@ export const Profile = () => {
                 </div>
               </div>
               <button
-                onClick={handleExportData}
+                onClick={() => ""}
                 className={`${secondaryBtn} w-full sm:w-auto flex items-center justify-center gap-2`}
               >
                 <FileDown className="w-4 h-4" /> Exportar

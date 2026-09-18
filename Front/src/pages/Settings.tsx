@@ -77,18 +77,13 @@ const pageBg = "min-h-screen bg-[#050510] text-white overflow-x-hidden pb-12";
 
 const Settings = () => {
   const [open, setOpen] = useState(false);
-
   const [activeTab, setActiveTab] = useState<TabId>("profile");
-
   const [fadeKey, setFadeKey] = useState(0);
-
   const [accentColor] = useState<AccentColor>("purple");
-
   const [toasts, setToasts] = useState<Toast[]>([]);
-
   const theme = themes[accentColor];
-
   const glows = glowColors[accentColor];
+
 
   function switchTab(id: TabId) {
     setActiveTab(id);
@@ -102,7 +97,7 @@ const Settings = () => {
   function renderTabContent() {
     switch (activeTab) {
       case "profile":
-        return <Profile />;
+        return <Profile  />;
 
       case "security":
         return <Security />;

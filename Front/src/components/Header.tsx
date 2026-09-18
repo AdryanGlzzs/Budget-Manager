@@ -3,12 +3,14 @@ import { Search, Bell, Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 import { useState, useEffect } from "react";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { useAuth } from "../contexts/authContext";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState(new Date());
   const { themeAccentColors, accentColor } = useThemeColors();
   const theme = themeAccentColors[accentColor];
+  const { User } = useAuth()
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +27,7 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 border-b ${theme.border} ${theme.bg} backdrop-blur-xl w-full lg:h-22.5 overflow-hidden transition-colors duration-500`}>
-    
+
       <div
         className={`pointer-events-none absolute -top-20 right-1/4 h-56 w-[500px] rounded-full bg-gradient-to-r ${theme.glow} blur-3xl opacity-90 transition-all duration-700`}
         aria-hidden="true"
@@ -82,11 +84,20 @@ const Header = () => {
             </div>
 
             <div className="hidden sm:flex items-center gap-3 pl-4 border-l border-white/10 md:hidden lg:flex">
-              <div className={`w-10 h-10 ${theme.activeBg} rounded-full flex items-center justify-center font-semibold text-white`}>
-                AG
-              </div>
+              {User?.avatar ? (
+                <img
+                  src={User.avatar}
+                  alt={User.name || "Perfil"}
+                  className="w-10 h-10 rounded-full object-cover shadow-sm border border-white/10"
+                />
+              ) : (
+                <div className={`w-10 h-10 ${theme.activeBg} rounded-full flex items-center justify-center font-semibold text-white`}>
+                  {User?.name ? User.name.substring(0, 2).toUpperCase() : "AG"}
+                </div>
+              )}
+
               <div>
-                <div className="text-[14px] font-medium">Adryan G</div>
+                <div className="text-[14px] font-medium">{User?.name || "Adryan G"}</div>
                 <div className={`text-[12px] ${theme.text}`}>Plano Pro</div>
               </div>
             </div>

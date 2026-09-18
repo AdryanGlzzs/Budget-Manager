@@ -11,7 +11,7 @@ interface ThemeContextType {
     accentColor: accentColor;
     setAccentColor: (color: accentColor) => void;
     colors: readonly accentColor[];
-    themeAccentColors: Record<accentColor, { bg: string, border: string, activeBg: string, primaryHover: string, focus: string, text: string, bgLight: string, ring: string, shadow: string, glow: string }>
+    themeAccentColors: Record<accentColor, { bg: string, border: string, activeBg: string, primary: string, primaryHover: string, focus: string, text: string, bgLight: string, ring: string, shadow: string, glow: string }>
     styles: {
         cardGlow: string;
         cardBase: string;
@@ -26,7 +26,7 @@ const ThemeContext = createContext<ThemeContextType | null>(null)
 
 export const ThemeContextProvider: React.FC<ThemeProps> = ({ children }) => {
 
-    const [accentColor, setAccentColor] = useState<accentColor>("purple")
+    const [accentColor, setAccentColor] = useState<accentColor>("blue")
 
     const themeAccentColors = {
         purple: {
