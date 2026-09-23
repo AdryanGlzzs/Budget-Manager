@@ -41,6 +41,21 @@ const initialForm: TransactionProps = {
   status: true,
 };
 
+const categories = [
+  { label: "Alimentação" },
+  { label: "Transporte" },
+  { label: "Moradia" },
+  { label: "Saúde" },
+  { label: "Educação" },
+  { label: "Lazer" },
+  { label: "Compras" },
+  { label: "Contas" },
+  { label: "Assinaturas" },
+  { label: "Investimentos" },
+  { label: "Viagens" },
+  { label: "Outros" },
+];
+
 
 const ColorOptions = [
   { label: "Indigo", hex: "#6366F1" },
@@ -184,17 +199,29 @@ export const TransactionModal = ({
               </div>
             </div>
 
+
+
             <div>
+
               <label className="block text-[11px] font-medium text-gray-500 uppercase mb-2">
                 Categoria
               </label>
-              <input
-                type="text"
+
+              <select
                 value={formProps.category}
                 onChange={(e) => HandleChange("category", e.target.value)}
-                placeholder="Ex: Alimentação, Lazer..."
-                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-purple-500/50"
-              />
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500/50"
+              >
+                <option value="" disabled>
+                  Selecione uma categoria
+                </option>
+
+                {categories.map((category) => (
+                  <option key={category.label} value={category.label} className="bg-[#0B1D14] text-gray-400">
+                    {category.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

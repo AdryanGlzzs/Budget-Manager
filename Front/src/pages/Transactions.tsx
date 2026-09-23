@@ -41,7 +41,7 @@ const Transactions = () => {
   }, []);
 
 
-  const TotalRevenue = transaction
+ const TotalRevenue = transaction
     .filter((t) => t.type === "revenue")
     .reduce((sun, t) => sun + Number(t.amount || 0), 0);
 
@@ -243,12 +243,12 @@ const Transactions = () => {
                             </div>
                             <div className="flex flex-col items-end gap-2">
                               <div
-                                className={`text-[16px] font-bold ${transaction.amount > 0
+                                className={`text-[16px] font-bold ${transaction.type === "revenue"
                                   ? "text-green-400"
                                   : "text-red-400"
                                   }`}
                               >
-                                {transaction.amount > 0 ? "+" : ""}$
+                                {transaction.type === "revenue" ? "+" : "-"} R${""}
                                 {Math.abs(transaction.amount).toFixed(2)}
                               </div>
                               <button
@@ -272,7 +272,7 @@ const Transactions = () => {
                               {transaction.category}
                             </div>
                             <div className="text-[12px] text-gray-400 flex-1 text-center px-2">
-                              {transaction.date}
+                              {transaction.date?.split('T')[0]}
                             </div>
                             <span
                               className={`px-2 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap ${transaction.status === true
@@ -314,7 +314,7 @@ const Transactions = () => {
                           </div>
 
                           <div className="col-span-2 text-[14px] text-gray-400">
-                            {transaction.date}
+                            {transaction.date.split("T")[0]}
                           </div>
 
                           <div className="col-span-2 flex justify-center">
@@ -332,12 +332,12 @@ const Transactions = () => {
 
                           <div className="col-span-1 text-right">
                             <div
-                              className={`text-[16px] font-bold ${transaction.amount > 0
+                              className={`text-[16px] font-bold ${transaction.type === 'revenue'
                                 ? "text-green-400"
                                 : "text-red-400"
                                 }`}
                             >
-                              {transaction.amount > 0 ? "+" : "-"}$
+                              {transaction.type === 'revenue' ? "+" : "-"} R${""}
                               {Math.abs(transaction.amount).toFixed(2)}
                             </div>
                           </div>

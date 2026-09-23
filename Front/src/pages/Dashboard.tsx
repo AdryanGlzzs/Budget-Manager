@@ -23,15 +23,60 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { api } from "../services/api";
+import type { TransactionProps } from "../components/TransactionModal";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
-  const cashFlowData = [{ month: "Jan", income: 4400, expense: 2200 }];
+  const cashFlowData = [{ month: "Jan", income: 4400, expense: 2200 }, { month: "Fev", income: 4400, expense: 2200 }, { month: "Mar", income: 45500, expense: 2200 }];
   const categoryData = [{ name: "Alimentação", value: 30, color: "#6366F1" }];
+  const [transaction, setTransaction] = useState<TransactionProps[]>([])
+
+  const getTransactions = async () => {
+    const response = await api.get('/transactions')
+
+    if (response?.data?.data) {
+      setTransaction(response.data?.data);
+    }
+
+
+  }
+
+  useEffect(() => {
+    getTransactions()
+  }, [])
+
+  const expensesCategory = transaction
+    .filter((t) => t.type === "expense")
+    .reduce((acc, t) => {
+      const existing = acc.find(
+        (item) => item.name === t.category
+      );
+
+      if (existing) {
+        existing.value += Number(t.amount);
+      } else {
+        acc.push({
+          name: t.category,
+          value: Number(t.amount),
+          color: t.color
+        });
+      }
+
+      return acc;
+    }, [] as { name: string; value: number; color: string }[]);
+
+
+  const TotalRevenue = transaction.filter((t) => t.type === 'revenue').reduce((acc, t) => acc + Number(t.amount || 0), 0)
+
+  const TotalExpense = transaction.filter((t) => t.type === "expense").reduce((acc, t) => acc + Number(t.amount || 0), 0)
+
+
+  const Total = TotalRevenue - TotalExpense
 
   const recentTransactions = [
     {
@@ -46,7 +91,7 @@ const Dashboard = () => {
   ];
 
   const upcomingBills = [
-    { name: "Netflix", date: "15 Fev", amount: 15.99, status: "warning" },
+    { name: "Netflix", date: "15 Fev", amount: 15.99, status: "warning" }
   ];
 
   const insights = [
@@ -87,7 +132,7 @@ const Dashboard = () => {
                         Saldo Total
                       </div>
                       <div className="mt-5 text-[45px] font-bold leading-none bg-linear-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-3">
-                        $66,000.00
+                        R$ {Total.toFixed(2)}
                       </div>
                       <div className="flex items-center gap-2 text-[14px]">
                         <span className="text-green-400 flex items-center gap-1 font-medium">
@@ -123,7 +168,7 @@ const Dashboard = () => {
                               Receita
                             </div>
                             <div className="text-[32px] font-bold leading-none mb-2">
-                              $44,000.00
+                              R$ {TotalRevenue.toFixed(2)}
                             </div>
                             <div className="text-[13px] text-green-400 flex items-center gap-1">
                               <ArrowUpRight className="w-3 h-3" />
@@ -146,7 +191,7 @@ const Dashboard = () => {
                               Despesas
                             </div>
                             <div className="text-[32px] font-bold leading-none mb-2">
-                              $22,000.00
+                              R$ {TotalExpense.toFixed(2)}
                             </div>
                             <div className="text-[13px] text-red-400 flex items-center gap-1">
                               <ArrowDownRight className="w-3 h-3" />
@@ -248,14 +293,14 @@ const Dashboard = () => {
                     <div className="text-[18px] font-semibold">
                       Gastos por Categoria
                     </div>
-                    <div className="text-[28px] font-bold">$15,000</div>
+                    <div className="text-[28px] font-bold">{TotalExpense}</div>
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <div className="relative w-40 h-40">
+                    <div className={`relative w-40 h-40 ${expensesCategory.length === 0 ? "hidden" : 'relative'}`}>
                       <PieChart width={160} height={160}>
                         <Pie
-                          data={categoryData}
+                          data={expensesCategory}
                           cx="50%"
                           cy="50%"
                           innerRadius={50}
@@ -263,21 +308,20 @@ const Dashboard = () => {
                           paddingAngle={2}
                           dataKey="value"
                         >
-                          {categoryData.map((entry, index) => (
+                          {expensesCategory.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
                       </PieChart>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <div className="text-[28px] font-bold">100%</div>
-                        <div className="text-[11px] text-gray-500">
+                        <div className="text-[13px] text-gray-500">
                           Total Gasto
                         </div>
                       </div>
                     </div>
 
                     <div className="space-y-3 flex-1">
-                      {categoryData.map((item) => (
+                      {expensesCategory.map((item) => (
                         <div
                           key={item.name}
                           className="flex items-center justify-between text-[13px]"
@@ -292,11 +336,32 @@ const Dashboard = () => {
                             ></div>
                             <span className="text-gray-400">{item.name}</span>
                           </div>
-                          <span className="font-medium">{item.value}%</span>
+                          <span className="font-medium">R$ {item.value.toFixed(2)}</span>
+                          <span className="font-medium">{TotalExpense > 0 ? `${((item.value / TotalExpense) * 100).toFixed(1)}%` : "0%"}</span>
                         </div>
                       ))}
+
+                      {expensesCategory.length === 0 && (
+                        <div className="flex flex-col items-center justify-center py-6 text-center">
+                          <div
+                            className="w-10 h-10 rounded-full bg-gray-800/50 border border-gray-700 flex items-center justify-center mb-3"
+                          >
+                            <span className="text-gray-500 text-lg">∅</span>
+                          </div>
+
+                          <span className="text-sm font-medium text-gray-400">
+                            Nenhuma categoria encontrada
+                          </span>
+
+                          <span className="text-xs text-gray-600 mt-1">
+                            Não há gastos registrados por categoria.
+                          </span>
+                        </div>
+                      )}
+
                     </div>
                   </div>
+
                 </div>
               </div>
             </section>
@@ -347,12 +412,10 @@ const Dashboard = () => {
 
                           <div className="text-right">
                             <div
-                              className={`text-[18px] font-bold ${
-                                transaction.amount > 0
-                                  ? "text-green-400"
-                                  : "text-red-400"
-                              }`}
+                              className={`text-[18px] font-bold ${transaction.amount > 0 ? "text-green-400" : "text-red-400"
+                                }`}
                             >
+
                               {transaction.amount > 0 ? "+" : ""}$
                               {Math.abs(transaction.amount).toFixed(2)}
                             </div>
@@ -468,11 +531,10 @@ const Dashboard = () => {
                             ${bill.amount}
                           </div>
                           <div
-                            className={`w-2 h-2 rounded-full ${
-                              bill.status === "warning"
-                                ? "bg-orange-400 shadow-sm shadow-orange-400/50"
-                                : "bg-green-400 shadow-sm shadow-green-400/50"
-                            }`}
+                            className={`w-2 h-2 rounded-full ${bill.status === "warning"
+                              ? "bg-orange-400 shadow-sm shadow-orange-400/50"
+                              : "bg-green-400 shadow-sm shadow-green-400/50"
+                              }`}
                           ></div>
                         </div>
                       </div>
@@ -507,13 +569,12 @@ const Dashboard = () => {
                         className="flex items-start gap-3 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all"
                       >
                         <div
-                          className={`w-2 h-2 rounded-full mt-2 ${
-                            insight.type === "positive"
-                              ? "bg-green-400 shadow-sm shadow-green-400/50"
-                              : insight.type === "warning"
-                                ? "bg-yellow-400 shadow-sm shadow-yellow-400/50"
-                                : "bg-red-400 shadow-sm shadow-red-400/50"
-                          }`}
+                          className={`w-2 h-2 rounded-full mt-2 ${insight.type === "positive"
+                            ? "bg-green-400 shadow-sm shadow-green-400/50"
+                            : insight.type === "warning"
+                              ? "bg-yellow-400 shadow-sm shadow-yellow-400/50"
+                              : "bg-red-400 shadow-sm shadow-red-400/50"
+                            }`}
                         ></div>
                         <p className="text-[14px] text-gray-300 leading-relaxed">
                           {insight.text}
