@@ -8,6 +8,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  Tooltip,
 } from "recharts";
 import {
   TrendingUp,
@@ -32,8 +33,7 @@ const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
-  const cashFlowData = [{ month: "Jan", income: 4400, expense: 2200 }, { month: "Fev", income: 4400, expense: 2200 }, { month: "Mar", income: 45500, expense: 2200 }];
-  const categoryData = [{ name: "Alimentação", value: 30, color: "#6366F1" }];
+  const [cash, setCash] = useState<TransactionProps[]>([])
   const [transaction, setTransaction] = useState<TransactionProps[]>([])
 
   const getTransactions = async () => {
@@ -41,7 +41,10 @@ const Dashboard = () => {
 
     if (response?.data?.data) {
       setTransaction(response.data?.data);
+      setCash(response.data?.data)
     }
+
+    console.log(response.data)
 
 
   }
@@ -49,6 +52,72 @@ const Dashboard = () => {
   useEffect(() => {
     getTransactions()
   }, [])
+
+  const chartData = (() => {
+  const grouped = cash.reduce(
+    (acc, transaction) => {
+      const rawDate = transaction.date;
+      const date = new Date(transaction.date).toLocaleDateString("pt-BR");
+
+      let existing = acc.find((item) => item.date === date);
+
+      if (!existing) {
+        existing = {
+          rawDate,
+          date,
+          revenue: 0,
+          expense: 0,
+        };
+        acc.push(existing);
+      }
+
+      if (transaction.type === "revenue" || transaction.type === "expense") {
+        existing.revenue += Number(transaction.amount);
+      }
+
+      if (transaction.type === "expense") {
+        existing.expense += Number(transaction.amount);
+      }
+
+      return acc;
+    },
+    [] as {
+      rawDate: string;
+      date: string;
+      revenue: number;
+      expense: number;
+    }[]
+  );
+
+  grouped.sort(
+    (a, b) => new Date(a.rawDate).getTime() - new Date(b.rawDate).getTime()
+  );
+
+  let accRevenue = 0;
+  let accExpense = 0;
+
+  const accumulated = grouped.map((item) => {
+    accRevenue += item.revenue;
+    accExpense += item.expense;
+
+    return {
+      ...item,
+      revenue: accRevenue,
+      expense: accExpense,
+    };
+  });
+
+  if (accumulated.length === 0) return [];
+
+  const startPoint = {
+    rawDate: accumulated[0].rawDate,
+    date: "Início", 
+    revenue: 0,
+    expense: 0,
+  };
+
+  return [startPoint, ...accumulated];
+})();
 
   const expensesCategory = transaction
     .filter((t) => t.type === "expense")
@@ -78,17 +147,7 @@ const Dashboard = () => {
 
   const Total = TotalRevenue - TotalExpense
 
-  const recentTransactions = [
-    {
-      id: 6,
-      name: "Conta de Luz",
-      category: "Contas",
-      date: "6 Fev",
-      amount: -125.0,
-      icon: Zap,
-      color: "#EF4444",
-    },
-  ];
+
 
   const upcomingBills = [
     { name: "Netflix", date: "15 Fev", amount: 15.99, status: "warning" }
@@ -236,36 +295,63 @@ const Dashboard = () => {
                   </div>
 
                   <ResponsiveContainer width="100%" height={200}>
-                    <LineChart data={cashFlowData}>
+                    <LineChart data={chartData}>
                       <CartesianGrid
                         strokeDasharray="3 3"
                         stroke="#1a1a2e"
                         vertical={false}
                       />
                       <XAxis
-                        dataKey="month"
+                        dataKey="date"
                         stroke="#6B7280"
                         style={{ fontSize: "12px" }}
                       />
-                      <YAxis stroke="#6B7280" style={{ fontSize: "12px" }} />
-                      <Line
-                        type="monotone"
-                        dataKey="income"
-                        stroke="#6366F1"
-                        strokeWidth={3}
-                        dot={false}
+                      <YAxis
+                        orientation="right"
+                        stroke="#6B7280"
+                        style={{ fontSize: "11px" }}
+                        domain={[0, "auto"]}
+                        tickFormatter={(val) =>
+                          val >= 1000 ? `R$ ${(val / 1000).toFixed(1)}k` : `R$ ${val}`
+                        }
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#0d0e1b",
+                          borderColor: "rgba(255, 255, 255, 0.1)",
+                          borderRadius: "12px",
+                          color: "#fff",
+                          fontSize: "12px",
+                        }}
+                        formatter={(val: any, name: any) => [
+                          `R$ ${Number(val || 0).toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                          })}`,
+                          name === "revenue" ? "Receita Acumulada" : "Despesa Acumulada",
+                        ]}
                       />
                       <Line
-                        type="monotone"
+                        type="linear"
+                        dataKey="revenue"
+                        name="revenue"
+                        stroke="#6366F1"
+                        strokeWidth={3}
+                        dot={{ r: 4, fill: "#6366F1" }}
+                        activeDot={{ r: 6 }}
+                      />
+                      <Line
+                        type="linear"
                         dataKey="expense"
+                        name="expense"
                         stroke="#06B6D4"
                         strokeWidth={3}
-                        dot={false}
+                        dot={{ r: 4, fill: "#06B6D4" }}
+                        activeDot={{ r: 6 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
 
-                  <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
+                  <div className="m t-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
                     <div>
                       <div className="text-[12px] text-gray-500 mb-1">
                         Receita Média
@@ -381,48 +467,60 @@ const Dashboard = () => {
                   </div>
 
                   <div className="space-y-2">
-                    {recentTransactions.map((transaction) => {
-                      const Icon = transaction.icon;
-                      return (
-                        <div
-                          key={transaction.id}
-                          className="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 transition-all cursor-pointer border border-transparent hover:border-white/10"
-                        >
+                    {transaction.length === 0 ? (
+                      <div className="text-[14px] text-gray-500 py-4 text-center">
+                        Nenhuma transação encontrada.
+                      </div>
+                    ) : (
+                      transaction.slice(0, 3).map((item) => {
+                        const isRevenue = item.type === "revenue";
+                        const amountNumber = Number(item.amount);
+                        const displayDate = new Date(item.date).toLocaleDateString("pt-BR", {
+                          day: "numeric",
+                          month: "short",
+                        });
+
+                        return (
                           <div
-                            className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
-                            style={{
-                              backgroundColor: `${transaction.color}20`,
-                              boxShadow: `0 4px 12px ${transaction.color}20`,
-                            }}
+                            key={item.id}
+                            className="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 transition-all cursor-pointer border border-transparent hover:border-white/10"
                           >
-                            <Icon
-                              className="w-5 h-5"
-                              style={{ color: transaction.color }}
-                            />
-                          </div>
-
-                          <div className="flex-1 min-w-0">
-                            <div className="text-[15px] font-medium mb-1">
-                              {transaction.name}
-                            </div>
-                            <div className="text-[13px] text-gray-500">
-                              {transaction.date} • {transaction.category}
-                            </div>
-                          </div>
-
-                          <div className="text-right">
                             <div
-                              className={`text-[18px] font-bold ${transaction.amount > 0 ? "text-green-400" : "text-red-400"
-                                }`}
+                              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                              style={{
+                                backgroundColor: `${item.color || (isRevenue ? "#22c55e" : "#ef4444")}20`,
+                                boxShadow: `0 4px 12px ${item.color || (isRevenue ? "#22c55e" : "#ef4444")}20`,
+                              }}
                             >
+                              {isRevenue ? (
+                                <TrendingUp className="w-5 h-5 text-green-400" />
+                              ) : (
+                                <TrendingDown className="w-5 h-5 text-red-400" />
+                              )}
+                            </div>
 
-                              {transaction.amount > 0 ? "+" : ""}$
-                              {Math.abs(transaction.amount).toFixed(2)}
+                            <div className="flex-1 min-w-0">
+                              <div className="text-[15px] font-medium mb-1">
+                                {item.name || item.category}
+                              </div>
+                              <div className="text-[13px] text-gray-500">
+                                {displayDate} • {item.category}
+                              </div>
+                            </div>
+
+                            <div className="text-right">
+                              <div
+                                className={`text-[18px] font-bold ${isRevenue ? "text-green-400" : "text-red-400"
+                                  }`}
+                              >
+                                {isRevenue ? "+" : "-"}R${" "}
+                                {amountNumber.toFixed(2)}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>
