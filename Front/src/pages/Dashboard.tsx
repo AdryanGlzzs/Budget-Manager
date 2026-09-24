@@ -15,8 +15,6 @@ import {
   TrendingDown,
   ArrowDownRight,
   ArrowUpRight,
-  Wallet,
-  Calendar,
   Zap,
   DollarSign,
   Target,
@@ -28,30 +26,43 @@ import { useEffect, useState } from "react";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { api } from "../services/api";
 import type { TransactionProps } from "../components/TransactionModal";
+import type { BudgetsProps } from "../components/BudgetModal";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
-  const [cash, setCash] = useState<TransactionProps[]>([])
-  const [transaction, setTransaction] = useState<TransactionProps[]>([])
+  const [cash, setCash] = useState<TransactionProps[]>([]);
+  const [transaction, setTransaction] = useState<TransactionProps[]>([]);
+  const [budgets, setBudgets] = useState<BudgetsProps[]>([]);
 
   const getTransactions = async () => {
-    const response = await api.get('/transactions')
-
-    if (response?.data?.data) {
-      setTransaction(response.data?.data);
-      setCash(response.data?.data)
+    try {
+      const response = await api.get('/transactions');
+      if (response?.data?.data) {
+        setTransaction(response.data?.data);
+        setCash(response.data?.data);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar transações:", error);
     }
+  };
 
-    console.log(response.data)
-
-
-  }
+  const getBudgets = async () => {
+    try {
+      const response = await api.get('/budgets');
+      if (response?.data?.data) {
+        setBudgets(response.data.data);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar orçamentos:", error);
+    }
+  };
 
   useEffect(() => {
-    getTransactions()
-  }, [])
+    getTransactions();
+    getBudgets();
+  }, []);
 
   const chartData = (() => {
   const grouped = cash.reduce(
@@ -149,9 +160,7 @@ const Dashboard = () => {
 
 
 
-  const upcomingBills = [
-    { name: "Netflix", date: "15 Fev", amount: 15.99, status: "warning" }
-  ];
+
 
   const insights = [
     {
@@ -526,120 +535,98 @@ const Dashboard = () => {
               </div>
             </section>
 
-            <section className="sm:grid sm:grid-cols-3 gap-6 mb-8">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-purple-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
-                      <Target className="w-5 h-5 text-purple-400" />
-                    </div>
-                    <h3 className="text-[16px] font-semibold">
-                      Orçamento Mensal
-                    </h3>
-                  </div>
-
-                  <div className="mb-4">
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-[28px] font-bold">$3,200</span>
-                      <span className="text-[14px] text-gray-500">
-                        de $5,000
-                      </span>
-                    </div>
-                    <div className="text-[13px] text-gray-400">
-                      64% usado • $1,800 restante
-                    </div>
-                  </div>
-
-                  <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden">
-                    <div
-                      className="bg-linear-to-r from-purple-600 to-purple-500 h-full rounded-full shadow-lg shadow-purple-600/50 transition-all"
-                      style={{ width: "64%" }}
-                    ></div>
-                  </div>
-                </div>
+            <section className="mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-[20px] font-semibold">Orçamentos</h2>
+                <span className="text-[13px] text-gray-400">
+                  Mostrando {Math.min(3, budgets.length)} de {budgets.length}
+                </span>
               </div>
 
-              <div className="relative group">
-                <div className="absolute inset-0 bg-green-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
-                      <Wallet className="w-5 h-5 text-green-400" />
-                    </div>
-                    <h3 className="text-[16px] font-semibold">
-                      Meta de Economia
-                    </h3>
-                  </div>
-
-                  <div className="mb-4">
-                    <div className="text-[13px] text-gray-400 mb-2">
-                      Fundo de Emergência
-                    </div>
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-[28px] font-bold text-green-400">
-                        $2,400
-                      </span>
-                      <span className="text-[14px] text-gray-500">
-                        de $10,000
-                      </span>
-                    </div>
-                    <div className="text-[13px] text-gray-400">
-                      Alvo: Julho 2026
-                    </div>
-                  </div>
-
-                  <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden">
-                    <div
-                      className="bg-linear-to-r from-green-600 to-green-500 h-full rounded-full shadow-lg shadow-green-600/50 transition-all"
-                      style={{ width: "24%" }}
-                    ></div>
-                  </div>
+              {budgets.length === 0 ? (
+                <div className="bg-linear-to-br from-white/10 to-white/2 p-8 rounded-2xl border border-white/10 text-center text-gray-400">
+                  Nenhum orçamento cadastrado.
                 </div>
-              </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  {budgets.slice(0, 3).map((budget) => {
+                    const spent = Number(budget.spent || 0);
+                    const limit = Number(budget.limit || 0);
+                    const remaining = Math.max(0, limit - spent);
+                    const percentage =
+                      limit > 0
+                        ? Math.min(100, Math.round((spent / limit) * 100))
+                        : 0;
+                    const cardColor = budget.color || "#8B5CF6";
 
-              <div className="relative group">
-                <div className="absolute inset-0 bg-orange-600/20 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
-                      <Calendar className="w-5 h-5 text-orange-400" />
-                    </div>
-                    <h3 className="text-[16px] font-semibold">
-                      Próximas Contas
-                    </h3>
-                  </div>
+                    return (
+                      <div key={budget.id} className="relative group">
+                        <div
+                          className="absolute inset-0 rounded-2xl blur-xl opacity-40 group-hover:opacity-70 transition-opacity"
+                          style={{ backgroundColor: `${cardColor}40` }}
+                        ></div>
+                        <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+                                style={{
+                                  backgroundColor: `${cardColor}30`,
+                                  boxShadow: `0 4px 12px ${cardColor}30`,
+                                }}
+                              >
+                                <Target className="w-5 h-5" style={{ color: cardColor }} />
+                              </div>
+                              <div>
+                                <h3 className="text-[16px] font-semibold truncate max-w-35">
+                                  {budget.name}
+                                </h3>
+                                <span className="text-[12px] text-gray-500">
+                                  {budget.period || "Mensal"}
+                                </span>
+                              </div>
+                            </div>
+                            <span
+                              className="text-[12px] font-bold px-2 py-1 rounded-md"
+                              style={{
+                                backgroundColor: `${cardColor}20`,
+                                color: cardColor,
+                              }}
+                            >
+                              {percentage}%
+                            </span>
+                          </div>
 
-                  <div className="space-y-3">
-                    {upcomingBills.map((bill, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 bg-white/5 rounded-xl"
-                      >
-                        <div>
-                          <div className="text-[14px] font-medium mb-1">
-                            {bill.name}
+                          <div className="mb-4">
+                            <div className="flex items-baseline gap-2 mb-2">
+                              <span className="text-[26px] font-bold">
+                                R$ {spent.toFixed(2)}
+                              </span>
+                              <span className="text-[13px] text-gray-500">
+                                de R$ {limit.toFixed(2)}
+                              </span>
+                            </div>
+                            <div className="text-[12px] text-gray-400">
+                              R$ {remaining.toFixed(2)} restante
+                            </div>
                           </div>
-                          <div className="text-[12px] text-gray-500">
-                            {bill.date}
+
+                          <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden">
+                            <div
+                              className="h-full rounded-full transition-all duration-500"
+                              style={{
+                                width: `${percentage}%`,
+                                backgroundColor: cardColor,
+                                boxShadow: `0 0 12px ${cardColor}80`,
+                              }}
+                            ></div>
                           </div>
-                        </div>
-                        <div className="text-right flex items-center gap-2">
-                          <div className="text-[15px] font-bold">
-                            ${bill.amount}
-                          </div>
-                          <div
-                            className={`w-2 h-2 rounded-full ${bill.status === "warning"
-                              ? "bg-orange-400 shadow-sm shadow-orange-400/50"
-                              : "bg-green-400 shadow-sm shadow-green-400/50"
-                              }`}
-                          ></div>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
-              </div>
+              )}
             </section>
 
             <section>
