@@ -41,7 +41,7 @@ const Transactions = () => {
   }, []);
 
 
- const TotalRevenue = transaction
+  const TotalRevenue = transaction
     .filter((t) => t.type === "revenue")
     .reduce((sun, t) => sun + Number(t.amount || 0), 0);
 
@@ -50,6 +50,8 @@ const Transactions = () => {
     .reduce((decrease, t) => decrease + Number(t.amount || 0), 0);
 
   const TotalBalance = TotalRevenue - TotalExpense;
+
+
 
 
   console.log(TotalBalance)

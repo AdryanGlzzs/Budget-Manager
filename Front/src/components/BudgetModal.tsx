@@ -71,7 +71,7 @@ const colors = [
 ];
 
 const PERIOD_OPTIONS = [
-  { label: "Este mês", value: "current-month" },
+  { label: "Este mês", value: "monthly" },
   { label: "Próximo mês", value: "next-month" },
   { label: "Trimestral", value: "quarterly" },
   { label: "Anual", value: "yearly" },
@@ -91,7 +91,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
     spent: 0,
     limit: 0,
     description: '',
-    period: ''
+    period: 'monthly'
   })
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
         spent: 0,
         limit: 0,
         description: "",
-        period: ""
+        period: "monthly"
       });
       setSelectedColor("");
 
@@ -131,6 +131,7 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
 
 
   const handleSave = async (newBudget: BudgetsProps) => {
+    console.log("Enviando para a API:", newBudget);
 
     try {
       if (newBudget.id) {
@@ -139,7 +140,9 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
         console.log("Caiu em edição", data)
       } else {
         const data = await api.post("/budgets", newBudget);
+        const periodo = budget.period
 
+        console.log(periodo)
         console.log("caiu em criar", data)
       }
 
@@ -272,12 +275,12 @@ const BudgetModal = ({ isOpen, onClose, onSave, onDelete, editingBudget }: Budge
                   <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
                   <select
                     name="period"
-                    value={budget.period || "current-month"}
+                    value={budget.period}
                     onChange={handleChange}
                     className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-10 py-3 text-white focus:outline-none focus:border-purple-500/50 transition-colors appearance-none cursor-pointer"
                   >
                     {PERIOD_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
+                      <option key={option.value} value={option.value} className="bg-[#0a0a1a] text-white">
                         {option.label}
                       </option>
                     ))}

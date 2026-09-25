@@ -53,6 +53,7 @@ const Dashboard = () => {
       const response = await api.get('/budgets');
       if (response?.data?.data) {
         setBudgets(response.data.data);
+        console.log(response.data)
       }
     } catch (error) {
       console.error("Erro ao buscar orçamentos:", error);
@@ -65,70 +66,70 @@ const Dashboard = () => {
   }, []);
 
   const chartData = (() => {
-  const grouped = cash.reduce(
-    (acc, transaction) => {
-      const rawDate = transaction.date;
-      const date = new Date(transaction.date).toLocaleDateString("pt-BR");
+    const grouped = cash.reduce(
+      (acc, transaction) => {
+        const rawDate = transaction.date;
+        const date = new Date(transaction.date).toLocaleDateString("pt-BR");
 
-      let existing = acc.find((item) => item.date === date);
+        let existing = acc.find((item) => item.date === date);
 
-      if (!existing) {
-        existing = {
-          rawDate,
-          date,
-          revenue: 0,
-          expense: 0,
-        };
-        acc.push(existing);
-      }
+        if (!existing) {
+          existing = {
+            rawDate,
+            date,
+            revenue: 0,
+            expense: 0,
+          };
+          acc.push(existing);
+        }
 
-      if (transaction.type === "revenue" || transaction.type === "expense") {
-        existing.revenue += Number(transaction.amount);
-      }
+        if (transaction.type === "revenue" || transaction.type === "expense") {
+          existing.revenue += Number(transaction.amount);
+        }
 
-      if (transaction.type === "expense") {
-        existing.expense += Number(transaction.amount);
-      }
+        if (transaction.type === "expense") {
+          existing.expense += Number(transaction.amount);
+        }
 
-      return acc;
-    },
-    [] as {
-      rawDate: string;
-      date: string;
-      revenue: number;
-      expense: number;
-    }[]
-  );
+        return acc;
+      },
+      [] as {
+        rawDate: string;
+        date: string;
+        revenue: number;
+        expense: number;
+      }[]
+    );
 
-  grouped.sort(
-    (a, b) => new Date(a.rawDate).getTime() - new Date(b.rawDate).getTime()
-  );
+    grouped.sort(
+      (a, b) => new Date(a.rawDate).getTime() - new Date(b.rawDate).getTime()
+    );
 
-  let accRevenue = 0;
-  let accExpense = 0;
+    let accRevenue = 0;
+    let accExpense = 0;
 
-  const accumulated = grouped.map((item) => {
-    accRevenue += item.revenue;
-    accExpense += item.expense;
+    const accumulated = grouped.map((item) => {
+      accRevenue += item.revenue;
+      accExpense += item.expense;
 
-    return {
-      ...item,
-      revenue: accRevenue,
-      expense: accExpense,
+      return {
+        ...item,
+        revenue: accRevenue,
+        expense: accExpense,
+      };
+    });
+
+    if (accumulated.length === 0) return [];
+
+    const startPoint = {
+      rawDate: accumulated[0].rawDate,
+      date: "Início",
+      revenue: 0,
+      expense: 0,
     };
-  });
 
-  if (accumulated.length === 0) return [];
-
-  const startPoint = {
-    rawDate: accumulated[0].rawDate,
-    date: "Início", 
-    revenue: 0,
-    expense: 0,
-  };
-
-  return [startPoint, ...accumulated];
-})();
+    return [startPoint, ...accumulated];
+  })();
 
   const expensesCategory = transaction
     .filter((t) => t.type === "expense")
@@ -157,6 +158,9 @@ const Dashboard = () => {
 
 
   const Total = TotalRevenue - TotalExpense
+
+
+  const totalFlow = TotalExpense + TotalRevenue;
 
 
 
@@ -296,7 +300,7 @@ const Dashboard = () => {
                     </div>
 
                     <div className="text-right">
-                      <div className="text-[28px] font-bold mb-1">+$22,000</div>
+                      <div className="text-[28px] font-bold mb-1">R$ {totalFlow.toFixed(2).replace(".", ",")}</div>
                       <span className="text-[12px] text-green-400 px-2 py-1 bg-green-400/10 rounded-md">
                         +2.7%
                       </span>
@@ -388,7 +392,7 @@ const Dashboard = () => {
                     <div className="text-[18px] font-semibold">
                       Gastos por Categoria
                     </div>
-                    <div className="text-[28px] font-bold">{TotalExpense}</div>
+                    <div className="text-[28px] font-bold">R$ {TotalExpense.toFixed(2)}</div>
                   </div>
 
                   <div className="flex items-center gap-6">
@@ -582,7 +586,7 @@ const Dashboard = () => {
                                   {budget.name}
                                 </h3>
                                 <span className="text-[12px] text-gray-500">
-                                  {budget.period || "Mensal"}
+                                  {budget.period === "monthly" ? "Mensal" : budget.period === "next-month" ? "Próximo mês" : budget.period === "quarterly" ? "Trimestral" : budget.period === "yearly" ? "Anual" : budget.period === "custom" ? "Personalizado" : budget.period}
                                 </span>
                               </div>
                             </div>
