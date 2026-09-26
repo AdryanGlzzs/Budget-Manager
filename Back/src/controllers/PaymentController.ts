@@ -10,6 +10,11 @@ const PlanPrices: Record<string, { price: number, description: string }> = {
     Business: {
         price: 100.00,
         description: "Assinatura Plano Business - Budget Manager"
+    },
+
+    Free: {
+        price: 0.01,
+        description: "Teste"
     }
 }
 

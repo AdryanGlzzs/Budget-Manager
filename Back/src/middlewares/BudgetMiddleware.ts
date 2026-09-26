@@ -7,7 +7,7 @@ const schemaBudget = z.object({
     spent: z.coerce.number().min(0, "O valor gasto não pode ser negativo"),
     limit: z.coerce.number().min(1, "O limite deve ser maior que zero"),
     description: z.string().trim().min(10, "Mínimo de 10 caracteres").max(100, "Máximo de 100 caracteres"),
-    
+    period: z.string().optional(),
 });
 
 const schemaDeleteBudget = z.object({
@@ -42,7 +42,7 @@ export const BudgetMiddleware = (req: Request, res: Response, next: NextFunction
     next();
 };
 
-export const DeleteBudgetMiddleware = ( req: Request, res: Response, next: NextFunction ) => {
+export const DeleteBudgetMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const result = schemaDeleteBudget.safeParse(req.params);
 
     if (!result.success) {

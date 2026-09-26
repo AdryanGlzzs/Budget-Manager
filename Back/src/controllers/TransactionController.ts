@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 
 export class TransactionController {
-    
+
     static async HandleSaveTransaction(req: Request, res: Response) {
         try {
-            const { name, category, date, amount,  color, type, status } = req.body;
-            
+            const { name, category, date, amount, color, type, status } = req.body;
+
 
             const transaction = await prisma.transaction.create({
                 data: {
@@ -64,13 +64,25 @@ export class TransactionController {
     }
 
     static async getTransaction(req: Request, res: Response) {
+
+        const { type } = req.query
+
         try {
-            const response = await prisma.transaction.findMany()
+            const response = await prisma.transaction.findMany({
+                where: {
+                    ...(type && { type: String(type).toUpperCase() })
+                },
+
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            })
 
             return res.status(200).json({
-                message: "Transações Puxadas",
+                message: "Transações encontradas com sucesso",
                 data: response
             })
+
         } catch (error) {
             res.status(400).json({
                 message: "Error",
