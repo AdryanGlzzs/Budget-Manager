@@ -27,6 +27,7 @@ import { useThemeColors } from "../contexts/ThemeContext";
 import { api } from "../services/api";
 import type { TransactionProps } from "../components/TransactionModal";
 import type { BudgetsProps } from "../components/BudgetModal";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -156,6 +157,12 @@ const Dashboard = () => {
 
   const TotalExpense = transaction.filter((t) => t.type === "expense").reduce((acc, t) => acc + Number(t.amount || 0), 0)
 
+  const revenues = transaction.filter((t) => t.type === "revenue")
+
+  const TotalR = transaction.reduce((acc, t) => acc + Number(t.amount || 0), 0)
+
+  const avarageR = revenues.length > 0 ? TotalR / revenues.length : 0
+
 
   const Total = TotalRevenue - TotalExpense
 
@@ -204,7 +211,7 @@ const Dashboard = () => {
                         Saldo Total
                       </div>
                       <div className="mt-5 text-[45px] font-bold leading-none bg-linear-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-3">
-                        R$ {Total.toFixed(2)}
+                        {formatCurrency(Total)}
                       </div>
                       <div className="flex items-center gap-2 text-[14px]">
                         <span className="text-green-400 flex items-center gap-1 font-medium">
@@ -240,7 +247,7 @@ const Dashboard = () => {
                               Receita
                             </div>
                             <div className="text-[32px] font-bold leading-none mb-2">
-                              R$ {TotalRevenue.toFixed(2)}
+                              {formatCurrency(TotalRevenue)}
                             </div>
                             <div className="text-[13px] text-green-400 flex items-center gap-1">
                               <ArrowUpRight className="w-3 h-3" />
@@ -263,7 +270,7 @@ const Dashboard = () => {
                               Despesas
                             </div>
                             <div className="text-[32px] font-bold leading-none mb-2">
-                              R$ {TotalExpense.toFixed(2)}
+                              {formatCurrency(TotalExpense)}
                             </div>
                             <div className="text-[13px] text-red-400 flex items-center gap-1">
                               <ArrowDownRight className="w-3 h-3" />
@@ -300,7 +307,7 @@ const Dashboard = () => {
                     </div>
 
                     <div className="text-right">
-                      <div className="text-[28px] font-bold mb-1">R$ {totalFlow.toFixed(2).replace(".", ",")}</div>
+                      <div className="text-[28px] font-bold mb-1">{formatCurrency(totalFlow)}</div>
                       <span className="text-[12px] text-green-400 px-2 py-1 bg-green-400/10 rounded-md">
                         +2.7%
                       </span>
@@ -337,9 +344,7 @@ const Dashboard = () => {
                           fontSize: "12px",
                         }}
                         formatter={(val: any, name: any) => [
-                          `R$ ${Number(val || 0).toLocaleString("pt-BR", {
-                            minimumFractionDigits: 2,
-                          })}`,
+                          formatCurrency(val),
                           name === "revenue" ? "Receita Acumulada" : "Despesa Acumulada",
                         ]}
                       />
@@ -370,7 +375,7 @@ const Dashboard = () => {
                         Receita Média
                       </div>
                       <div className="text-[20px] font-bold text-purple-400">
-                        $5,150
+                        {formatCurrency(avarageR)}
                       </div>
                     </div>
                     <div>
@@ -378,7 +383,7 @@ const Dashboard = () => {
                         Despesa Média
                       </div>
                       <div className="text-[20px] font-bold text-cyan-400">
-                        $2,817
+                        {formatCurrency(2817)}
                       </div>
                     </div>
                   </div>
@@ -392,7 +397,7 @@ const Dashboard = () => {
                     <div className="text-[18px] font-semibold">
                       Gastos por Categoria
                     </div>
-                    <div className="text-[28px] font-bold">R$ {TotalExpense.toFixed(2)}</div>
+                    <div className="text-[28px] font-bold">{formatCurrency(TotalExpense)}</div>
                   </div>
 
                   <div className="flex items-center gap-6">
@@ -435,7 +440,7 @@ const Dashboard = () => {
                             ></div>
                             <span className="text-gray-400">{item.name}</span>
                           </div>
-                          <span className="font-medium">R$ {item.value.toFixed(2)}</span>
+                          <span className="font-medium">{formatCurrency(item.value)}</span>
                           <span className="font-medium">{TotalExpense > 0 ? `${((item.value / TotalExpense) * 100).toFixed(1)}%` : "0%"}</span>
                         </div>
                       ))}
@@ -526,8 +531,7 @@ const Dashboard = () => {
                                 className={`text-[18px] font-bold ${isRevenue ? "text-green-400" : "text-red-400"
                                   }`}
                               >
-                                {isRevenue ? "+" : "-"}R${" "}
-                                {amountNumber.toFixed(2)}
+                                {isRevenue ? "+" : "-"} {formatCurrency(amountNumber)}
                               </div>
                             </div>
                           </div>
@@ -604,14 +608,14 @@ const Dashboard = () => {
                           <div className="mb-4">
                             <div className="flex items-baseline gap-2 mb-2">
                               <span className="text-[26px] font-bold">
-                                R$ {spent.toFixed(2)}
+                                {formatCurrency(spent)}
                               </span>
                               <span className="text-[13px] text-gray-500">
-                                de R$ {limit.toFixed(2)}
+                                de {formatCurrency(limit)}
                               </span>
                             </div>
                             <div className="text-[12px] text-gray-400">
-                              R$ {remaining.toFixed(2)} restante
+                              {formatCurrency(remaining)} restante
                             </div>
                           </div>
 

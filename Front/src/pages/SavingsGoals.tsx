@@ -15,6 +15,7 @@ import { SavingsGoalsModal } from "../components/SavingGoalsModal";
 import type { Goalsprops, } from "../components/SavingGoalsModal";
 import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const SavingsGoals = () => {
   const [SavingModal, setSavingModal] = useState(false);
@@ -150,7 +151,7 @@ const SavingsGoals = () => {
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Total Economizado</p>
-                  <h3 className="text-[24px] font-bold">R$ {goalReduce}</h3>
+                  <h3 className="text-[24px] font-bold">{formatCurrency(goalReduce)}</h3>
                 </div>
               </div>
             </div>
@@ -277,10 +278,10 @@ const SavingsGoals = () => {
 
                   <div className="flex items-baseline gap-2 mb-4">
                     <span className={`text-[24px] font-bold ${colors.text}`}>
-                      ${Goal.current.toLocaleString()}
+                      {formatCurrency(Goal.current)}
                     </span>
                     <span className="text-[14px] text-gray-500">
-                      de ${Goal.target.toLocaleString()}
+                      de {formatCurrency(Goal.target)}
                     </span>
                   </div>
 

@@ -17,6 +17,7 @@ import { TransactionModal } from "../components/TransactionModal";
 import type { TransactionProps } from "../components/TransactionModal";
 import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const Transactions = () => {
   const [open, setOpen] = useState(false);
@@ -131,9 +132,9 @@ const Transactions = () => {
                         Receita Total
                       </div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1">{TotalRevenue.toFixed(2)}</div>
+                    <div className="text-[32px] font-bold mb-1">{formatCurrency(TotalRevenue)}</div>
                     <div className="text-[13px] text-green-400">Este mês</div>
-                  </div>
+                  </div>  
                 </div>
 
                 <div className="relative group w-full">
@@ -147,7 +148,7 @@ const Transactions = () => {
                         Despesas Totais
                       </div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1">{TotalExpense.toFixed(2)}</div>
+                    <div className="text-[32px] font-bold mb-1">{formatCurrency(TotalExpense)}</div>
                     <div className="text-[13px] text-red-400">Este mês</div>
                   </div>
                 </div>
@@ -161,7 +162,7 @@ const Transactions = () => {
                       </div>
                       <div className="text-[14px] text-gray-400">Saldo</div>
                     </div>
-                    <div className="text-[32px] font-bold mb-1">{TotalBalance.toFixed(2)}</div>
+                    <div className="text-[32px] font-bold mb-1">{formatCurrency(TotalBalance)}</div>
                     <div className="text-[13px] text-green-400">Este mês</div>
                   </div>
                 </div>
@@ -250,8 +251,7 @@ const Transactions = () => {
                                   : "text-red-400"
                                   }`}
                               >
-                                {transaction.type === "revenue" ? "+" : "-"} R${""}
-                                {Math.abs(transaction.amount).toFixed(2)}
+                                {transaction.type === "revenue" ? "+" : "-"} {formatCurrency(Math.abs(transaction.amount))}
                               </div>
                               <button
                                 onClick={() => HandleRemove(transaction.id)}
@@ -339,8 +339,7 @@ const Transactions = () => {
                                 : "text-red-400"
                                 }`}
                             >
-                              {transaction.type === 'revenue' ? "+" : "-"} R${""}
-                              {Math.abs(transaction.amount).toFixed(2)}
+                              {transaction.type === 'revenue' ? "+" : "-"} {formatCurrency(Math.abs(transaction.amount))}
                             </div>
                           </div>
 

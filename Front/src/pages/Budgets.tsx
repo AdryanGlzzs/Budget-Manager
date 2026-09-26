@@ -15,6 +15,7 @@ import { DeductModal, } from "../components/deductModal";
 import type { PropsModalDeduct } from '../components/deductModal'
 import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const Budgets = () => {
   const [open, setOpen] = useState(false);
@@ -91,8 +92,8 @@ const Budgets = () => {
 
   const FilterBudgets = budgets;
 
-  const totalBudget = budgets.reduce((sum, b) => sum + b.limit, 0);
-  const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
+  const totalBudget = budgets.reduce((sum, b) => sum + Number(b.limit || 0), 0);
+  const totalSpent = budgets.reduce((sum, b) => sum + Number(b.spent || 0), 0);
   const totalPercentage =
     totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
 
@@ -153,7 +154,7 @@ const Budgets = () => {
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
-                    R${totalBudget.toLocaleString()}
+                    {formatCurrency(totalBudget)}
                   </div>
                   <div className="text-[12px] md:text-[13px] text-gray-400">
                     Em todas as categorias
@@ -173,7 +174,7 @@ const Budgets = () => {
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
-                    R${totalSpent.toLocaleString()}
+                    {formatCurrency(totalSpent)}
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="text-[12px] md:text-[13px] text-cyan-400">
@@ -195,7 +196,7 @@ const Budgets = () => {
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
-                    R${(totalBudget - totalSpent).toLocaleString()}
+                    {formatCurrency(totalBudget - totalSpent)}
                   </div>
                   <div className="text-[12px] md:text-[13px] text-green-400">
                     {100 - totalPercentage}% disponível
@@ -291,10 +292,10 @@ const Budgets = () => {
                                 className={`text-[22px] md:text-[28px] font-bold ${isOverBudget ? "text-red-400" : "text-white"
                                   }`}
                               >
-                                R${item.spent}
+                                {formatCurrency(item.spent)}
                               </span>
                               <span className="text-[14px] md:text-[16px] text-gray-500">
-                                de R${item.limit}
+                                de {formatCurrency(item.limit)}
                               </span>
                               <span
                                 className={`text-[13px] md:text-[14px] ml-auto font-medium ${isOverBudget
@@ -323,14 +324,11 @@ const Budgets = () => {
                             </div>
 
                             <div className="mt-2.5 md:mt-3 text-[12px] md:text-[13px] text-gray-400">
-                              R$
-                              {item.limit - item.spent > 0
-                                ? item.limit - item.spent
-                                : 0}{" "}
+                              {formatCurrency(item.limit - item.spent > 0 ? item.limit - item.spent : 0)}{" "}
                               restante
                               {isOverBudget && (
                                 <span className="text-red-400 ml-2">
-                                  • R${item.spent - item.limit} acima do
+                                  • {formatCurrency(item.spent - item.limit)} acima do
                                   orçamento
                                 </span>
                               )}

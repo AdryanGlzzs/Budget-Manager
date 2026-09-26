@@ -23,6 +23,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useState } from "react";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const Analytics = () => {
   const [open, setOpen] = useState(false);
@@ -66,13 +67,13 @@ const Analytics = () => {
   const stats = [
     {
       label: "Receita Mensal Média",
-      value: "$5,167",
+      value: formatCurrency(5167),
       change: "+8.2%",
       trend: "up",
     },
     {
       label: "Despesa Mensal Média",
-      value: "$2,817",
+      value: formatCurrency(2817),
       change: "-3.1%",
       trend: "down",
     },
@@ -344,7 +345,7 @@ const Analytics = () => {
                           </div>
                           <div className="flex items-center gap-3">
                             <span className="text-[13px] text-gray-500">
-                              ${item.value}
+                              {formatCurrency(item.value)}
                             </span>
                             <span className="text-[14px] font-medium">
                               {item.percentage}%
@@ -435,7 +436,7 @@ const Analytics = () => {
                           {source.source}
                         </div>
                         <div className="text-[24px] font-bold">
-                          ${source.amount.toLocaleString()}
+                          {formatCurrency(source.amount)}
                         </div>
                       </div>
                     ))}
