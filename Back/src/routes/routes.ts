@@ -9,6 +9,7 @@ import { CreateSavingGoalsMiddleware } from '../middlewares/SavingGoalsMiddlewar
 import { SavingGoalsController } from '../controllers/SavingGoalsController'
 import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { PaymentController } from '../controllers/PaymentController'
+import { AuthTenantId } from '../middlewares/authTenant'
 
 export const routes = Router()
 
@@ -19,19 +20,19 @@ routes.post("/auth/google", UserController.GoogleLoginController);
 routes.post('/auth/facebook', UserController.FacebookLoginController)
 routes.post('/auth/github', UserController.GitHubLoginController)
 
-routes.get('/transactions', TransactionController.getTransaction)
-routes.post('/transactions', TransactionMiddleware, TransactionController.HandleSaveTransaction)
-routes.delete('/transactions/delete/:id', TransactionMiddlewareDelete, TransactionController.HandleDeleteTransaction)
+routes.get('/transactions', AuthTenantId, TransactionController.getTransaction)
+routes.post('/transactions', AuthTenantId, TransactionMiddleware, TransactionController.HandleSaveTransaction)
+routes.delete('/transactions/delete/:id', AuthTenantId, TransactionMiddlewareDelete, TransactionController.HandleDeleteTransaction)
 
-routes.post('/budgets', BudgetMiddleware, BudgetController.CreateBudget)
-routes.delete('/budgets/delete/:id', DeleteBudgetMiddleware, BudgetController.DeleteBudget)
-routes.put('/budgets/edit/:id', EditBudget, BudgetController.EditBudget)
-routes.get('/budgets', BudgetController.getBudgets)
+routes.post('/budgets', AuthTenantId, BudgetMiddleware, BudgetController.CreateBudget)
+routes.delete('/budgets/delete/:id', AuthTenantId, DeleteBudgetMiddleware, BudgetController.DeleteBudget)
+routes.put('/budgets/edit/:id', AuthTenantId, EditBudget, BudgetController.EditBudget)
+routes.get('/budgets', AuthTenantId, BudgetController.getBudgets)
 
-routes.get('/savings-goals', SavingGoalsController.getGoals)
-routes.post('/savings-goals', CreateSavingGoalsMiddleware, SavingGoalsController.CreateGoal)
-routes.delete('/savings-goals/delete/:id', SavingGoalsController.deleteGoal)
-routes.put('/savings-goals/edit/:id', SavingGoalsController.EditGoal)
+routes.get('/savings-goals', AuthTenantId, SavingGoalsController.getGoals)
+routes.post('/savings-goals', AuthTenantId, CreateSavingGoalsMiddleware, SavingGoalsController.CreateGoal)
+routes.delete('/savings-goals/delete/:id', AuthTenantId, SavingGoalsController.deleteGoal)
+routes.put('/savings-goals/edit/:id', AuthTenantId, SavingGoalsController.EditGoal)
 
 routes.post('/process_payment', PaymentController.processPayment)
 

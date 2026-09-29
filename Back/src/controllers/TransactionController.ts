@@ -8,7 +8,7 @@ export class TransactionController {
             const { name, category, date, amount, color, type, status } = req.body;
 
 
-            const transaction = await prisma.transaction.create({
+            const transaction = await req.prisma.transaction.create({
                 data: {
                     name,
                     category,
@@ -16,7 +16,8 @@ export class TransactionController {
                     amount,
                     color,
                     type,
-                    status
+                    status,
+                    tenantId: req.tenantId!
                 }
             });
 
@@ -45,7 +46,7 @@ export class TransactionController {
                 });
             }
 
-            const remove = await prisma.transaction.delete({
+            const remove = await req.prisma.transaction.delete({
                 where: {
                     id,
                 }
@@ -68,7 +69,7 @@ export class TransactionController {
         const { type } = req.query
 
         try {
-            const response = await prisma.transaction.findMany({
+            const response = await req.prisma.transaction.findMany({
                 where: {
                     ...(type && { type: String(type).toUpperCase() })
                 },

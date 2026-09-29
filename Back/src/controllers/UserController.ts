@@ -33,6 +33,11 @@ export class UserController {
         name,
         email,
         password: hashedPassword,
+        tenant: {
+          create: {
+            name: `${name}'s Workspace`
+          }
+        }
       }
     });
 
@@ -44,7 +49,7 @@ export class UserController {
       })
     }
     const token = jwt.sign(
-      { id: user.id }, secret, {
+      { sub: user.id, id: user.id, tenantId: user.tenantId }, secret, {
       expiresIn: '7d'
     }
     )
@@ -97,7 +102,7 @@ export class UserController {
       }
 
       const token = jwt.sign(
-        { id: userLogin.id },
+        { sub: userLogin.id, id: userLogin.id, tenantId: userLogin.tenantId },
         secret,
         { expiresIn: "7d" }
       )
@@ -236,7 +241,12 @@ export class UserController {
           data: {
             name: name || "Usuario Google",
             email,
-            password: ""
+            password: "",
+            tenant: {
+              create: {
+                name: `${name || 'Usuario Google'}'s Workspace`
+              }
+            }
           }
         })
       }
@@ -249,7 +259,7 @@ export class UserController {
         });
       }
 
-      const appToken = jwt.sign({ id: user.id },
+      const appToken = jwt.sign({ sub: user.id, id: user.id, tenantId: user.tenantId },
         secret,
         { expiresIn: "7d" }
       )
@@ -308,7 +318,12 @@ export class UserController {
           data: {
             name: name || "Usuario Facebook",
             email,
-            password: ""
+            password: "",
+            tenant: {
+              create: {
+                name: `${name || 'Usuario Facebook'}'s Workspace`
+              }
+            }
           }
         })
       }
@@ -321,7 +336,7 @@ export class UserController {
         });
       }
 
-      const appToken = jwt.sign({ id: user.id }, secret, { expiresIn: "7d" })
+      const appToken = jwt.sign({ sub: user.id, id: user.id, tenantId: user.tenantId }, secret, { expiresIn: "7d" })
 
       res.cookie("token", appToken, {
         httpOnly: true,
@@ -377,8 +392,13 @@ export class UserController {
           user = await prisma.user.create({
             data:{
               name: name || "Usuario GitHub",
-              email ,
-              password: ""
+              email,
+              password: "",
+              tenant: {
+                create: {
+                  name: `${name || 'Usuario GitHub'}'s Workspace`
+                }
+              }
             }
           })
         }
@@ -391,7 +411,7 @@ export class UserController {
           })
         }
 
-        const appToken = jwt.sign({id: user.id}, secret, {expiresIn: "7d"})
+        const appToken = jwt.sign({ sub: user.id, id: user.id, tenantId: user.tenantId }, secret, {expiresIn: "7d"})
 
         res.cookie("token", appToken, {
           httpOnly: true,

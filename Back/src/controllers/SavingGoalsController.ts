@@ -5,14 +5,14 @@ export class SavingGoalsController {
     const { name, target, current, color, deadline } = req.body
 
     try {
-      const response = await prisma.savingGoals.create({
+      const response = await req.prisma.savingGoal.create({
         data: {
           name,
           target,
           current,
           color,
-          deadline
-          
+          deadline,
+          tenantId: req.tenantId!
         }
       })
 
@@ -32,7 +32,7 @@ export class SavingGoalsController {
 
   static async getGoals(req: Request, res: Response) {
 
-    const response = await prisma.savingGoals.findMany()
+    const response = await req.prisma.savingGoal.findMany()
 
     try {
       res.status(200).json({
@@ -59,7 +59,7 @@ export class SavingGoalsController {
         })
       }
 
-      const deleteGoal = await prisma.savingGoals.delete({
+      const deleteGoal = await req.prisma.savingGoal.delete({
         where: {
           id
         }
@@ -87,7 +87,7 @@ export class SavingGoalsController {
     }
 
     try {
-      const editResponse = await prisma.savingGoals.update({
+      const editResponse = await req.prisma.savingGoal.update({
         where: {
           id: String(id)
         },

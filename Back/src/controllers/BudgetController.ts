@@ -7,14 +7,15 @@ export class BudgetController {
 
         try {
 
-            const createBudget = await prisma.budget.create({
+            const createBudget = await req.prisma.budget.create({
                 data: {
                     name,
                     color,
                     spent,
                     limit,
                     description,
-                    period
+                    period,
+                    tenantId: req.tenantId!
                 }
             })
 
@@ -38,7 +39,7 @@ export class BudgetController {
         const id = String(req.params.id);
 
         try {
-            const deleteBudget = await prisma.budget.delete({
+            const deleteBudget = await req.prisma.budget.delete({
                 where: {
                     id
                 }
@@ -67,7 +68,7 @@ export class BudgetController {
         }
 
         try {
-            const editBudget = await prisma.budget.update({
+            const editBudget = await req.prisma.budget.update({
                 where: {
                     id: String(id)
                 },
@@ -97,7 +98,7 @@ export class BudgetController {
 
     static async getBudgets(req: Request, res: Response) {
         try {
-            const response = await prisma.budget.findMany()
+            const response = await req.prisma.budget.findMany()
             
             res.status(200).json({
                 message: "Dados Puxados",

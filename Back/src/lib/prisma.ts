@@ -3,15 +3,20 @@ import { PrismaClient } from "@prisma/client";
 export const prisma = new PrismaClient();
 
 type PrismaScopedArgs = {
-    where?: Record<string, unknown>
+    where?: Record<string, unknown>;
     data?: Record<string, unknown> | Array<Record<string, unknown>>;
-}
+};
 
 export const createTenantPrisma = (tenantId: string) => {
     return prisma.$extends({
         query: {
             $allModels: {
-                async $allOperations({ operation, args, query }) {
+                async $allOperations({ model, operation, args, query }) {
+                    
+                    if (model as string === 'Tenant') {
+                        return query(args);
+                    }
+
                     const anyArgs = args as PrismaScopedArgs;
 
                     if (
@@ -23,6 +28,7 @@ export const createTenantPrisma = (tenantId: string) => {
                     if (operation === 'create') {
                         anyArgs.data = { ...anyArgs.data, tenantId };
                     }
+
                     if (operation === 'createMany' && Array.isArray(anyArgs.data)) {
                         anyArgs.data = anyArgs.data.map((item: any) => ({
                             ...item,
@@ -34,5 +40,5 @@ export const createTenantPrisma = (tenantId: string) => {
                 },
             },
         },
-    }) as unknown as PrismaClient;
+    });
 };
