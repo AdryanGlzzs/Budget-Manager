@@ -10,11 +10,12 @@ import { SavingGoalsController } from '../controllers/SavingGoalsController'
 import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { PaymentController } from '../controllers/PaymentController'
 import { AuthTenantId } from '../middlewares/authTenant'
+import { TurnstileMiddleware } from '../middlewares/TurnstileMiddleware'
 
-export const routes = Router()
+export const routes = Router()  
 
-routes.post('/login', LoginUserMiddleware, UserController.login)
-routes.post('/signup', SignUpUserMiddleware, UserController.signup)
+routes.post('/login', TurnstileMiddleware,  LoginUserMiddleware, UserController.login)
+routes.post('/signup', TurnstileMiddleware, SignUpUserMiddleware, UserController.signup)
 routes.get('/users/me', AuthMiddleware,  UserController.GetUsers)
 routes.post("/auth/google", UserController.GoogleLoginController);
 routes.post('/auth/facebook', UserController.FacebookLoginController)
