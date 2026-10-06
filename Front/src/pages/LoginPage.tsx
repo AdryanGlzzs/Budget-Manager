@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff } from "lucide-react";
 import Logo from "../images/logo.png";
 import { signInWithPopup, } from "firebase/auth";
+import { Turnstile } from "@marsidev/react-turnstile";
+
 import {
   auth,
   googleProvider,
@@ -22,16 +24,24 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { Login, ValidateToken, setUser: setAuthUser } = useAuth();
+  const [token, setToken] = useState<string>('')
   const [user, setUser] = useState<User>({
     email: "",
     password: ""
   });
 
+
+
+
   const HandleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    if(!token){
+      alert("Por favor, Conclua a verificação do Cloudfare")
+    }
+
     try {
-      await Login(user.email, user.password);
+      await Login(user.email, user.password, token);
       navigate('/dashboard');
     } catch (error) {
       console.error("Erro ao fazer login:", error);
@@ -293,6 +303,17 @@ const LoginPage = () => {
               </button>
             </form>
 
+            <div className="flex items-center justify-center mt-5">
+              <Turnstile
+                siteKey= {import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                onSuccess={(token: string) => {
+                  console.log("Sucess", token)
+                  setToken(token)
+                }}
+                onExpire={() => setToken('')}
+              />
+            </div>
+
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-400">
                 Não tem uma conta?{" "}
@@ -306,6 +327,8 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
+
+
 
         <p className="text-center text-gray-600 text-xs mt-10">
           Ao entrar, você concorda com nossos <br />

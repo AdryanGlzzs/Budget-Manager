@@ -1,9 +1,11 @@
-  import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff, User } from "lucide-react";
 import Logo from "../images/logo.png";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { useAuth } from "../contexts/authContext";
 
 interface UserProps {
   name: string;
@@ -14,16 +16,24 @@ interface UserProps {
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [token, setToken] = useState<string>('')
+  const { Register } = useAuth()
   const [formData, setFormData] = useState<UserProps>({
-    name: "", 
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const navigate = useNavigate()
 
+
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!token) {
+      alert("Por favor conclua o processo do Cloudfare")
+      return
+    }
 
     if (formData.password !== formData.confirmPassword) {
       alert("As senhas não coincidem!");
@@ -31,9 +41,8 @@ const RegisterPage = () => {
     }
 
     try {
-      const { name, email, password, confirmPassword } = formData;
-      const req = await api.post('/signup', { name, email, password, confirmPassword });
-      console.log(req.data);
+      await Register(formData.name, formData.email, formData.password, token)
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Erro no cadastro:", error);
@@ -216,6 +225,17 @@ const RegisterPage = () => {
                     </>
                   )}
                 </button>
+              </div>
+
+              <div className="flex items-center justify-center mt-2">
+                <Turnstile
+                  siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                  onSuccess={(token: string) => {
+                    console.log("Sucess", token)
+                    setToken(token)
+                  }}
+                  onExpire={() => setToken('')}
+                />
               </div>
 
               <button

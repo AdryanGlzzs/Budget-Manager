@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect, createContext, type ReactNode } from "react";
 import { api } from "../services/api";
+import axios from "axios";
 
 export interface User {
     id: string;
@@ -11,7 +12,8 @@ export interface User {
 interface AuthContextType {
     User: User | null;
     Loading: boolean;
-    Login: (email: string, password: string) => Promise<void>;
+    Register: (name: string, email: string, password: string, turnstileToken?: string) => Promise<void>;
+    Login: (email: string, password: string, turnstileToken?: string) => Promise<void>;
     Logout: () => Promise<void>;
     ValidateToken: () => Promise<void>;
     setUser: (user: User | null) => void;
@@ -43,9 +45,21 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) =>
         ValidateToken()
     }, [])
 
-    const Login = async (email: string, password: string) => {
+    const Register = async (name: string, email: string, password: string, turnstileToken?: string) => {
         try {
-            const response = await api.post('/login', { email, password })
+            const response = await api.post('/signup', { name, email, password, turnstileToken })
+            const userData = response.data.user || response.data
+
+            setIsUser(userData)
+        } catch (error) {
+            console.error("Erro no registro", error);
+            throw error;
+        }
+    }
+
+    const Login = async (email: string, password: string, turnstileToken?: string) => {
+        try {
+            const response = await api.post('/login', { email, password, turnstileToken })
             const userData = response.data.user || response.data
             setIsUser(userData)
         } catch (error) {
@@ -65,7 +79,7 @@ export const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) =>
     }
 
     return (
-        <AuthContext.Provider value={{ Login, Logout, User: isUser, Loading: loading, ValidateToken, setUser: setIsUser }}>
+        <AuthContext.Provider value={{ Login, Register, Logout, User: isUser, Loading: loading, ValidateToken, setUser: setIsUser }}>
             {children}
         </AuthContext.Provider>
     )
