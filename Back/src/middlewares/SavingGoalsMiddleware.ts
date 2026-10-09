@@ -10,13 +10,13 @@ export const createSavingGoalSchema = z.object({
 });
 
 export const CreateSavingGoalsMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const result = createSavingGoalSchema.safeParse(req.body)
-
     try {
+        const result = createSavingGoalSchema.safeParse(req.body)
+
         if (!result.success) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Erro na criação de meta",
-                data: result
+                errors: result.error
             })
         }
 
@@ -25,7 +25,8 @@ export const CreateSavingGoalsMiddleware = (req: Request, res: Response, next: N
         return next()
 
     } catch (error) {
-        res.json({
+        return res.status(500).json({
+            message: "Erro interno no middleware de metas",
             erro: error
         })
     }

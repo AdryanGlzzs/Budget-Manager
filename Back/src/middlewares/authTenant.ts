@@ -25,7 +25,12 @@ export function AuthTenantId(req: Request, res: Response, next: NextFunction) {
 
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload
+        const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
+        if (!secret) {
+            return res.status(500).json({ error: 'Chave secreta não configurada no servidor' })
+        }
+
+        const decoded = jwt.verify(token, secret) as TokenPayload
 
         req.userId = decoded.sub
         req.tenantId = decoded.tenantId

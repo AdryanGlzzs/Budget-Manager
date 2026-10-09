@@ -1,5 +1,25 @@
 import { Request, Response } from "express"
-import { prisma } from "../lib/prisma"
+
+function parseDate(dateStr?: string | Date | null): Date | null {
+  if (!dateStr) return null
+  if (dateStr instanceof Date) return isNaN(dateStr.getTime()) ? null : dateStr
+
+  let parsed = new Date(dateStr)
+  if (!isNaN(parsed.getTime())) return parsed
+
+  if (typeof dateStr === 'string' && dateStr.includes('/')) {
+    const parts = dateStr.split('/')
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10)
+      const month = parseInt(parts[1], 10) - 1
+      const year = parseInt(parts[2], 10)
+      parsed = new Date(year, month, day)
+      if (!isNaN(parsed.getTime())) return parsed
+    }
+  }
+  return null
+}
+
 export class SavingGoalsController {
   static async CreateGoal(req: Request, res: Response) {
     const { name, target, current, color, deadline } = req.body
@@ -11,51 +31,48 @@ export class SavingGoalsController {
           target,
           current,
           color,
-          deadline,
+          deadline: parseDate(deadline),
           tenantId: req.tenantId!
         }
       })
 
-      res.status(201).json({
+      return res.status(201).json({
         message: "Meta criada",
         body: response
       })
     } catch (error) {
-
-      res.status(500).json({
-        message: "Erro interno",
-        data: error
+      console.error("Erro ao criar meta:", error)
+      return res.status(500).json({
+        message: "Erro interno ao criar meta",
+        data: String(error)
       })
-
     }
   }
 
   static async getGoals(req: Request, res: Response) {
-
-    const response = await req.prisma.savingGoal.findMany()
-
     try {
-      res.status(200).json({
+      const response = await req.prisma.savingGoal.findMany()
+
+      return res.status(200).json({
         message: "Dados puxados",
         data: response
       })
     } catch (error) {
-      res.status(500).json({
-        message: "Erro interno",
-        data: error
+      console.error("Erro ao puxar metas:", error)
+      return res.status(500).json({
+        message: "Erro interno ao buscar metas",
+        data: String(error)
       })
     }
-
   }
 
   static async deleteGoal(req: Request, res: Response) {
     const id = String(req.params.id)
 
     try {
-
-      if (Array.isArray(id)) {
-        res.status(404).json({
-          message: "ID invalido",
+      if (!id) {
+        return res.status(400).json({
+          message: "ID inválido",
         })
       }
 
@@ -65,15 +82,16 @@ export class SavingGoalsController {
         }
       })
 
-      res.status(201).json({
+      return res.status(200).json({
         message: "Meta deletada",
         data: deleteGoal
       })
 
     } catch (error) {
-      res.status(404).json({
-        message: "Erro interno",
-        error
+      console.error("Erro ao deletar meta:", error)
+      return res.status(500).json({
+        message: "Erro interno ao deletar meta",
+        error: String(error)
       })
     }
   }
@@ -83,7 +101,7 @@ export class SavingGoalsController {
     const { name, target, current, color, deadline } = req.body
 
     if (!id) {
-      throw new Error("Id invalido")
+      return res.status(400).json({ message: "ID inválido" })
     }
 
     try {
@@ -96,19 +114,19 @@ export class SavingGoalsController {
           target,
           current,
           color,
-          deadline
+          deadline: parseDate(deadline)
         }
-      }
-      )
+      })
 
-      res.status(201).json({
-        message: "Orçamento Editado",
+      return res.status(200).json({
+        message: "Meta editada com sucesso",
         data: editResponse
       })
     } catch (error) {
-      res.status(400).json({
-        message: "Orçamento não encontrado",
-        data: error
+      console.error("Erro ao editar meta:", error)
+      return res.status(500).json({
+        message: "Erro ao editar meta",
+        data: String(error)
       })
     }
   }

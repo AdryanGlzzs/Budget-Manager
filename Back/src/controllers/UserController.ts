@@ -212,30 +212,23 @@ export class UserController {
   }
 
   static async GoogleLoginController(req: Request, res: Response) {
-    const { token } = req.body
-
+    const { token } = req.body;
     if (!token) {
       return res.status(400).json({
         message: "Token ausente"
-      })
+      });
     }
-
     try {
-      const decodedToken = await authAdmin.verifyIdToken(token)
-      const { name, email } = decodedToken
-
+      const decodedToken = await authAdmin.verifyIdToken(token);
+      const { name, email } = decodedToken;
       if (!email) {
         return res.status(400).json({
           message: "Email não fornecido com o Google"
-        })
+        });
       }
-
       let user = await prisma.user.findUnique({
-        where: {
-          email
-        }
-      })
-
+        where: { email }
+      });
       if (!user) {
         user = await prisma.user.create({
           data: {
@@ -248,29 +241,25 @@ export class UserController {
               }
             }
           }
-        })
+        });
       }
-
-      const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
-
+      const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK;
       if (!secret) {
         return res.status(500).json({
           message: "Chave secreta não configurada"
         });
       }
-
-      const appToken = jwt.sign({ sub: user.id, id: user.id, tenantId: user.tenantId },
+      const appToken = jwt.sign(
+        { sub: user.id, id: user.id, tenantId: user.tenantId },
         secret,
         { expiresIn: "7d" }
-      )
-
+      );
       res.cookie("token", appToken, {
         httpOnly: true,
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
         maxAge: 7 * 24 * 60 * 60 * 1000
-      })
-
+      });
       return res.status(200).json({
         message: "Login com Google realizado com sucesso!",
         token: appToken,
@@ -280,7 +269,6 @@ export class UserController {
           email: user.email
         }
       });
-
     } catch (error) {
       console.error("Erro no GoogleLoginController:", error);
       return res.status(401).json({ message: "Token inválido ou expirado" });
@@ -288,31 +276,23 @@ export class UserController {
   }
 
   static async FacebookLoginController(req: Request, res: Response) {
-
-    const { token } = req.body
-
+    const { token } = req.body;
     if (!token) {
       return res.status(400).json({
         message: "Token ausente"
-      })
+      });
     }
-
     try {
-      const decodedToken = await authAdmin.verifyIdToken(token)
-      const { name, email } = decodedToken
-
+      const decodedToken = await authAdmin.verifyIdToken(token);
+      const { name, email } = decodedToken;
       if (!email) {
         return res.status(400).json({
           message: "Email não fornecido com o Facebook"
-        })
+        });
       }
-
       let user = await prisma.user.findUnique({
-        where: {
-          email
-        }
-      })
-
+        where: { email }
+      });
       if (!user) {
         user = await prisma.user.create({
           data: {
@@ -325,28 +305,27 @@ export class UserController {
               }
             }
           }
-        })
+        });
       }
-
-      const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
-
+      const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK;
       if (!secret) {
         return res.status(500).json({
           message: "Chave secreta não configurada"
         });
       }
-
-      const appToken = jwt.sign({ sub: user.id, id: user.id, tenantId: user.tenantId }, secret, { expiresIn: "7d" })
-
+      const appToken = jwt.sign(
+        { sub: user.id, id: user.id, tenantId: user.tenantId },
+        secret,
+        { expiresIn: "7d" }
+      );
       res.cookie("token", appToken, {
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production"
-      })
-
+      });
       return res.status(200).json({
-        message: "Login com Facebook  realizado com sucesso!",
+        message: "Login com Facebook realizado com sucesso!",
         token: appToken,
         user: {
           id: user.id,
@@ -355,81 +334,75 @@ export class UserController {
         }
       });
     } catch (error) {
-      res.status(404).json({
-        message: "Houve um erro",
+      console.error("Erro no FacebookLoginController:", error);
+      return res.status(401).json({
+        message: "Token inválido ou erro no login social",
         data: error
-      })
+      });
     }
   }
 
   static async GitHubLoginController(req: Request, res: Response) {
-    const { token } = req.body
-
-      if(!token){
-        return res.status(401).json({
-          message: "Token não encontrado"
-        })
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({
+        message: "Token ausente"
+      });
+    }
+    try {
+      const decodedToken = await authAdmin.verifyIdToken(token);
+      const { name, email } = decodedToken;
+      if (!email) {
+        return res.status(400).json({
+          message: "Email não fornecido pelo GitHub"
+        });
       }
-
-      try {
-        const decodedToken = await authAdmin.verifyIdToken(token)
-
-        const {name, email} = decodedToken
-
-        if(!email){
-          return res.status(404).json({
-            message: "Email não fornecido pelo git hub"
-          })
-        }
-
-        let user = await prisma.user.findUnique({
-          where:{
-            email
-          }
-        })
-
-        if(!user){
-          user = await prisma.user.create({
-            data:{
-              name: name || "Usuario GitHub",
-              email,
-              password: "",
-              tenant: {
-                create: {
-                  name: `${name || 'Usuario GitHub'}'s Workspace`
-                }
+      let user = await prisma.user.findUnique({
+        where: { email }
+      });
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            name: name || "Usuario GitHub",
+            email,
+            password: "",
+            tenant: {
+              create: {
+                name: `${name || 'Usuario GitHub'}'s Workspace`
               }
             }
-          })
-        }
-
-        const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK
-
-        if(!secret){
-          return res.status(500).json({
-            message: "Chave secreta não declarada"
-          })
-        }
-
-        const appToken = jwt.sign({ sub: user.id, id: user.id, tenantId: user.tenantId }, secret, {expiresIn: "7d"})
-
-        res.cookie("token", appToken, {
-          httpOnly: true,
-          maxAge: 7 * 24 * 60 * 60 * 1000,
-          sameSite: 'lax',
-          secure: process.env.NODE_ENV === "Production"           
-        })
-
-        res.status(200).json({
-          message: "Login GitHub realizado com sucesso",
-          data: {
-            id: user.id,
-            name: user.name,
-            email: user.email
           }
-        })
-      } catch (error) {
-        
+        });
       }
+      const secret = process.env.JWT_SECRET || process.env.JWT_SECRET_FALLBACK;
+      if (!secret) {
+        return res.status(500).json({
+          message: "Chave secreta não declarada"
+        });
+      }
+      const appToken = jwt.sign(
+        { sub: user.id, id: user.id, tenantId: user.tenantId },
+        secret,
+        { expiresIn: "7d" }
+      );
+      res.cookie("token", appToken, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production"
+      });
+      return res.status(200).json({
+        message: "Login GitHub realizado com sucesso",
+        token: appToken,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email
+        }
+      });
+    } catch (error) {
+      console.error("Erro no GitHubLoginController:", error);
+      return res.status(401).json({ message: "Token inválido ou expirado" });
+    }
   }
 }
