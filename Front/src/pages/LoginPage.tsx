@@ -50,17 +50,17 @@ const LoginPage = () => {
 
   const handleLoginFacebook = async () => {
     try {
-      const provider = facebookProvider
-      const result = await signInWithPopup(auth, provider)
+      const provider = facebookProvider;
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
 
-      const user = result.user
+      const response = await api.post('/auth/facebook', { token: idToken });
+      const appToken = response.data.token;
 
-      const idToken = await user.getIdToken()
-
-      const response = await api.post('/auth/facebook', { token: idToken })
-
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token)
+      if (appToken) {
+        localStorage.setItem("token", appToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${appToken}`;
       }
 
       if (response.data.user) {
@@ -69,11 +69,8 @@ const LoginPage = () => {
         await ValidateToken();
       }
 
-      navigate("/dashboard")
-
-      console.log(result.user)
-
-      return response.data
+      navigate("/dashboard");
+      return response.data;
     } catch (error) {
       console.error("Erro detalhado:", error);
     }
@@ -81,17 +78,17 @@ const LoginPage = () => {
 
   const handleLoginGoogle = async () => {
     try {
-      const provider = googleProvider
+      const provider = googleProvider;
       const result = await signInWithPopup(auth, provider);
-
-      const user = result.user
-
-      const idToken = await user.getIdToken()
+      const user = result.user;
+      const idToken = await user.getIdToken();
 
       const response = await api.post('/auth/google', { token: idToken });
+      const appToken = response.data.token;
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      if (appToken) {
+        localStorage.setItem("token", appToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${appToken}`;
       }
 
       if (response.data.user) {
@@ -101,30 +98,26 @@ const LoginPage = () => {
       }
 
       navigate("/dashboard");
-
-      console.log(result.user);
-
-      return response.data
-
+      return response.data;
     } catch (error) {
       console.log("Autenticação com google não realizada", error);
-      throw error
+      throw error;
     }
   };
 
   const handleLoginGithub = async () => {
     try {
-      const provider = gitHubProvider
+      const provider = gitHubProvider;
       const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
 
-      const user = result.user
+      const response = await api.post("/auth/github", { token: idToken });
+      const appToken = response.data.token;
 
-      const idToken = await user.getIdToken()
-
-      const response = await api.post("/auth/github", { token: idToken })
-
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token)
+      if (appToken) {
+        localStorage.setItem("token", appToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${appToken}`;
       }
 
       if (response.data.user) {
@@ -134,13 +127,8 @@ const LoginPage = () => {
       }
 
       navigate("/dashboard");
-
-      console.log(result.user);
-
-      return response.data
-
+      return response.data;
     } catch (error) {
-
       console.log("Autenticação com o github não realizada", error);
     }
   };

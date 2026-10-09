@@ -159,9 +159,13 @@ const Dashboard = () => {
 
   const revenues = transaction.filter((t) => t.type === "revenue")
 
+  const expense = transaction.filter((t) => t.type === 'expense')
+
   const TotalR = transaction.reduce((acc, t) => acc + Number(t.amount || 0), 0)
 
   const avarageR = revenues.length > 0 ? TotalR / revenues.length : 0
+
+  const avarageE = expense.length > 0 ? TotalExpense / expense.length : 0
 
 
   const Total = TotalRevenue - TotalExpense
@@ -383,7 +387,7 @@ const Dashboard = () => {
                         Despesa Média
                       </div>
                       <div className="text-[20px] font-bold text-cyan-400">
-                        {formatCurrency(2817)}
+                        {formatCurrency(avarageE)}
                       </div>
                     </div>
                   </div>

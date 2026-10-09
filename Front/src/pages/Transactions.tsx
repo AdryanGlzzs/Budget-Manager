@@ -29,6 +29,7 @@ const Transactions = () => {
   const getTransactions = async () => {
     try {
       const response = await api.get('/transactions');
+      console.log(response.data)
       if (response?.data?.data) {
         setTransactions(response.data.data);
       }
@@ -249,9 +250,10 @@ const Transactions = () => {
                                 className={`text-[16px] font-bold ${transaction.type === "revenue"
                                   ? "text-green-400"
                                   : "text-red-400"
-                                  }`}
+                                  } flex items-center justify-end gap-1 tabular-nums`}
                               >
-                                {transaction.type === "revenue" ? "+" : "-"} {formatCurrency(Math.abs(transaction.amount))}
+                                <span className="w-4 inline-block text-center">{transaction.type === "revenue" ? "+" : "-"}</span>
+                                <span>{formatCurrency(Math.abs(transaction.amount))}</span>
                               </div>
                               <button
                                 onClick={() => HandleRemove(transaction.id)}
@@ -337,9 +339,10 @@ const Transactions = () => {
                               className={`text-[16px] font-bold ${transaction.type === 'revenue'
                                 ? "text-green-400"
                                 : "text-red-400"
-                                }`}
+                                } flex items-center justify-end gap-1 tabular-nums`}
                             >
-                              {transaction.type === 'revenue' ? "+" : "-"} {formatCurrency(Math.abs(transaction.amount))}
+                              <span className="w-4 inline-block text-center">{transaction.type === 'revenue' ? "+" : "-"}</span>
+                              <span>{formatCurrency(Math.abs(transaction.amount))}</span>
                             </div>
                           </div>
 

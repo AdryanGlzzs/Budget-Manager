@@ -21,17 +21,52 @@ import {
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
+import { api } from "../services/api";
+import type { TransactionProps } from "../components/TransactionModal";
+import type { Goalsprops } from "../components/SavingGoalsModal";
 
 const Analytics = () => {
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
+  const [transaction, setTransaction] = useState<TransactionProps[]>([])
+  const [savings, setSavings] = useState<Goalsprops[]>([])
 
   const selectedPeriod = "Últimos 6 Meses";
   const selectedView = "visão geral";
+
+  const getTransactions = async () => {
+    try {
+      const response = await api.get('/transactions');
+      if (response?.data?.data) {
+        setTransaction(response.data.data);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar transações no Analytics:", error);
+    }
+  };
+
+  const getSavingGoals = async () => {
+    try {
+      const response = await api.get('/savings-goals');
+      if (response?.data?.data) {
+        setSavings(response.data.data);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar metas no Analytics:", error);
+    }
+  };
+
+  useEffect(() => {
+    getTransactions();
+    getSavingGoals();
+  }, []);
+
+  
+ 
 
   const monthlyData = [
     { month: "Ago", income: 4400, expense: 2200, savings: 2200 },
