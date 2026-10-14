@@ -65,8 +65,28 @@ const Analytics = () => {
     getSavingGoals();
   }, []);
 
-  
- 
+  const revenues = transaction.filter((t) => t.type === 'revenue')
+  const expenses = transaction.filter((t) => t.type === 'expense')
+
+  const totalRevenue = revenues.reduce((acc, item) => acc + Number(item.amount), 0)
+  const totalExpense = expenses.reduce((acc, item) => acc + Number(item.amount), 0)
+
+
+
+  const savingRate = totalRevenue > 0 ? (((totalRevenue - totalExpense) / totalRevenue) * 100).toFixed(1) : "0.0"
+
+  const topCategory = expenses.reduce((acc, t) => {
+    const sum = (acc.totals[t.category] || 0) + Number(t.amount);
+    acc.totals[t.category] = sum;
+    if (sum > acc.amount) { acc.name = t.category; acc.amount = sum; }
+    return acc;
+  }, { name: "-", amount: 0, totals: {} as Record<string, number> });
+
+  const topCategoryPercent = totalExpense > 0 ? ((topCategory.amount / totalExpense) * 100).toFixed(0) : "0"
+
+  console.log(revenues)
+  console.log(expenses)
+
 
   const monthlyData = [
     { month: "Ago", income: 4400, expense: 2200, savings: 2200 },
@@ -102,26 +122,26 @@ const Analytics = () => {
   const stats = [
     {
       label: "Receita Mensal Média",
-      value: formatCurrency(5167),
+      value: formatCurrency(totalRevenue),
       change: "+8.2%",
       trend: "up",
     },
     {
       label: "Despesa Mensal Média",
-      value: formatCurrency(2817),
+      value: formatCurrency(totalExpense),
       change: "-3.1%",
       trend: "down",
     },
     {
       label: "Taxa de Economia",
-      value: "45.5%",
+      value: `${savingRate} %`,
       change: "+5.3%",
       trend: "up",
     },
     {
       label: "Maior Categoria de Gastos",
-      value: "Alimentação",
-      change: "30%",
+      value: `${topCategory.name}`,
+      change: `${topCategoryPercent}`,
       trend: "neutral",
     },
   ];
