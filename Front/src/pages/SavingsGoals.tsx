@@ -113,10 +113,13 @@ const SavingsGoals = () => {
     }
   };
 
-  const handleOpenAmountModal = (
-    goal: Goalsprops | null,
-    mode: SavingGoalActionType = "add"
-  ) => {
+  const handleOpenAmountModal = (goal: Goalsprops | null, mode: SavingGoalActionType = "add") => {
+    setSelectedGoalForAmount(goal);
+    setAmountInitialMode(mode);
+    setAmountModalOpen(true);
+  };
+
+    const handleOpenRemoveModal = (goal: Goalsprops | null, mode: SavingGoalActionType = "remove") => {
     setSelectedGoalForAmount(goal);
     setAmountInitialMode(mode);
     setAmountModalOpen(true);
@@ -390,7 +393,7 @@ const SavingsGoals = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleOpenAmountModal(Goal, "remove");
+                        handleOpenRemoveModal(Goal, "remove");
                       }}
                       disabled={currentVal <= 0}
                       className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 text-[12px] font-semibold transition-all hover:scale-[1.02] cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
@@ -443,6 +446,7 @@ const SavingsGoals = () => {
         onClose={() => setAmountModalOpen(false)}
         goal={selectedGoalForAmount}
         onSave={handleSaveAmount}
+        initialType={amountInitialMode}
       />
     </div>
   );

@@ -35,8 +35,8 @@ const Analytics = () => {
   const [transaction, setTransaction] = useState<TransactionProps[]>([])
   const [savings, setSavings] = useState<Goalsprops[]>([])
 
-  const selectedPeriod = "Últimos 6 Meses";
-  const selectedView = "visão geral";
+  const [selectedPeriod, setSelectedPeriod] = useState("Últimos 6 Meses");
+  const [selectedView, setSelectedView] = useState("visão geral");
 
   const getTransactions = async () => {
     try {
@@ -92,14 +92,36 @@ const Analytics = () => {
   console.log(expenses)
 
 
-  const monthlyData = [
-    { month: "Ago", income: 4400, expense: 2200, savings: 2200 },
-    { month: "Set", income: 5100, expense: 2800, savings: 2300 },
-    { month: "Out", income: 4800, expense: 2400, savings: 2400 },
-    { month: "Nov", income: 5500, expense: 3100, savings: 2400 },
-    { month: "Dez", income: 5200, expense: 2900, savings: 2300 },
-    { month: "Jan", income: 6000, expense: 3500, savings: 2500 },
-  ];
+  const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+  const monthlyData = Array.from({ length: 6 }).map((_, index) => {
+    const date = new Date();
+    date.setDate(1);
+    date.setMonth(date.getMonth() - (5 - index));
+    const month = date.getMonth();
+    const year = date.getFullYear();
+
+    const monthTransactions = transaction.filter((t) => {
+      if (!t.date) return false;
+      const [tYear, tMonth] = t.date.split("-").map(Number);
+      return tMonth - 1 === month && tYear === year;
+    });
+
+    const income = monthTransactions
+      .filter((t) => t.type === "revenue")
+      .reduce((acc, t) => acc + Number(t.amount || 0), 0);
+
+    const expense = monthTransactions
+      .filter((t) => t.type === "expense")
+      .reduce((acc, t) => acc + Number(t.amount || 0), 0);
+
+    return {
+      month: months[month],
+      income,
+      expense,
+      savings: Math.max(0, income - expense),
+    };
+  });
 
   const categorySpending = [
     { name: "Alimentação", value: 1200, percentage: 30, color: "#6366F1" },
@@ -183,20 +205,22 @@ const Analytics = () => {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
                 <select
-                  defaultValue={selectedPeriod}
+                  value={selectedPeriod}
+                  onChange={(e) => setSelectedPeriod(e.target.value)}
                   className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer w-full sm:w-auto"
                 >
-                  <option>Últimos 6 Meses</option>
-                  <option>Últimos 12 Meses</option>
-                  <option>Este Ano</option>
-                  <option>Todo o Tempo</option>
+                  <option value="Últimos 6 Meses">Últimos 6 Meses</option>
+                  <option value="Últimos 12 Meses">Últimos 12 Meses</option>
+                  <option value="Este Ano">Este Ano</option>
+                  <option value="Todo o Tempo">Todo o Tempo</option>
                 </select>
 
                 <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl w-full sm:w-auto">
                   {["visão geral", "receita", "despesas"].map((view) => (
                     <button
                       key={view}
-                      className={`px-3 md:px-4 py-2 rounded-lg text-[13px] md:text-[14px] font-medium capitalize transition-all flex-1 sm:flex-none ${selectedView === view
+                      onClick={() => setSelectedView(view)}
+                      className={`px-3 md:px-4 py-2 rounded-lg text-[13px] md:text-[14px] font-medium capitalize transition-all flex-1 sm:flex-none cursor-pointer ${selectedView === view
                         ? theme.activeBg
                         : "text-gray-400 hover:text-white hover:bg-white/5"
                         }`}
@@ -254,18 +278,24 @@ const Analytics = () => {
                         Tendência de Receitas vs Despesas
                       </h2>
                       <div className="flex items-center gap-4 text-[13px]">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-                          <span className="text-gray-400">Receita</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
-                          <span className="text-gray-400">Despesas</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-purple-500 rounded-sm"></div>
-                          <span className="text-gray-400">Economias</span>
-                        </div>
+                        {(selectedView === "visão geral" || selectedView === "receita") && (
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
+                            <span className="text-gray-400">Receita</span>
+                          </div>
+                        )}
+                        {(selectedView === "visão geral" || selectedView === "despesas") && (
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
+                            <span className="text-gray-400">Despesas</span>
+                          </div>
+                        )}
+                        {selectedView === "visão geral" && (
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-purple-500 rounded-sm"></div>
+                            <span className="text-gray-400">Economias</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -327,30 +357,49 @@ const Analytics = () => {
                           border: "1px solid rgba(255,255,255,0.1)",
                           borderRadius: "12px",
                         }}
+                        formatter={(value: any, name: any) => [
+                          formatCurrency(Number(value) || 0),
+                          name === "income"
+                            ? "Receita"
+                            : name === "expense"
+                              ? "Despesas"
+                              : name === "savings"
+                                ? "Economias"
+                                : name,
+                        ]}
                       />
-                      <Area
-                        type="monotone"
-                        dataKey="income"
-                        stroke="#10B981"
-                        strokeWidth={2}
-                        fillOpacity={1}
-                        fill="url(#colorIncome)"
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="expense"
-                        stroke="#EF4444"
-                        strokeWidth={2}
-                        fillOpacity={1}
-                        fill="url(#colorExpense)"
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="savings"
-                        stroke="#6366F1"
-                        strokeWidth={2}
-                        dot={false}
-                      />
+                      {(selectedView === "visão geral" || selectedView === "receita") && (
+                        <Area
+                          type="monotone"
+                          dataKey="income"
+                          name="Receita"
+                          stroke="#10B981"
+                          strokeWidth={2}
+                          fillOpacity={1}
+                          fill="url(#colorIncome)"
+                        />
+                      )}
+                      {(selectedView === "visão geral" || selectedView === "despesas") && (
+                        <Area
+                          type="monotone"
+                          dataKey="expense"
+                          name="Despesas"
+                          stroke="#EF4444"
+                          strokeWidth={2}
+                          fillOpacity={1}
+                          fill="url(#colorExpense)"
+                        />
+                      )}
+                      {selectedView === "visão geral" && (
+                        <Line
+                          type="monotone"
+                          dataKey="savings"
+                          name="Economias"
+                          stroke="#6366F1"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                      )}
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
