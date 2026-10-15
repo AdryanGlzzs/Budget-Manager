@@ -123,13 +123,59 @@ const Analytics = () => {
     };
   });
 
-  const categorySpending = [
-    { name: "Alimentação", value: 1200, percentage: 30, color: "#6366F1" },
-    { name: "Transporte", value: 800, percentage: 20, color: "#06B6D4" },
-    { name: "Compras", value: 1000, percentage: 25, color: "#10B981" },
-    { name: "Entretenimento", value: 600, percentage: 15, color: "#F59E0B" },
-    { name: "Contas", value: 400, percentage: 10, color: "#EF4444" },
+  const categoryColors: Record<string, string> = {
+    Alimentação: "#6366F1",
+    Transporte: "#06B6D4",
+    Moradia: "#10B981",
+    Saúde: "#EF4444",
+    Educação: "#8B5CF6",
+    Lazer: "#F59E0B",
+    Compras: "#EC4899",
+    Contas: "#F97316",
+    Assinaturas: "#3B82F6",
+    Investimentos: "#14B8A6",
+    Viagens: "#A855F7",
+    Outros: "#64748B",
+  };
+
+  const defaultPalette = [
+    "#6366F1",
+    "#06B6D4",
+    "#10B981",
+    "#F59E0B",
+    "#EF4444",
+    "#8B5CF6",
+    "#EC4899",
+    "#F97316",
+    "#3B82F6",
+    "#14B8A6",
   ];
+
+  const categoryTotals = expenses.reduce((acc, t) => {
+    const cat = t.category?.trim() || "Outros";
+    const amount = Number(t.amount) || 0;
+
+    if (!acc[cat]) {
+      acc[cat] = {
+        name: cat,
+        value: 0,
+        color:
+          t.color ||
+          categoryColors[cat] ||
+          defaultPalette[Object.keys(acc).length % defaultPalette.length],
+      };
+    }
+
+    acc[cat].value += amount;
+    return acc;
+  }, {} as Record<string, { name: string; value: number; color: string }>);
+
+  const categorySpending = Object.values(categoryTotals)
+    .map((item) => ({
+      ...item,
+      percentage: totalExpense > 0 ? Math.round((item.value / totalExpense) * 100) : 0,
+    }))
+    .sort((a, b) => b.value - a.value);
 
   const weeklySpending = [
     { week: "Semana 1", spending: 450 },
@@ -167,7 +213,7 @@ const Analytics = () => {
     {
       label: "Maior Categoria de Gastos",
       value: `${topCategory.name}`,
-      change: `${topCategoryPercent}`,
+      change: `${topCategoryPercent}%`,
       trend: "neutral",
     },
   ];
@@ -412,57 +458,74 @@ const Analytics = () => {
                     Gastos por Categoria
                   </h2>
 
-                  <div className="flex flex-col sm:flex-row items-center gap-6">
-                    <div className="w-40 h-40 sm:w-48 sm:h-48">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={categorySpending}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={60}
-                            outerRadius={85}
-                            paddingAngle={3}
-                            dataKey="value"
-                          >
-                            {categorySpending.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                          </Pie>
-                        </PieChart>
-                      </ResponsiveContainer>
+                  {categorySpending.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+                      <p className="text-[14px]">Nenhum gasto registrado ainda.</p>
                     </div>
-
-                    <div className="space-y-3 flex-1">
-                      {categorySpending.map((item) => (
-                        <div
-                          key={item.name}
-                          className="flex items-center justify-between"
-                        >
-                          <div className="flex items-center gap-2">
-                            <div
-                              className="w-3 h-3 rounded-full"
-                              style={{
-                                backgroundColor: item.color,
-                                boxShadow: `0 0 8px ${item.color}40`,
+                  ) : (
+                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                      <div className="w-40 h-40 sm:w-48 sm:h-48">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={categorySpending}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={85}
+                              paddingAngle={3}
+                              dataKey="value"
+                            >
+                              {categorySpending.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "#0a0a14",
+                                border: "1px solid rgba(255,255,255,0.1)",
+                                borderRadius: "12px",
                               }}
-                            ></div>
-                            <span className="text-[14px] text-gray-400">
-                              {item.name}
-                            </span>
+                              formatter={(value: any) => [
+                                formatCurrency(Number(value) || 0),
+                                "Gasto",
+                              ]}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+
+                      <div className="space-y-3 flex-1 max-h-56 overflow-y-auto pr-1">
+                        {categorySpending.map((item) => (
+                          <div
+                            key={item.name}
+                            className="flex items-center justify-between"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className="w-3 h-3 rounded-full shrink-0"
+                                style={{
+                                  backgroundColor: item.color,
+                                  boxShadow: `0 0 8px ${item.color}40`,
+                                }}
+                              ></div>
+                              <span className="text-[14px] text-gray-400 truncate max-w-[120px]">
+                                {item.name}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-[13px] text-gray-500">
+                                {formatCurrency(item.value)}
+                              </span>
+                              <span className="text-[14px] font-medium">
+                                {item.percentage}%
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <span className="text-[13px] text-gray-500">
-                              {formatCurrency(item.value)}
-                            </span>
-                            <span className="text-[14px] font-medium">
-                              {item.percentage}%
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
@@ -582,12 +645,12 @@ const Analytics = () => {
                       <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2"></div>
                       <div>
                         <div className="text-[15px] font-medium mb-2">
-                          Gastos Elevados com Alimentação
+                          Gastos Elevados com {topCategory.name !== "-" ? topCategory.name : "Alimentação"}
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
-                          Alimentação representa 30% das suas despesas totais.
-                          Considere definir um orçamento mais rigoroso para esta
-                          categoria.
+                          {topCategory.name !== "-"
+                            ? `${topCategory.name} representa ${topCategoryPercent}% das suas despesas totais. Considere definir um orçamento mais rigoroso para esta categoria.`
+                            : "Alimentação representa 30% das suas despesas totais. Considere definir um orçamento mais rigoroso para esta categoria."}
                         </div>
                       </div>
                     </div>
