@@ -3,6 +3,8 @@ import {
   Target,
   TrendingUp,
   Plus,
+  Minus,
+  Coins,
   ArrowRight,
   Trash2,
   Search,
@@ -12,7 +14,11 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import { SavingsGoalsModal } from "../components/SavingGoalsModal";
-import type { Goalsprops, } from "../components/SavingGoalsModal";
+import type { Goalsprops } from "../components/SavingGoalsModal";
+import {
+  SavingGoalAmountModal,
+  type SavingGoalActionType,
+} from "../components/SavingGoalAmountModal";
 import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
@@ -25,45 +31,54 @@ const SavingsGoals = () => {
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
 
-  const goalReduce = Goals.reduce((total, goal) => total + Number(goal.current) , 0)
+  const [amountModalOpen, setAmountModalOpen] = useState(false);
+  const [selectedGoalForAmount, setSelectedGoalForAmount] =
+    useState<Goalsprops | null>(null);
+  const [amountInitialMode, setAmountInitialMode] =
+    useState<SavingGoalActionType>("add");
+
+  const goalReduce = Goals.reduce(
+    (total, goal) => total + Number(goal.current || 0),
+    0
+  );
 
   useEffect(() => {
-    getSavingGoals()
-  }, [])
+    getSavingGoals();
+  }, []);
 
   const getSavingGoals = async () => {
     try {
-      const response = await api.get('/savings-goals')
+      const response = await api.get("/savings-goals");
 
       if (!response) {
-        throw new Error("Erro interno")
+        throw new Error("Erro interno");
       }
 
-      console.log(response)
+      console.log(response);
 
-      setGoals(response.data.data)
+      setGoals(response.data.data);
     } catch (error) {
       console.error("Erro ao carregar metas:", error);
     }
-  }
+  };
 
   const HandleRemoveGoals = async (id: string) => {
+    const deleteGoals = await api.delete(`/savings-goals/delete/${id}`);
 
-    const deleteGoals = await api.delete(`/savings-goals/delete/${id}`)
+    console.log(deleteGoals);
 
-    console.log(deleteGoals)
+    setGoals((prev) => prev.filter((goals) => goals.id !== id));
 
-    setGoals((prev) => prev.filter((goals) => goals.id !== id))
-
-    getSavingGoals()
+    getSavingGoals();
   };
 
   const HandleSaveGoals = async (newGoals: Goalsprops) => {
-
     try {
       if (newGoals.id) {
-
-        const response = await api.put(`/savings-goals/edit/${newGoals.id}`, newGoals)
+        const response = await api.put(
+          `/savings-goals/edit/${newGoals.id}`,
+          newGoals
+        );
 
         console.log("Meta Editada", {
           id: newGoals.id,
@@ -71,16 +86,14 @@ const SavingsGoals = () => {
           target: newGoals.target,
           current: newGoals.current,
           color: newGoals.color,
-          deadline: newGoals.deadline
-        })
+          deadline: newGoals.deadline,
+        });
 
-        console.log(response)
+        console.log(response);
 
-        getSavingGoals()
-
+        getSavingGoals();
       } else {
-
-        const response = await api.post('/savings-goals', newGoals)
+        const response = await api.post("/savings-goals", newGoals);
 
         console.log("Meta Criada", {
           id: newGoals.id,
@@ -88,27 +101,93 @@ const SavingsGoals = () => {
           target: newGoals.target,
           current: newGoals.current,
           color: newGoals.color,
-          deadline: newGoals.deadline
-        })
+          deadline: newGoals.deadline,
+        });
 
-        console.log(response)
+        console.log(response);
 
-        getSavingGoals()
+        getSavingGoals();
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
+  };
 
+  const handleOpenAmountModal = (
+    goal: Goalsprops | null,
+    mode: SavingGoalActionType = "add"
+  ) => {
+    setSelectedGoalForAmount(goal);
+    setAmountInitialMode(mode);
+    setAmountModalOpen(true);
+  };
+
+  const handleSaveAmount = async (updatedGoal: Goalsprops) => {
+    try {
+      await api.put(`/savings-goals/edit/${updatedGoal.id}`, updatedGoal);
+
+      setGoals((prev) =>
+        prev.map((g) => (g.id === updatedGoal.id ? updatedGoal : g))
+      );
+
+      getSavingGoals();
+    } catch (error) {
+      console.error("Erro ao atualizar valor da meta:", error);
+    }
+  };
+
+  const getGoalTheme = (colorStr: string) => {
+    const isHex = colorStr?.startsWith("#");
+    const hexColor = isHex
+      ? colorStr
+      : colorStr === "purple"
+        ? "#8B5CF6"
+        : colorStr === "cyan"
+          ? "#06B6D4"
+          : colorStr === "pink"
+            ? "#EC4899"
+            : colorStr === "green"
+              ? "#10B981"
+              : "#8B5CF6";
+
+    return {
+      hex: hexColor,
+      textStyle: { color: hexColor },
+      bgStyle: { backgroundColor: `${hexColor}20` },
+      barStyle: {
+        background: `linear-gradient(90deg, ${hexColor}, ${hexColor}dd)`,
+        boxShadow: `0 0 10px ${hexColor}60`,
+      },
+    };
   };
 
   const GoalsLength = Goals;
 
+  const averageProgress =
+    Goals.length > 0
+      ? Math.round(
+        Goals.reduce(
+          (acc, goal) =>
+            acc +
+            (Number(goal.target) > 0
+              ? (Number(goal.current) / Number(goal.target)) * 100
+              : 0),
+          0
+        ) / Goals.length
+      )
+      : 0;
+
   return (
-    <div className={`flex min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
+    <div
+      className={`flex min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}
+    >
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute -left-50 -top-50 w-150 h-150 bg-linear-to-br ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
-        <div className={`absolute -right-50 -bottom-50 w-150 h-150 bg-linear-to-bl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}></div>
+        <div
+          className={`absolute -left-50 -top-50 w-150 h-150 bg-linear-to-br ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}
+        ></div>
+        <div
+          className={`absolute -right-50 -bottom-50 w-150 h-150 bg-linear-to-bl ${theme.glow} rounded-full blur-[140px] opacity-80 transition-all duration-700`}
+        ></div>
       </div>
 
       <div className="pb-0">
@@ -120,30 +199,45 @@ const SavingsGoals = () => {
       </div>
 
       <main className="flex-1 p-8 max-w-350 relative z-10 overflow-y-auto h-screen mt-15">
-        <header className="flex items-center justify-between mb-8">
+        <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-[28px] font-bold mb-2">Metas de Economia</h1>
             <p className="text-gray-400 text-[15px] w-[80%]">
               Visualize e gerencie seus objetivos financeiros de longo prazo.
             </p>
-
-
           </div>
-          <button
-            onClick={() => {
-              setEditing(null);
-              setSavingModal(true);
-            }}
-            className={`${theme.activeBg} text-white px-5 py-3 rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] flex items-center gap-2`}
-          >
-            <Plus className="w-5 h-5" />
-            Nova Meta
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => handleOpenAmountModal(Goals[0] || null, "add")}
+              disabled={Goals.length === 0}
+              className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-3 rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] flex items-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              title={
+                Goals.length === 0
+                  ? "Crie uma meta primeiro"
+                  : "Adicionar ou remover valores guardados"
+              }
+            >
+              <Coins className="w-4 h-4 text-emerald-400" />
+              Guardar / Resgatar
+            </button>
+            <button
+              onClick={() => {
+                setEditing(null);
+                setSavingModal(true);
+              }}
+              className={`${theme.activeBg} text-white px-5 py-3 rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] flex items-center gap-2 cursor-pointer`}
+            >
+              <Plus className="w-5 h-5" />
+              Nova Meta
+            </button>
+          </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="relative group">
-            <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
+            <div
+              className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}
+            ></div>
             <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
@@ -151,14 +245,18 @@ const SavingsGoals = () => {
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Total Economizado</p>
-                  <h3 className="text-[24px] font-bold">{formatCurrency(goalReduce)}</h3>
+                  <h3 className="text-[24px] font-bold">
+                    {formatCurrency(goalReduce)}
+                  </h3>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="relative group">
-            <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
+            <div
+              className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}
+            ></div>
             <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
@@ -173,7 +271,9 @@ const SavingsGoals = () => {
           </div>
 
           <div className="relative group">
-            <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
+            <div
+              className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}
+            ></div>
             <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
@@ -181,7 +281,7 @@ const SavingsGoals = () => {
                 </div>
                 <div>
                   <p className="text-[13px] text-gray-400">Progresso Médio</p>
-                  <h3 className="text-[24px] font-bold">{Goals.length > 0 ? Math.round(Goals.reduce((a, e) => a + (e.current / e.target) * 100, 0) / Goals.length) : 0} %</h3>
+                  <h3 className="text-[24px] font-bold">{averageProgress} %</h3>
                 </div>
               </div>
             </div>
@@ -191,73 +291,31 @@ const SavingsGoals = () => {
         <h2 className="text-[20px] font-semibold mb-6">Suas Metas</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Goals.map((Goal) => {
-            const percent = Math.round((Goal.current / Goal.target) * 100);
+            const currentVal = Number(Goal.current || 0);
+            const targetVal = Number(Goal.target || 0);
+            const percent =
+              targetVal > 0
+                ? Math.min(Math.round((currentVal / targetVal) * 100), 100)
+                : 0;
 
-
-            const getColorClasses = (color: string) => {
-              switch (color) {
-                case "purple":
-                  return {
-                    bg: "bg-purple-500/20",
-                    text: "text-purple-400",
-                    shadow: "shadow-purple-500/20",
-                    barFrom: "from-purple-600",
-                    barTo: "to-purple-500",
-                    barShadow: "shadow-purple-600/50",
-                  };
-                case "cyan":
-                  return {
-                    bg: "bg-cyan-500/20",
-                    text: "text-cyan-400",
-                    shadow: "shadow-cyan-500/20",
-                    barFrom: "from-cyan-600",
-                    barTo: "to-cyan-500",
-                    barShadow: "shadow-cyan-600/50",
-                  };
-                case "pink":
-                  return {
-                    bg: "bg-pink-500/20",
-                    text: "text-pink-400",
-                    shadow: "shadow-pink-500/20",
-                    barFrom: "from-pink-600",
-                    barTo: "to-pink-500",
-                    barShadow: "shadow-pink-600/50",
-                  };
-                case "green":
-                  return {
-                    bg: "bg-green-500/20",
-                    text: "text-green-400",
-                    shadow: "shadow-green-500/20",
-                    barFrom: "from-green-600",
-                    barTo: "to-green-500",
-                    barShadow: "shadow-green-600/50",
-                  };
-                default:
-                  return {
-                    bg: "bg-purple-500/20",
-                    text: "text-purple-400",
-                    shadow: "shadow-purple-500/20",
-                    barFrom: "from-purple-600",
-                    barTo: "to-purple-500",
-                    barShadow: "shadow-purple-600/50",
-                  };
-              }
-            };
-
-            const colors = getColorClasses(Goal.color);
+            const goalTheme = getGoalTheme(Goal.color);
 
             return (
               <div key={Goal.id} className="relative group cursor-pointer">
                 <div
-                  className={`absolute inset-0 bg-${Goal.color}-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}
+                  className="absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  style={{
+                    backgroundColor: `${goalTheme.hex}15`,
+                  }}
                 ></div>
 
-                <div className="relative bg-[#0a0a14]/60 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all -hover:translate-y-1">
+                <div className="relative bg-[#0a0a14]/60 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all hover:-translate-y-1">
                   <div className="absolute top-4 right-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10">
                     <button
-                      className="p-2 rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-all"
+                      className="p-2 rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
                       title="Editar meta"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setEditing(Goal);
                         setSavingModal(true);
                       }}
@@ -266,22 +324,36 @@ const SavingsGoals = () => {
                     </button>
 
                     <button
-                      className="p-2 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
+                      className="p-2 rounded-lg text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-all cursor-pointer"
                       title="Remover meta"
-                      onClick={() => HandleRemoveGoals(Goal.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        HandleRemoveGoals(Goal.id);
+                      }}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
 
-                  <h3 className="text-[18px] font-bold mb-2">{Goal.name}</h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full inline-block"
+                      style={{ backgroundColor: goalTheme.hex }}
+                    />
+                    <h3 className="text-[18px] font-bold text-white truncate">
+                      {Goal.name}
+                    </h3>
+                  </div>
 
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className={`text-[24px] font-bold ${colors.text}`}>
-                      {formatCurrency(Goal.current)}
+                    <span
+                      className="text-[24px] font-bold"
+                      style={goalTheme.textStyle}
+                    >
+                      {formatCurrency(currentVal)}
                     </span>
                     <span className="text-[14px] text-gray-500">
-                      de {formatCurrency(Goal.target)}
+                      de {formatCurrency(targetVal)}
                     </span>
                   </div>
 
@@ -294,15 +366,47 @@ const SavingsGoals = () => {
                     </div>
                     <div className="w-full bg-white/5 rounded-full h-2.5 overflow-hidden">
                       <div
-                        className={`bg-linear-to-r ${colors.barFrom} ${colors.barTo} h-full rounded-full shadow-lg ${colors.barShadow} transition-all duration-1000 ease-out`}
-                        style={{ width: `${percent}%` }}
+                        className="h-full rounded-full transition-all duration-1000 ease-out"
+                        style={{
+                          width: `${percent}%`,
+                          ...goalTheme.barStyle,
+                        }}
                       ></div>
                     </div>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-white/5 flex justify-end">
-                    <button className="text-[13px] text-gray-400 hover:text-white flex items-center gap-1 transition-colors group/btn">
-                      Ver Detalhes
+                  <div className="grid grid-cols-2 gap-2 mt-5 pt-4 border-t border-white/5">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenAmountModal(Goal, "add");
+                      }}
+                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-300 text-[12px] font-semibold transition-all hover:scale-[1.02] cursor-pointer"
+                      title="Adicionar valor salvo"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      Guardar
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenAmountModal(Goal, "remove");
+                      }}
+                      disabled={currentVal <= 0}
+                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 text-[12px] font-semibold transition-all hover:scale-[1.02] cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                      title="Resgatar valor salvo"
+                    >
+                      <Minus className="w-3.5 h-3.5" />
+                      Resgatar
+                    </button>
+                  </div>
+
+                  <div className="mt-3 flex justify-end">
+                    <button
+                      onClick={() => handleOpenAmountModal(Goal, "add")}
+                      className="text-[12px] text-gray-400 hover:text-white flex items-center gap-1 transition-colors group/btn cursor-pointer"
+                    >
+                      Movimentar Saldo
                       <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                   </div>
@@ -312,22 +416,20 @@ const SavingsGoals = () => {
           })}
         </div>
 
-        {
-          GoalsLength.length === 0 && (
-            <div className="py-20 text-center">
-              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="w-10 h-10 text-gray-500" />
-              </div>
-              <div className="text-[18px] font-semibold mb-2">
-                Nenhuma meta encontrada
-              </div>
-              <div className="text-[14px] text-gray-500">
-                Tente ajustar seus filtros
-              </div>
+        {GoalsLength.length === 0 && (
+          <div className="py-20 text-center">
+            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-10 h-10 text-gray-500" />
             </div>
-          )
-        }
-      </main >
+            <div className="text-[18px] font-semibold mb-2">
+              Nenhuma meta encontrada
+            </div>
+            <div className="text-[14px] text-gray-500">
+              Crie uma meta para começar a economizar
+            </div>
+          </div>
+        )}
+      </main>
 
       <SavingsGoalsModal
         IsOpen={SavingModal}
@@ -335,7 +437,14 @@ const SavingsGoals = () => {
         OnSave={HandleSaveGoals}
         EditingGoals={editing}
       />
-    </div >
+
+      <SavingGoalAmountModal
+        isOpen={amountModalOpen}
+        onClose={() => setAmountModalOpen(false)}
+        goal={selectedGoalForAmount}
+        onSave={handleSaveAmount}
+      />
+    </div>
   );
 };
 

@@ -54,6 +54,7 @@ const Analytics = () => {
       const response = await api.get('/savings-goals');
       if (response?.data?.data) {
         setSavings(response.data.data);
+        console.log(response)
       }
     } catch (error) {
       console.error("Erro ao carregar metas no Analytics:", error);
@@ -67,6 +68,9 @@ const Analytics = () => {
 
   const revenues = transaction.filter((t) => t.type === 'revenue')
   const expenses = transaction.filter((t) => t.type === 'expense')
+
+  console.log(revenues)
+  console.log(expenses)
 
   const totalRevenue = revenues.reduce((acc, item) => acc + Number(item.amount), 0)
   const totalExpense = expenses.reduce((acc, item) => acc + Number(item.amount), 0)

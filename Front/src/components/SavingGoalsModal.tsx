@@ -193,7 +193,7 @@ export const SavingsGoalsModal = ({
           <button className="flex-2 py-3 bg-linear-to-r from-purple-700 to-purple-500 rounded-xl text-[14px] font-semibold text-white shadow-lg shadow-purple-600/40 hover:shadow-purple-600/60 hover:scale-[1.02] transition-all"
             onClick={() => HandleSubmit()}
           >
-            Criar Meta
+            {IsEditing ? "Salvar Alterações" : "Criar Meta"}
           </button>
         </div>
       </div>
