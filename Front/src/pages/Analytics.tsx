@@ -37,6 +37,7 @@ const Analytics = () => {
 
   const [selectedPeriod, setSelectedPeriod] = useState("Últimos 6 Meses");
   const [selectedView, setSelectedView] = useState("visão geral");
+  const [selectedWeeklyMonth, setSelectedWeeklyMonth] = useState<string>("");
 
   const getTransactions = async () => {
     try {
@@ -177,12 +178,109 @@ const Analytics = () => {
     }))
     .sort((a, b) => b.value - a.value);
 
-  const weeklySpending = [
-    { week: "Semana 1", spending: 450 },
-    { week: "Semana 2", spending: 620 },
-    { week: "Semana 3", spending: 380 },
-    { week: "Semana 4", spending: 550 },
+  const fullMonths = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
   ];
+
+  const availableExpenseMonths = Array.from(
+    new Set(
+      expenses
+        .filter((t) => t.date)
+        .map((t) => {
+          const [y, m] = t.date.split("T")[0].split("-").map(Number);
+          return `${y}-${String(m).padStart(2, "0")}`;
+        })
+    )
+  ).sort().reverse();
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+
+  let targetYear = currentYear;
+  let targetMonth = currentMonth;
+
+  if (selectedWeeklyMonth) {
+    const [selYear, selMonth] = selectedWeeklyMonth.split("-").map(Number);
+    if (!isNaN(selYear) && !isNaN(selMonth)) {
+      targetYear = selYear;
+      targetMonth = selMonth - 1;
+    }
+  } else {
+    const hasExpensesThisMonth = expenses.some((t) => {
+      if (!t.date) return false;
+      const [tYear, tMonth] = t.date.split("T")[0].split("-").map(Number);
+      return tMonth - 1 === currentMonth && tYear === currentYear;
+    });
+
+    if (!hasExpensesThisMonth && availableExpenseMonths.length > 0) {
+      const [latestYear, latestMonth] = availableExpenseMonths[0].split("-").map(Number);
+      if (!isNaN(latestYear) && !isNaN(latestMonth)) {
+        targetYear = latestYear;
+        targetMonth = latestMonth - 1;
+      }
+    }
+  }
+
+  const daysInTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+
+  const weeklyTargetExpenses = expenses.filter((t) => {
+    if (!t.date) return false;
+    const [tYear, tMonth] = t.date.split("T")[0].split("-").map(Number);
+    return tMonth - 1 === targetMonth && tYear === targetYear;
+  });
+
+  let week1 = 0;
+  let week2 = 0;
+  let week3 = 0;
+  let week4 = 0;
+  let week5 = 0;
+
+  weeklyTargetExpenses.forEach((t) => {
+    const [, , tDay] = t.date.split("T")[0].split("-").map(Number);
+    const amount = Number(t.amount) || 0;
+
+    if (tDay >= 1 && tDay <= 7) {
+      week1 += amount;
+    } else if (tDay >= 8 && tDay <= 14) {
+      week2 += amount;
+    } else if (tDay >= 15 && tDay <= 21) {
+      week3 += amount;
+    } else if (tDay >= 22 && tDay <= 28) {
+      week4 += amount;
+    } else if (tDay >= 29) {
+      week5 += amount;
+    }
+  });
+
+  const weeklySpending: { week: string; spending: number; range: string }[] = [
+    { week: "Semana 1", spending: week1, range: "01 a 07" },
+    { week: "Semana 2", spending: week2, range: "08 a 14" },
+    { week: "Semana 3", spending: week3, range: "15 a 21" },
+    { week: "Semana 4", spending: week4, range: "22 a 28" },
+  ];
+
+  if (week5 > 0) {
+    weeklySpending.push({
+      week: "Semana 5",
+      spending: week5,
+      range: `29 a ${daysInTargetMonth}`,
+    });
+  } else {
+    weeklySpending[3].spending += week5;
+    weeklySpending[3].range = `22 a ${daysInTargetMonth}`;
+  }
 
   const incomeBreakdown = [
     { source: "Salário", amount: 5500, color: "#10B981" },
@@ -532,49 +630,87 @@ const Analytics = () => {
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
-                  <h2 className="text-[20px] font-semibold mb-6">
-                    Padrão de Gastos Semanal
-                  </h2>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                    <div>
+                      <h2 className="text-[20px] font-semibold">
+                        Padrão de Gastos Semanal
+                      </h2>
+                      <p className="text-[12px] text-gray-400 mt-0.5">
+                        {fullMonths[targetMonth]} de {targetYear}
+                      </p>
+                    </div>
 
-                  <ResponsiveContainer width="100%" height={240}>
-                    <BarChart data={weeklySpending}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#1a1a2e"
-                        vertical={false}
-                      />
-                      <XAxis
-                        dataKey="week"
-                        stroke="#6B7280"
-                        style={{ fontSize: "12px" }}
-                      />
-                      <YAxis stroke="#6B7280" style={{ fontSize: "12px" }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#0a0a14",
-                          border: "1px solid rgba(255,255,255,0.1)",
-                          borderRadius: "12px",
-                        }}
-                      />
-                      <Bar
-                        dataKey="spending"
-                        fill="url(#barGradient)"
-                        radius={[8, 8, 0, 0]}
-                      />
-                      <defs>
-                        <linearGradient
-                          id="barGradient"
-                          x1="0"
-                          y1="0"
-                          x2="0"
-                          y2="1"
-                        >
-                          <stop offset="0%" stopColor="#6366F1" />
-                          <stop offset="100%" stopColor="#06B6D4" />
-                        </linearGradient>
-                      </defs>
-                    </BarChart>
-                  </ResponsiveContainer>
+                    {availableExpenseMonths.length > 1 && (
+                      <select
+                        value={selectedWeeklyMonth || `${targetYear}-${String(targetMonth + 1).padStart(2, "0")}`}
+                        onChange={(e) => setSelectedWeeklyMonth(e.target.value)}
+                        className="bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 text-[12px] text-gray-300 focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer self-start sm:self-auto"
+                      >
+                        {availableExpenseMonths.map((ym) => {
+                          const [y, m] = ym.split("-").map(Number);
+                          return (
+                            <option key={ym} value={ym} className="bg-[#0a0a14] text-white">
+                              {fullMonths[m - 1]} {y}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    )}
+                  </div>
+
+                  {weeklyTargetExpenses.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-[240px] text-gray-400">
+                      <p className="text-[14px]">Nenhum gasto registrado neste mês.</p>
+                    </div>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={240}>
+                      <BarChart data={weeklySpending}>
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="#1a1a2e"
+                          vertical={false}
+                        />
+                        <XAxis
+                          dataKey="week"
+                          stroke="#6B7280"
+                          style={{ fontSize: "12px" }}
+                        />
+                        <YAxis stroke="#6B7280" style={{ fontSize: "12px" }} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "#0a0a14",
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            borderRadius: "12px",
+                          }}
+                          formatter={(value: any) => [
+                            formatCurrency(Number(value) || 0),
+                            "Gastos",
+                          ]}
+                          labelFormatter={(label: any, payload: any) => {
+                            const item = payload?.[0]?.payload;
+                            return item?.range ? `${label} (Dias ${item.range})` : label;
+                          }}
+                        />
+                        <Bar
+                          dataKey="spending"
+                          fill="url(#barGradient)"
+                          radius={[8, 8, 0, 0]}
+                        />
+                        <defs>
+                          <linearGradient
+                            id="barGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop offset="0%" stopColor="#6366F1" />
+                            <stop offset="100%" stopColor="#06B6D4" />
+                          </linearGradient>
+                        </defs>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
                 </div>
               </div>
 
