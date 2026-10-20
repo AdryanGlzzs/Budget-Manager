@@ -282,12 +282,48 @@ const Analytics = () => {
     weeklySpending[3].range = `22 a ${daysInTargetMonth}`;
   }
 
-  const incomeBreakdown = [
-    { source: "Salário", amount: 5500, color: "#10B981" },
-    { source: "Freelancer", amount: 2500, color: "#6366F1" },
-    { source: "Investimentos", amount: 800, color: "#F59E0B" },
-    { source: "Outros", amount: 200, color: "#06B6D4" },
-  ];
+  const incomeColors: Record<string, string> = {
+    Salário: "#10B981",
+    Salario: "#10B981",
+    Freelancer: "#6366F1",
+    Freelance: "#6366F1",
+    Investimentos: "#F59E0B",
+    Investimento: "#F59E0B",
+    Rendimentos: "#14B8A6",
+    Dividendos: "#10B981",
+    Vendas: "#EC4899",
+    Bônus: "#8B5CF6",
+    Consultoria: "#3B82F6",
+    Outros: "#06B6D4",
+  };
+
+  const revenueTotals = revenues.reduce((acc, t) => {
+    const sourceName = t.name?.trim() || t.category?.trim() || "Outros";
+    const amount = Number(t.amount) || 0;
+
+    if (!acc[sourceName]) {
+      acc[sourceName] = {
+        source: sourceName,
+        amount: 0,
+        color:
+          t.color ||
+          incomeColors[sourceName] ||
+          categoryColors[sourceName] ||
+          defaultPalette[Object.keys(acc).length % defaultPalette.length],
+      };
+    }
+
+    acc[sourceName].amount += amount;
+    return acc;
+  }, {} as Record<string, { source: string; amount: number; color: string }>);
+
+  const incomeBreakdown = Object.values(revenueTotals)
+    .map((item) => ({
+      ...item,
+      percentage: totalRevenue > 0 ? Math.round((item.amount / totalRevenue) * 100) : 0,
+    }))
+    .sort((a, b) => b.amount - a.amount);
+
 
   const stats = [
     {
@@ -717,37 +753,63 @@ const Analytics = () => {
               <div className="relative group md:col-span-2">
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
-                  <h2 className="text-[20px] font-semibold mb-6">
-                    Detalhamento de Receitas
-                  </h2>
-
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-                    {incomeBreakdown.map((source, index) => (
-                      <div
-                        key={index}
-                        className="bg-white/5 p-5 rounded-xl border border-white/10 hover:bg-white/10 transition-all"
-                      >
-                        <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 shadow-lg"
-                          style={{
-                            backgroundColor: `${source.color}20`,
-                            boxShadow: `0 4px 12px ${source.color}20`,
-                          }}
-                        >
-                          <DollarSign
-                            className="w-6 h-6"
-                            style={{ color: source.color }}
-                          />
-                        </div>
-                        <div className="text-[14px] text-gray-400 mb-2">
-                          {source.source}
-                        </div>
-                        <div className="text-[24px] font-bold">
-                          {formatCurrency(source.amount)}
-                        </div>
-                      </div>
-                    ))}
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-[20px] font-semibold">
+                      Detalhamento de Receitas
+                    </h2>
+                    {totalRevenue > 0 && (
+                      <span className="text-[13px] text-gray-400">
+                        Total: <strong className="text-emerald-400">{formatCurrency(totalRevenue)}</strong>
+                      </span>
+                    )}
                   </div>
+
+                  {incomeBreakdown.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+                      <p className="text-[14px]">Nenhuma receita registrada ainda.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+                      {incomeBreakdown.map((source, index) => (
+                        <div
+                          key={index}
+                          className="bg-white/5 p-5 rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+                        >
+                          <div className="flex items-center justify-between mb-4">
+                            <div
+                              className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                              style={{
+                                backgroundColor: `${source.color}20`,
+                                boxShadow: `0 4px 12px ${source.color}20`,
+                              }}
+                            >
+                              <DollarSign
+                                className="w-6 h-6"
+                                style={{ color: source.color }}
+                              />
+                            </div>
+                            {totalRevenue > 0 && (
+                              <span
+                                className="text-[12px] font-semibold px-2 py-0.5 rounded-md"
+                                style={{
+                                  backgroundColor: `${source.color}15`,
+                                  color: source.color,
+                                }}
+                              >
+                                {source.percentage}%
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[14px] text-gray-400 mb-2 truncate" title={source.source}>
+                            {source.source}
+                          </div>
+                          <div className="text-[20px] md:text-[24px] font-bold">
+                            {formatCurrency(source.amount)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -800,9 +862,11 @@ const Analytics = () => {
                           Receita Diversificada
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
-                          Você tem 4 fontes de receita diferentes, o que
-                          proporciona boa estabilidade financeira e
-                          diversificação de riscos.
+                          {incomeBreakdown.length > 1
+                            ? `Você tem ${incomeBreakdown.length} fontes de receita diferentes, o que proporciona boa estabilidade financeira e diversificação de riscos.`
+                            : incomeBreakdown.length === 1
+                              ? `Você possui 1 fonte principal de receita (${incomeBreakdown[0].source}). Considere diversificar suas fontes para maior segurança financeira.`
+                              : "Nenhuma receita registrada ainda para analisar a diversificação de riscos."}
                         </div>
                       </div>
                     </div>
