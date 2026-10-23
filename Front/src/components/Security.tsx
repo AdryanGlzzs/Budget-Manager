@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { themes } from "../themes/themes";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 type AccentColor = "purple" | "blue" | "emerald" | "pink";
 
@@ -45,7 +46,7 @@ const initialPasswords: PasswordState = {
 };
 
 export const Security = () => {
-  const [accentColor] = useState<AccentColor>("purple");
+  const { accentColor } = useThemeColors();
 
   const [passwords, setPasswords] =
     useState<PasswordState>(initialPasswords);

@@ -73,16 +73,17 @@ const glowColors = {
   },
 };
 
-const pageBg = "min-h-screen bg-[#050510] text-white overflow-x-hidden pb-12";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 const Settings = () => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>("profile");
   const [fadeKey, setFadeKey] = useState(0);
-  const [accentColor] = useState<AccentColor>("purple");
+  const { accentColor, themeAccentColors } = useThemeColors();
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const theme = themes[accentColor];
-  const glows = glowColors[accentColor];
+  const theme = themes[accentColor] ?? themes.purple;
+  const themeColors = themeAccentColors[accentColor] ?? themeAccentColors.purple;
+  const glows = glowColors[accentColor] ?? glowColors.purple;
 
 
   function switchTab(id: TabId) {
@@ -117,7 +118,7 @@ const Settings = () => {
   }
 
   return (
-    <div className={pageBg}>
+    <div className={`min-h-screen ${themeColors.bg} text-white overflow-x-hidden pb-12 transition-colors duration-500`}>
       <style>{`
         @keyframes slideIn {
           from {

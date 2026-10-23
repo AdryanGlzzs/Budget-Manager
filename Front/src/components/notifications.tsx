@@ -1,11 +1,10 @@
 import { themes } from "../themes/themes";
 import { useState } from "react";
 import { Save } from "lucide-react";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 export const Notifications = () => {
-  const [accentColor, setAccentColor] = useState<
-    "purple" | "blue" | "emerald" | "pink"
-  >("purple");
+  const { accentColor } = useThemeColors();
 
   const [toasts, setToasts] = useState<
     { id: string; message: string; type: "success" | "info" | "error" }[]

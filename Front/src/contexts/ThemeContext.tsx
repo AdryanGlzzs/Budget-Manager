@@ -25,10 +25,15 @@ const ThemeContext = createContext<ThemeContextType | null>(null)
 
 
 export const ThemeContextProvider: React.FC<ThemeProps> = ({ children }) => {
+    const [accentColor, setAccentColorState] = useState<accentColor>(() => {
+        const saved = localStorage.getItem("budget_accent_color") as accentColor;
+        return (saved && ["purple", "blue", "emerald", "pink"].includes(saved)) ? saved : "blue";
+    });
 
-
-
-    const [accentColor, setAccentColor] = useState<accentColor>("blue")
+    const setAccentColor = (color: accentColor) => {
+        setAccentColorState(color);
+        localStorage.setItem("budget_accent_color", color);
+    };
 
     const themeAccentColors = {
         purple: {

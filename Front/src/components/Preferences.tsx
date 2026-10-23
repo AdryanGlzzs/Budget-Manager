@@ -1,15 +1,14 @@
 import { themes } from "../themes/themes";
 import { useState } from "react";
 import { ChevronDown, Save } from "lucide-react";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 export const Preferences = () => {
+  const { accentColor, setAccentColor, themeAccentColors } = useThemeColors();
   const [currency, setCurrency] = useState("USD - Dólar Americano");
   const [language, setLanguage] = useState("Português (BR)");
   const [timezone, setTimezone] = useState("GMT-3 (Horário de Brasília)");
   const [dateFormat, setDateFormat] = useState("DD/MM/YYYY");
-  const [accentColor, setAccentColor] = useState<
-    "purple" | "blue" | "emerald" | "pink"
-  >("purple");
   const [toasts, setToasts] = useState<
     { id: string; message: string; type: "success" | "info" | "error" }[]
   >([]);

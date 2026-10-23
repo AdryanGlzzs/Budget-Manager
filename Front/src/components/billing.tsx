@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CreditCard, Download } from "lucide-react";
 import { themes } from "../themes/themes";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 type AccentColor = "purple" | "blue" | "emerald" | "pink";
 
@@ -43,10 +44,10 @@ const billingHistory: BillingHistory[] = [
 ];
 
 export const Billing = () => {
-  const [accentColor] = useState<AccentColor>("purple");
+  const { accentColor } = useThemeColors();
   const [downloadingIndex, setDownloadingIndex] = useState<number | null>(null);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
-  const theme = themes[accentColor];
+  const theme = themes[accentColor] ?? themes.purple;
   const styles = {
     cardGlow: `absolute inset-0bg-gradient-to-br ${theme.glow}rounded-2xl blur-xlopacity-0 group-hover:opacity-100transition-all duration-300pointer-events-none`,
 
