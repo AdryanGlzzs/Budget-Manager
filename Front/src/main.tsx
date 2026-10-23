@@ -5,6 +5,7 @@ import { AppRoutes } from './routes/Routes'
 import { AuthContextProvider } from './contexts/authContext'
 import { initMercadoPago } from '@mercadopago/sdk-react'
 import { ThemeContextProvider } from './contexts/ThemeContext'
+import { ToastContextProvider } from './contexts/ToastContext'
 
 
 initMercadoPago(import.meta.env.VITE_MARKET_PAID_PUBLIC_KEY, {
@@ -14,9 +15,11 @@ initMercadoPago(import.meta.env.VITE_MARKET_PAID_PUBLIC_KEY, {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeContextProvider>
-      <AuthContextProvider>
-          <AppRoutes />
-      </AuthContextProvider>
+      <ToastContextProvider>
+        <AuthContextProvider>
+            <AppRoutes />
+        </AuthContextProvider>
+      </ToastContextProvider>
     </ThemeContextProvider>
   </StrictMode>,
 )

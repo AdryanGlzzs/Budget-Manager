@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { api } from "../services/api";
 import { useAuth } from "../contexts/authContext";
+import { useToast } from "../contexts/ToastContext";
 
 interface PhotoProps {
   currentPhotoUrl?: string;
@@ -128,9 +129,7 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
 
   }
 
-  const [toasts, setToasts] = useState<
-    { id: string; message: string; type: "success" | "info" | "error" }[]
-  >([]);
+  const { showToast } = useToast();
   const [address, setAddress] = useState(
     "123 Main Street, San Francisco, CA 94102",
   );
@@ -182,18 +181,6 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
       type: "date",
     },
   ];
-
-  const showToast = (
-    message: string,
-    type: "success" | "info" | "error" = "success",
-  ) => {
-    const id = Date.now().toString();
-    setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(
-      () => setToasts((prev) => prev.filter((t) => t.id !== id)),
-      3000,
-    );
-  };
 
   const confirmAction = (config: {
     title: string;

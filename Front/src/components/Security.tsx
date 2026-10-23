@@ -10,10 +10,9 @@ import {
 
 import { themes } from "../themes/themes";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { useToast } from "../contexts/ToastContext";
 
 type AccentColor = "purple" | "blue" | "emerald" | "pink";
-
-type ToastType = "success" | "info" | "error";
 
 type PasswordState = {
   current: string;
@@ -47,6 +46,7 @@ const initialPasswords: PasswordState = {
 
 export const Security = () => {
   const { accentColor } = useThemeColors();
+  const { showToast } = useToast();
 
   const [passwords, setPasswords] =
     useState<PasswordState>(initialPasswords);
@@ -192,13 +192,21 @@ export const Security = () => {
       !passwords.new ||
       !passwords.confirm
     ) {
+      showToast("Preencha todos os campos de senha.", "error");
+      return;
+    }
+
+    if (passwords.new.length < 6) {
+      showToast("A nova senha deve ter no mínimo 6 caracteres.", "warning");
       return;
     }
 
     if (passwords.new !== passwords.confirm) {
+      showToast("A nova senha e a confirmação não coincidem.", "error");
       return;
     }
 
+    showToast("Senha alterada com sucesso!", "success");
     setPasswords(initialPasswords);
   }
 
@@ -214,6 +222,7 @@ export const Security = () => {
 
         onConfirm: () => {
           setIs2faEnabled(false);
+          showToast("Autenticação em duas etapas desativada.", "info");
         },
       });
 
@@ -221,6 +230,7 @@ export const Security = () => {
     }
 
     setIs2faEnabled(true);
+    showToast("Autenticação em duas etapas ativada com sucesso!", "success");
   }
 
   function handleRevokeSession(
@@ -238,6 +248,7 @@ export const Security = () => {
         setSessions((prev) =>
           prev.filter((session) => session.id !== sessionId),
         );
+        showToast(`Sessão encerrada em ${deviceName}.`, "info");
       },
     });
   }

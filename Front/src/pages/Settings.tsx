@@ -19,6 +19,7 @@ import { Profile } from "../components/Profile";
 import { Security } from "../components/Security";
 
 import { themes } from "../themes/themes";
+import { useThemeColors } from "../contexts/ThemeContext";
 
 type TabId =
   | "profile"
@@ -27,15 +28,6 @@ type TabId =
   | "preferences"
   | "billing";
 
-type AccentColor = "purple" | "blue" | "emerald" | "pink";
-
-type ToastType = "success" | "info" | "error";
-
-type Toast = {
-  id: string;
-  message: string;
-  type: ToastType;
-};
 
 type TabItem = {
   id: TabId;
@@ -73,26 +65,18 @@ const glowColors = {
   },
 };
 
-import { useThemeColors } from "../contexts/ThemeContext";
-
 const Settings = () => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>("profile");
   const [fadeKey, setFadeKey] = useState(0);
   const { accentColor, themeAccentColors } = useThemeColors();
-  const [toasts, setToasts] = useState<Toast[]>([]);
   const theme = themes[accentColor] ?? themes.purple;
   const themeColors = themeAccentColors[accentColor] ?? themeAccentColors.purple;
   const glows = glowColors[accentColor] ?? glowColors.purple;
 
-
   function switchTab(id: TabId) {
     setActiveTab(id);
     setFadeKey((prev) => prev + 1);
-  }
-
-  function removeToast(id: string) {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }
 
   function renderTabContent() {
@@ -179,8 +163,7 @@ const Settings = () => {
               </h1>
 
               <p className="text-sm sm:text-base text-zinc-400">
-                Gerencie as credenciais, segurança e preferências da sua conta
-                corporativa
+                Gerencie seu perfil, segurança e preferências financeiras
               </p>
             </section>
 
@@ -231,41 +214,6 @@ const Settings = () => {
             </div>
           </main>
         </div>
-      </div>
-
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
-        {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`
-              p-4 rounded-xl border shadow-2xl
-              flex items-center gap-3
-              backdrop-blur-md
-              transition-all duration-300
-              pointer-events-auto
-
-              ${
-                toast.type === "success"
-                  ? "bg-green-500/10 border-green-500/20 text-green-300"
-                  : toast.type === "error"
-                    ? "bg-red-500/10 border-red-500/20 text-red-300"
-                    : "bg-blue-500/10 border-blue-500/20 text-blue-300"
-              }
-            `}
-            style={{
-              animation: "slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-            }}
-          >
-            <div className="flex-1 text-xs font-semibold">{toast.message}</div>
-
-            <button
-              onClick={() => removeToast(toast.id)}
-              className="text-zinc-400 hover:text-white text-xs cursor-pointer"
-            >
-              ✕
-            </button>
-          </div>
-        ))}
       </div>
     </div>
   );

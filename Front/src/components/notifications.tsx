@@ -2,13 +2,11 @@ import { themes } from "../themes/themes";
 import { useState } from "react";
 import { Save } from "lucide-react";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { useToast } from "../contexts/ToastContext";
 
 export const Notifications = () => {
   const { accentColor } = useThemeColors();
-
-  const [toasts, setToasts] = useState<
-    { id: string; message: string; type: "success" | "info" | "error" }[]
-  >([]);
+  const { showToast } = useToast();
 
   const initialNotifications = [
     {
@@ -60,17 +58,6 @@ export const Notifications = () => {
 
   const primaryBtn = `flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r ${theme.primary} rounded-xl text-sm font-semibold hover:shadow-lg ${theme.primaryHover} active:scale-[0.98] transition-all cursor-pointer`;
 
-  const showToast = (
-    message: string,
-    type: "success" | "info" | "error" = "success",
-  ) => {
-    const id = Date.now().toString();
-    setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(
-      () => setToasts((prev) => prev.filter((t) => t.id !== id)),
-      3000,
-    );
-  };
   const toggleNotification = (key: string) => {
     setNotifications((prev) =>
       prev.map((n) => (n.key === key ? { ...n, enabled: !n.enabled } : n)),

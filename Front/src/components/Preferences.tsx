@@ -2,28 +2,15 @@ import { themes } from "../themes/themes";
 import { useState } from "react";
 import { ChevronDown, Save } from "lucide-react";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { useToast } from "../contexts/ToastContext";
 
 export const Preferences = () => {
   const { accentColor, setAccentColor, themeAccentColors } = useThemeColors();
+  const { showToast } = useToast();
   const [currency, setCurrency] = useState("USD - Dólar Americano");
   const [language, setLanguage] = useState("Português (BR)");
   const [timezone, setTimezone] = useState("GMT-3 (Horário de Brasília)");
   const [dateFormat, setDateFormat] = useState("DD/MM/YYYY");
-  const [toasts, setToasts] = useState<
-    { id: string; message: string; type: "success" | "info" | "error" }[]
-  >([]);
-
-  const showToast = (
-    message: string,
-    type: "success" | "info" | "error" = "success",
-  ) => {
-    const id = Date.now().toString();
-    setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(
-      () => setToasts((prev) => prev.filter((t) => t.id !== id)),
-      3000,
-    );
-  };
 
   const handleSavePreferences = () => {
     showToast("Preferências gerais salvas com sucesso!", "success");
@@ -155,5 +142,4 @@ export const Preferences = () => {
       </div>
     </section>
   );
-};
-3
+};

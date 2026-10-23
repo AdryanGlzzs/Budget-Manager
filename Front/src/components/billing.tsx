@@ -2,10 +2,9 @@ import { useState } from "react";
 import { CreditCard, Download } from "lucide-react";
 import { themes } from "../themes/themes";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { useToast } from "../contexts/ToastContext";
 
 type AccentColor = "purple" | "blue" | "emerald" | "pink";
-
-type ToastType = "success" | "info" | "error";
 
 type ModalConfig = {
   isOpen: boolean;
@@ -45,6 +44,7 @@ const billingHistory: BillingHistory[] = [
 
 export const Billing = () => {
   const { accentColor } = useThemeColors();
+  const { showToast } = useToast();
   const [downloadingIndex, setDownloadingIndex] = useState<number | null>(null);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
   const theme = themes[accentColor] ?? themes.purple;
@@ -135,6 +135,8 @@ export const Billing = () => {
       anchor.click();
 
       anchor.remove();
+
+      showToast(`Fatura de ${date} baixada com sucesso!`, "success");
     }, 1200);
   }
 
@@ -203,7 +205,9 @@ export const Billing = () => {
 
                   type: "danger",
 
-                  onConfirm: () => {},
+                  onConfirm: () => {
+                    showToast("Assinatura cancelada com sucesso.", "info");
+                  },
                 })
               }
               className={styles.dangerBtn}
