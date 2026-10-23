@@ -124,6 +124,12 @@ const Analytics = () => {
     };
   });
 
+  const currentMonthExpense = monthlyData[monthlyData.length - 1]?.expense || 0;
+  const prevMonthExpense = monthlyData[monthlyData.length - 2]?.expense || 0;
+  const expenseMoMChange = prevMonthExpense > 0
+    ? (((currentMonthExpense - prevMonthExpense) / prevMonthExpense) * 100).toFixed(1)
+    : null;
+
   const categoryColors: Record<string, string> = {
     Alimentação: "#6366F1",
     Transporte: "#06B6D4",
@@ -824,49 +830,101 @@ const Analytics = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                   <div className="bg-white/5 p-5 rounded-xl border border-white/10">
                     <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
-                      <div>
-                        <div className="text-[15px] font-medium mb-2">
-                          Forte Tendência de Economia
-                        </div>
-                        <div className="text-[13px] text-gray-400 leading-relaxed">
-                          Sua taxa de economia aumentou 5,3% nos últimos 6
-                          meses, mantendo você no caminho certo para seus
-                          objetivos financeiros.
-                        </div>
-                      </div>
+                      {Number(savingRate) >= 20 ? (
+                        <>
+                          <div className="w-2 h-2 bg-green-400 rounded-full mt-2 shrink-0"></div>
+                          <div>
+                            <div className="text-[15px] font-medium mb-2">
+                              Forte Disciplina de Economia
+                            </div>
+                            <div className="text-[13px] text-gray-400 leading-relaxed">
+                              Sua taxa de poupança está em {savingRate}%, gerando uma sobra de {formatCurrency(totalRevenue - totalExpense)}. Você está acima da meta recomendada de 20%!
+                            </div>
+                          </div>
+                        </>
+                      ) : Number(savingRate) > 0 ? (
+                        <>
+                          <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 shrink-0"></div>
+                          <div>
+                            <div className="text-[15px] font-medium mb-2">
+                              Economia Moderada ({savingRate}%)
+                            </div>
+                            <div className="text-[13px] text-gray-400 leading-relaxed">
+                              Você poupou {savingRate}% ({formatCurrency(totalRevenue - totalExpense)}) até agora. Pequenos ajustes em supérfluos ajudarão a atingir a meta de 20%.
+                            </div>
+                          </div>
+                        </>
+                      ) : totalRevenue > 0 && totalExpense > totalRevenue ? (
+                        <>
+                          <div className="w-2 h-2 bg-red-400 rounded-full mt-2 shrink-0"></div>
+                          <div>
+                            <div className="text-[15px] font-medium mb-2">
+                              Atenção ao Déficit
+                            </div>
+                            <div className="text-[13px] text-gray-400 leading-relaxed">
+                              Suas despesas superaram sua receita em {formatCurrency(totalExpense - totalRevenue)}. Evite compras não essenciais para reequilibrar o orçamento.
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 shrink-0"></div>
+                          <div>
+                            <div className="text-[15px] font-medium mb-2">
+                              Taxa de Economia
+                            </div>
+                            <div className="text-[13px] text-gray-400 leading-relaxed">
+                              Cadastre suas receitas e despesas para acompanhar sua taxa de economia em tempo real.
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
                   <div className="bg-white/5 p-5 rounded-xl border border-white/10">
                     <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2"></div>
-                      <div>
-                        <div className="text-[15px] font-medium mb-2">
-                          Gastos Elevados com {topCategory.name !== "-" ? topCategory.name : "Alimentação"}
-                        </div>
-                        <div className="text-[13px] text-gray-400 leading-relaxed">
-                          {topCategory.name !== "-"
-                            ? `${topCategory.name} representa ${topCategoryPercent}% das suas despesas totais. Considere definir um orçamento mais rigoroso para esta categoria.`
-                            : "Alimentação representa 30% das suas despesas totais. Considere definir um orçamento mais rigoroso para esta categoria."}
-                        </div>
-                      </div>
+                      {topCategory.name !== "-" ? (
+                        <>
+                          <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 shrink-0"></div>
+                          <div>
+                            <div className="text-[15px] font-medium mb-2">
+                              Maior Gasto: {topCategory.name}
+                            </div>
+                            <div className="text-[13px] text-gray-400 leading-relaxed">
+                              {topCategory.name} representa {topCategoryPercent}% das suas despesas totais ({formatCurrency(topCategory.amount)}). Estipular um teto para essa categoria pode trazer economia imediata.
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 shrink-0"></div>
+                          <div>
+                            <div className="text-[15px] font-medium mb-2">
+                              Concentração de Gastos
+                            </div>
+                            <div className="text-[13px] text-gray-400 leading-relaxed">
+                              Nenhuma despesa registrada ainda para avaliar a categoria de maior impacto.
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
                   <div className="bg-white/5 p-5 rounded-xl border border-white/10">
                     <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 shrink-0"></div>
                       <div>
                         <div className="text-[15px] font-medium mb-2">
-                          Receita Diversificada
+                          {incomeBreakdown.length > 1 ? "Receita Diversificada" : "Fonte de Renda"}
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
                           {incomeBreakdown.length > 1
-                            ? `Você tem ${incomeBreakdown.length} fontes de receita diferentes, o que proporciona boa estabilidade financeira e diversificação de riscos.`
+                            ? `Você possui ${incomeBreakdown.length} fontes de receita ativas, totalizando ${formatCurrency(totalRevenue)}. Essa diversificação garante boa segurança financeira.`
                             : incomeBreakdown.length === 1
-                              ? `Você possui 1 fonte principal de receita (${incomeBreakdown[0].source}). Considere diversificar suas fontes para maior segurança financeira.`
-                              : "Nenhuma receita registrada ainda para analisar a diversificação de riscos."}
+                              ? `Você possui 1 fonte principal de receita (${incomeBreakdown[0].source} - ${formatCurrency(incomeBreakdown[0].amount)}). Diversificar no futuro aumentará sua proteção.`
+                              : "Nenhuma receita registrada ainda para analisar a diversificação do seu fluxo."}
                         </div>
                       </div>
                     </div>
@@ -874,16 +932,45 @@ const Analytics = () => {
 
                   <div className="bg-white/5 p-5 rounded-xl border border-white/10">
                     <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2"></div>
-                      <div>
-                        <div className="text-[15px] font-medium mb-2">
-                          Redução de Despesas
-                        </div>
-                        <div className="text-[13px] text-gray-400 leading-relaxed">
-                          Suas despesas mensais médias diminuíram 3,1%,
-                          mostrando uma melhoria na disciplina de gastos.
-                        </div>
-                      </div>
+                      {expenseMoMChange !== null ? (
+                        Number(expenseMoMChange) <= 0 ? (
+                          <>
+                            <div className="w-2 h-2 bg-green-400 rounded-full mt-2 shrink-0"></div>
+                            <div>
+                              <div className="text-[15px] font-medium mb-2">
+                                Redução de Despesas (-{Math.abs(Number(expenseMoMChange))}%)
+                              </div>
+                              <div className="text-[13px] text-gray-400 leading-relaxed">
+                                Suas despesas caíram {Math.abs(Number(expenseMoMChange))}% em relação ao mês anterior ({formatCurrency(currentMonthExpense)} vs {formatCurrency(prevMonthExpense)}). Parabéns pela disciplina!
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 shrink-0"></div>
+                            <div>
+                              <div className="text-[15px] font-medium mb-2">
+                                Aumento nos Gastos (+{expenseMoMChange}%)
+                              </div>
+                              <div className="text-[13px] text-gray-400 leading-relaxed">
+                                Seus gastos subiram {expenseMoMChange}% em relação ao mês anterior ({formatCurrency(currentMonthExpense)} vs {formatCurrency(prevMonthExpense)}). Atenção às saídas até o fechamento.
+                              </div>
+                            </div>
+                          </>
+                        )
+                      ) : (
+                        <>
+                          <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2 shrink-0"></div>
+                          <div>
+                            <div className="text-[15px] font-medium mb-2">
+                              Controle Mensal
+                            </div>
+                            <div className="text-[13px] text-gray-400 leading-relaxed">
+                              Registre gastos em meses consecutivos para visualizar a comparação da sua disciplina financeira mês a mês.
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
