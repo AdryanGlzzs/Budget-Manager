@@ -151,6 +151,9 @@ export class UserController {
           id: true,
           name: true,
           email: true,
+          phone: true,
+          birthdate: true,
+          address: true,
           createdAt: true
         }
       });
@@ -405,4 +408,55 @@ export class UserController {
       return res.status(401).json({ message: "Token inválido ou expirado" });
     }
   }
+
+  
+
+  static async UpdateUser(req: Request, res: Response) {
+    try {
+      const userId = (req as Request & { user?: { id: string } }).user?.id;
+
+      if (!userId) {
+        return res.status(401).json({
+          message: "Não autorizado"
+        });
+      }
+
+      const { name, phone, birthdate, address } = req.body;
+
+      let parsedBirthdate: Date | undefined = undefined;
+      if (birthdate) {
+        const d = new Date(birthdate);
+        if (!isNaN(d.getTime())) {
+          parsedBirthdate = d;
+        }
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          name: name !== undefined ? String(name).trim() : undefined,
+          phone: phone !== undefined ? String(phone).trim() : undefined,
+          birthdate: parsedBirthdate,
+          address: address !== undefined ? String(address).trim() : undefined,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          birthdate: true,
+          address: true,
+          createdAt: true
+        }
+      });
+
+      return res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error("Erro no UpdateUser:", error);
+      return res.status(500).json({
+        message: "Erro interno do servidor"
+      });
+    }
+  }
+
 }

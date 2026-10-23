@@ -17,6 +17,7 @@ export const routes = Router()
 routes.post('/login', TurnstileMiddleware,  LoginUserMiddleware, UserController.login)
 routes.post('/signup', TurnstileMiddleware, SignUpUserMiddleware, UserController.signup)
 routes.get('/users/me', AuthMiddleware,  UserController.GetUsers)
+routes.put('/users/me', AuthMiddleware, UserController.UpdateUser)
 routes.post("/auth/google", UserController.GoogleLoginController);
 routes.post('/auth/facebook', UserController.FacebookLoginController)
 routes.post('/auth/github', UserController.GitHubLoginController)
