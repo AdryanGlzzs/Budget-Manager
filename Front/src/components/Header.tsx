@@ -45,7 +45,7 @@ const Header = () => {
               <div className="text-[13px] text-gray-500">
                 {Hour <= 12 ? "Bom dia" : Hour < 18 ? "Boa tarde" : "Boa noite"}
               </div>
-              <div className="text-[17px] font-semibold ml-1">Adryan Glzzs</div>
+              <div className="text-[17px] font-semibold ml-1">{User?.name || "Usuário"}</div>
             </div>
           </div>
 

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useThemeColors } from "../contexts/ThemeContext";
 import {
-  Camera,
   UserCircle,
   Save,
   AlertTriangle,
@@ -13,31 +12,45 @@ import { useToast } from "../contexts/ToastContext";
 
 interface PhotoProps {
   currentPhotoUrl?: string;
-  onPhotoChange: (file: File, previewUrl: string) => void
+  onPhotoChange: (file: File, previewUrl: string) => void;
   maxSizeMB: number;
   acceptTypes?: string[];
-  size?: number
+  size?: number;
 }
 
-const TypesPhoto = ['image/jpeg', 'image/png', 'image/webp']
+const TypesPhoto = ['image/jpeg', 'image/png', 'image/webp'];
 
-export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto, size = 120 }: PhotoProps) => {
-  const [name, setName] = useState("Adryan Gomes");
-  const [email, setEmail] = useState("adryan.gomes@email.com");
-  const [phone, setPhone] = useState("+1 (555) 123-4567");
-  const [birthdate, setBirthdate] = useState("1995-03-15");
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto }: Partial<PhotoProps>) => {
+  const { User, setUser } = useAuth();
+  const { showToast } = useToast();
+  const [name, setName] = useState(User?.name || "");
+  const [email, setEmail] = useState(User?.email || "");
+  const [phone, setPhone] = useState(User?.phone || "");
+  const [birthdate, setBirthdate] = useState(User?.birthdate ? User.birthdate.split("T")[0] : "");
+  const [address, setAddress] = useState(User?.address || "");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(User?.avatar || null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const { User, setUser } = useAuth()
+  const [saving, setSaving] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  useEffect(() => {
+    if (User) {
+      if (User.name) setName(User.name);
+      if (User.email) setEmail(User.email);
+      if (User.phone) setPhone(User.phone);
+      if (User.birthdate) setBirthdate(User.birthdate.split("T")[0]);
+      if (User.address) setAddress(User.address);
+      if (User.avatar) setPreviewUrl(User.avatar);
+    }
+  }, [User]);
+
   useEffect(() => {
     return () => {
       if (previewUrl && previewUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl)
+        URL.revokeObjectURL(previewUrl);
       }
-    }
-  }, [previewUrl])
+    };
+  }, [previewUrl]);
 
   const validatedFile = useCallback((file: File): string | null => {
     if (!acceptTypes.includes(file.type)) {
@@ -55,61 +68,45 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
 
   const handleAvatarClick = () => {
     inputRef.current?.click();
-  }
-
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key == "Enter" || event.key === " ") {
-      event.preventDefault()
-      handleAvatarClick()
-    }
-  }
-
+  };
 
   const HandleSelectFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    event.target.value = ""
+    const file = event.target.files?.[0];
+    event.target.value = "";
 
     if (!file) return;
 
     const validationError = validatedFile(file);
     if (validationError) {
-      setError(validationError);
+      showToast(validationError, "error");
       return;
     }
 
-    setError(null)
-
-    const newPreviewUrl = URL.createObjectURL(file)
-    setPreviewUrl(newPreviewUrl)
-    onPhotoChange?.(file, newPreviewUrl)
+    const newPreviewUrl = URL.createObjectURL(file);
+    setPreviewUrl(newPreviewUrl);
+    onPhotoChange?.(file, newPreviewUrl);
 
     if (User) {
       setUser({
         ...User,
-        avatar: newPreviewUrl
-      })
+        avatar: newPreviewUrl,
+      });
     }
 
-    setUploading(true)
     try {
       const data = await uploadFoto(file, "/profile/photo");
 
-      if (data.url) {
-        setPreviewUrl(data.url)
-
+      if (data?.url) {
+        setPreviewUrl(data.url);
         if (User) {
-          setUser({ ...User, avatar: data.url })
+          setUser({ ...User, avatar: data.url });
         }
       }
-
-    } catch (err) {
-      setError("Não foi possível enviar a foto. Tente novamente.");
-    } finally {
-      setUploading(false);
+      showToast("Foto de perfil atualizada!", "success");
+    } catch {
+      showToast("Foto salva localmente.", "info");
     }
-
-  }
+  };
 
   const uploadFoto = async (file: File, endpoint: string) => {
     const formData = new FormData();
@@ -129,32 +126,8 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
 
   }
 
-  const { showToast } = useToast();
-  const [address, setAddress] = useState(
-    "123 Main Street, San Francisco, CA 94102",
-  );
-  const [avatar, setAvatar] = useState<{
-    hasPhoto: boolean;
-    photoUrl?: string;
-  }>({ hasPhoto: false });
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [passwords, setPasswords] = useState({
-    current: "",
-    new: "",
-    confirm: "",
-  });
   const { accentColor, themeAccentColors } = useThemeColors();
 
-  const [modalConfig, setModalConfig] = useState<{
-    isOpen: boolean;
-    title: string;
-    description: string;
-    confirmText: string;
-    cancelText: string;
-    type: "danger" | "warning" | "info";
-    onConfirm: () => void;
-  } | null>(null);
   const steps = [
     { key: "name", label: "Nome adicionado", done: name.trim().length > 0 },
     {
@@ -167,7 +140,7 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
       label: "Telefone adicionado",
       done: phone.trim().length > 0,
     },
-    { key: "photo", label: "Foto de perfil", done: avatar.hasPhoto },
+    { key: "photo", label: "Foto de perfil", done: !!(previewUrl || User?.avatar) },
   ];
 
   const personalFields = [
@@ -182,55 +155,121 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
     },
   ];
 
-  const confirmAction = (config: {
-    title: string;
-    description: string;
-    confirmText: string;
-    cancelText: string;
-    type: "danger" | "warning" | "info";
-    onConfirm: () => void;
-  }) => {
-    setModalConfig({ ...config, isOpen: true });
-  };
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar({ hasPhoto: true, photoUrl: reader.result as string });
-        showToast("Foto de perfil atualizada com sucesso!", "success");
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const completedCount = steps.filter((s) => s.done).length;
   const completionPercentage = Math.round(
     (completedCount / steps.length) * 100,
   );
 
-  const handleSaveProfile = () => {
-    showToast("Informações pessoais salvas com sucesso!", "success");
+  const handleSaveProfile = async () => {
+    if (!name.trim()) {
+      showToast("O nome completo não pode ficar vazio.", "warning");
+      return;
+    }
+
+    try {
+      setSaving(true);
+      const payload = {
+        name: name.trim(),
+        phone: phone.trim() || null,
+        birthdate: birthdate || null,
+        address: address.trim() || null,
+      };
+
+      const response = await api.put("/users/me", payload);
+
+      if (response?.data) {
+        setUser({
+          ...User,
+          ...response.data,
+          avatar: previewUrl || User?.avatar,
+        });
+      } else if (User) {
+        setUser({
+          ...User,
+          name: payload.name,
+          phone: payload.phone || undefined,
+          birthdate: payload.birthdate || undefined,
+          address: payload.address || undefined,
+          avatar: previewUrl || User?.avatar,
+        });
+      }
+
+      showToast("Perfil atualizado com sucesso!", "success");
+    } catch (err: any) {
+      console.error("Erro ao salvar perfil:", err);
+      if (User) {
+        setUser({
+          ...User,
+          name: name.trim(),
+          phone: phone.trim() || undefined,
+          birthdate: birthdate || undefined,
+          address: address.trim() || undefined,
+          avatar: previewUrl || User?.avatar,
+        });
+      }
+      showToast("Perfil salvo localmente!", "info");
+    } finally {
+      setSaving(false);
+    }
   };
 
+  const handleExportData = async () => {
+    try {
+      setExporting(true);
+      let transactions = [];
+      try {
+        const res = await api.get("/transactions");
+        if (res?.data?.data) {
+          transactions = res.data.data;
+        }
+      } catch (e) {
+        console.warn("Não foi possível buscar transações para o backup:", e);
+      }
+
+      const backupData = {
+        exportedAt: new Date().toISOString(),
+        user: {
+          name,
+          email,
+          phone,
+          birthdate,
+          address,
+        },
+        transactions,
+      };
+
+      const dataStr =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute(
+        "download",
+        `budget-backup-${new Date().toISOString().split("T")[0]}.json`,
+      );
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      showToast("Dados exportados com sucesso!", "success");
+    } catch (err) {
+      showToast("Erro ao exportar dados.", "error");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const handleDeleteAccount = () => {
-    confirmAction({
-      title: "Excluir Conta Permanentemente?",
-      description:
-        "ESTA AÇÃO É IRREVERSÍVEL. Todos os seus dados financeiros, orçamentos, históricos de transações e assinaturas serão apagados definitivamente do nosso sistema.",
-      confirmText: "Excluir Conta",
-      cancelText: "Cancelar",
-      type: "danger",
-      onConfirm: () => {
-        showToast("Processando exclusão permanente...", "info");
-        setTimeout(
-          () => showToast("Conta desativada. Redirecionando...", "error"),
-          1500,
-        );
-      },
-    });
+    if (
+      window.confirm(
+        "ESTA AÇÃO É IRREVERSÍVEL. Todos os seus dados financeiros, orçamentos, históricos de transações e assinaturas serão apagados definitivamente do nosso sistema. Tem certeza que deseja excluir?",
+      )
+    ) {
+      showToast("Processando exclusão permanente...", "info");
+      setTimeout(() => {
+        showToast("Conta desativada.", "error");
+      }, 1500);
+    }
   };
 
   const theme = themeAccentColors[accentColor];
@@ -311,10 +350,13 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
                 >
                   Alterar Foto
                 </button>
-                {avatar.hasPhoto && (
+                {(previewUrl || User?.avatar) && (
                   <button
                     onClick={() => {
-                      setAvatar({ hasPhoto: false });
+                      setPreviewUrl(null);
+                      if (User) {
+                        setUser({ ...User, avatar: undefined });
+                      }
                       showToast("Foto de perfil removida.", "info");
                     }}
                     className={dangerBtn}
@@ -403,8 +445,12 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
           </div>
 
           <div className="flex justify-end mt-6 border-t border-white/5 pt-5">
-            <button onClick={handleSaveProfile} className={primaryBtn}>
-              <Save className="w-4 h-4" /> Salvar Alterações
+            <button
+              onClick={handleSaveProfile}
+              disabled={saving}
+              className={`${primaryBtn} ${saving ? "opacity-70 cursor-not-allowed" : ""}`}
+            >
+              <Save className="w-4 h-4" /> {saving ? "Salvando..." : "Salvar Alterações"}
             </button>
           </div>
         </div>
@@ -439,10 +485,11 @@ export const Profile = ({ currentPhotoUrl, onPhotoChange, maxSizeMB = 5, acceptT
                 </div>
               </div>
               <button
-                onClick={() => ""}
-                className={`${secondaryBtn} w-full sm:w-auto flex items-center justify-center gap-2`}
+                onClick={handleExportData}
+                disabled={exporting}
+                className={`${secondaryBtn} w-full sm:w-auto flex items-center justify-center gap-2 ${exporting ? "opacity-70 cursor-not-allowed" : ""}`}
               >
-                <FileDown className="w-4 h-4" /> Exportar
+                <FileDown className="w-4 h-4" /> {exporting ? "Exportando..." : "Exportar"}
               </button>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-red-500/[0.02] rounded-xl border border-red-500/10 gap-4">
