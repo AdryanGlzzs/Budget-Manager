@@ -112,6 +112,12 @@ export const Preferences = () => {
               {colors.map((color) => {
                 const isActive = accentColor === color;
                 const c = themeAccentColors[color];
+                const dotColors: Record<typeof color, string> = {
+                  purple: "bg-purple-500 shadow-purple-500/50",
+                  blue: "bg-blue-500 shadow-blue-500/50",
+                  emerald: "bg-emerald-500 shadow-emerald-500/50",
+                  pink: "bg-pink-500 shadow-pink-500/50",
+                };
                 return (
                   <button
                     key={color}
@@ -125,7 +131,7 @@ export const Preferences = () => {
                     }}
                     className={`flex items-center gap-2.5 px-4 py-2 rounded-xl border text-sm font-semibold transition-all cursor-pointer ${isActive ? `${c.activeBg} ${c.border} text-white shadow-lg ${theme.shadow}` : "bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10"}`}
                   >
-                    <span className={`w-3.5 h-3.5 rounded-full ${c.bg}`} />
+                    <span className={`w-3.5 h-3.5 rounded-full ${dotColors[color]} shadow-sm`} />
                     {themeLabels[color]}
                   </button>
                 );

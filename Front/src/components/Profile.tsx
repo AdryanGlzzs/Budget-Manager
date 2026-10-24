@@ -32,6 +32,7 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
   const inputRef = useRef<HTMLInputElement>(null);
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (User) {
@@ -54,20 +55,61 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
 
   const validatedFile = useCallback((file: File): string | null => {
     if (!acceptTypes.includes(file.type)) {
-      return `Formato de imagem não suportado. Use ${acceptTypes.map((t) => t.split("/")[1]).join(", ")}.`
+      return `Formato de imagem não suportado. Use ${acceptTypes.map((t) => t.split("/")[1]).join(", ")}.`;
     }
 
-    const MaxBytes = maxSizeMB * 1024 * 1024
+    const MaxBytes = maxSizeMB * 1024 * 1024;
 
     if (file.size > MaxBytes) {
-      return `A imagem deve ter no máximo ${maxSizeMB}`
+      return `A imagem deve ter no máximo ${maxSizeMB}MB.`;
     }
 
-    return null
-  }, [acceptTypes, maxSizeMB])
+    return null;
+  }, [acceptTypes, maxSizeMB]);
 
   const handleAvatarClick = () => {
     inputRef.current?.click();
+  };
+
+  const convertAndCompressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 400;
+          const MAX_HEIGHT = 400;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Gera imagem leve comprimida em JPEG
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.82);
+          resolve(compressedDataUrl);
+        };
+        img.onerror = (err) => reject(err);
+      };
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const HandleSelectFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,49 +124,46 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
       return;
     }
 
-    const newPreviewUrl = URL.createObjectURL(file);
-    setPreviewUrl(newPreviewUrl);
-    onPhotoChange?.(file, newPreviewUrl);
-
-    if (User) {
-      setUser({
-        ...User,
-        avatar: newPreviewUrl,
-      });
-    }
-
     try {
-      const data = await uploadFoto(file, "/profile/photo");
+      showToast("Processando e enviando imagem...", "info");
+      const base64Image = await convertAndCompressImage(file);
+      setPreviewUrl(base64Image);
+      onPhotoChange?.(file, base64Image);
 
-      if (data?.url) {
-        setPreviewUrl(data.url);
-        if (User) {
-          setUser({ ...User, avatar: data.url });
-        }
+      const response = await api.put("/users/me", { avatarUrl: base64Image });
+      const updatedAvatar = response.data?.avatarUrl || base64Image;
+
+      if (User) {
+        setUser({
+          ...User,
+          avatar: updatedAvatar,
+          avatarUrl: updatedAvatar,
+        });
       }
-      showToast("Foto de perfil atualizada!", "success");
-    } catch {
-      showToast("Foto salva localmente.", "info");
+      showToast("Foto de perfil atualizada no banco de dados!", "success");
+    } catch (err) {
+      console.error("Erro ao salvar foto:", err);
+      showToast("Não foi possível salvar a foto no servidor.", "error");
     }
   };
 
-  const uploadFoto = async (file: File, endpoint: string) => {
-    const formData = new FormData();
-    formData.append("photo", file)
-
-    const response = await api.post(endpoint, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data"
+  const handleRemovePhoto = async () => {
+    try {
+      await api.put("/users/me", { avatarUrl: null });
+      setPreviewUrl(null);
+      if (User) {
+        setUser({
+          ...User,
+          avatar: undefined,
+          avatarUrl: undefined,
+        });
       }
-    })
-
-    if (!response) {
-      throw new Error(`Falha no upload`)
+      showToast("Foto de perfil removida com sucesso.", "info");
+    } catch (err) {
+      console.error("Erro ao remover foto:", err);
+      showToast("Erro ao remover foto do servidor.", "error");
     }
-
-    return response.data
-
-  }
+  };
 
   const { accentColor, themeAccentColors } = useThemeColors();
 
@@ -173,6 +212,7 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
         phone: phone.trim() || null,
         birthdate: birthdate || null,
         address: address.trim() || null,
+        avatarUrl: previewUrl || null,
       };
 
       const response = await api.put("/users/me", payload);
@@ -181,7 +221,7 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
         setUser({
           ...User,
           ...response.data,
-          avatar: previewUrl || User?.avatar,
+          avatar: response.data.avatarUrl || previewUrl || User?.avatar,
         });
       } else if (User) {
         setUser({
@@ -194,20 +234,10 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
         });
       }
 
-      showToast("Perfil atualizado com sucesso!", "success");
+      showToast("Perfil atualizado com sucesso no banco!", "success");
     } catch (err: any) {
       console.error("Erro ao salvar perfil:", err);
-      if (User) {
-        setUser({
-          ...User,
-          name: name.trim(),
-          phone: phone.trim() || undefined,
-          birthdate: birthdate || undefined,
-          address: address.trim() || undefined,
-          avatar: previewUrl || User?.avatar,
-        });
-      }
-      showToast("Perfil salvo localmente!", "info");
+      showToast("Erro ao salvar dados no servidor.", "error");
     } finally {
       setSaving(false);
     }
@@ -259,16 +289,31 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
     }
   };
 
-  const handleDeleteAccount = () => {
-    if (
-      window.confirm(
-        "ESTA AÇÃO É IRREVERSÍVEL. Todos os seus dados financeiros, orçamentos, históricos de transações e assinaturas serão apagados definitivamente do nosso sistema. Tem certeza que deseja excluir?",
-      )
-    ) {
-      showToast("Processando exclusão permanente...", "info");
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm(
+      "ESTA AÇÃO É IRREVERSÍVEL. Todos os seus dados financeiros, orçamentos, históricos de transações e metas serão apagados permanentemente do sistema.\n\nTem certeza absoluta de que deseja excluir sua conta?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setDeleting(true);
+      showToast("Excluindo conta e limpando dados...", "info");
+
+      await api.delete("/users/me");
+
+      localStorage.removeItem("token");
+      setUser(null);
+      showToast("Conta excluída com sucesso.", "success");
+
       setTimeout(() => {
-        showToast("Conta desativada.", "error");
-      }, 1500);
+        window.location.href = "/login";
+      }, 1000);
+    } catch (err) {
+      console.error("Erro ao excluir conta:", err);
+      showToast("Erro ao excluir conta. Verifique sua conexão.", "error");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -352,13 +397,7 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
                 </button>
                 {(previewUrl || User?.avatar) && (
                   <button
-                    onClick={() => {
-                      setPreviewUrl(null);
-                      if (User) {
-                        setUser({ ...User, avatar: undefined });
-                      }
-                      showToast("Foto de perfil removida.", "info");
-                    }}
+                    onClick={handleRemovePhoto}
                     className={dangerBtn}
                   >
                     Remover
@@ -504,9 +543,10 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
               </div>
               <button
                 onClick={handleDeleteAccount}
-                className="w-full sm:w-auto px-4 py-2 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 text-red-400 rounded-lg text-sm font-semibold active:scale-[0.98] transition-all cursor-pointer"
+                disabled={deleting}
+                className={`w-full sm:w-auto px-4 py-2 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 text-red-400 rounded-lg text-sm font-semibold active:scale-[0.98] transition-all cursor-pointer ${deleting ? "opacity-70 cursor-not-allowed" : ""}`}
               >
-                Excluir Conta
+                {deleting ? "Excluindo..." : "Excluir Conta"}
               </button>
             </div>
           </div>
