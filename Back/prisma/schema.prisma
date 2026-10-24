@@ -26,6 +26,7 @@ model User {
   phone     String?
   birthdate DateTime?
   address   String?
+  avatarUrl String?
   tenantId  String
   tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())

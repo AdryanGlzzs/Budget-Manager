@@ -18,6 +18,7 @@ routes.post('/login', TurnstileMiddleware,  LoginUserMiddleware, UserController.
 routes.post('/signup', TurnstileMiddleware, SignUpUserMiddleware, UserController.signup)
 routes.get('/users/me', AuthMiddleware,  UserController.GetUsers)
 routes.put('/users/me', AuthMiddleware, UserController.UpdateUser)
+routes.delete('/users/me', AuthMiddleware, UserController.DeleteAccount)
 routes.post("/auth/google", UserController.GoogleLoginController);
 routes.post('/auth/facebook', UserController.FacebookLoginController)
 routes.post('/auth/github', UserController.GitHubLoginController)

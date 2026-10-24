@@ -154,6 +154,7 @@ export class UserController {
           phone: true,
           birthdate: true,
           address: true,
+          avatarUrl: true,
           createdAt: true
         }
       });
@@ -421,7 +422,7 @@ export class UserController {
         });
       }
 
-      const { name, phone, birthdate, address } = req.body;
+      const { name, phone, birthdate, address, avatarUrl } = req.body;
 
       let parsedBirthdate: Date | undefined = undefined;
       if (birthdate) {
@@ -438,6 +439,7 @@ export class UserController {
           phone: phone !== undefined ? String(phone).trim() : undefined,
           birthdate: parsedBirthdate,
           address: address !== undefined ? String(address).trim() : undefined,
+          avatarUrl: avatarUrl !== undefined ? (avatarUrl ? String(avatarUrl).trim() : null) : undefined,
         },
         select: {
           id: true,
@@ -446,6 +448,7 @@ export class UserController {
           phone: true,
           birthdate: true,
           address: true,
+          avatarUrl: true,
           createdAt: true
         }
       });
@@ -455,6 +458,48 @@ export class UserController {
       console.error("Erro no UpdateUser:", error);
       return res.status(500).json({
         message: "Erro interno do servidor"
+      });
+    }
+  }
+
+  static async DeleteAccount(req: Request, res: Response) {
+    try {
+      const userId = (req as Request & { user?: { id: string } }).user?.id;
+
+      if (!userId) {
+        return res.status(401).json({
+          message: "Não autorizado"
+        });
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true, tenantId: true }
+      });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "Usuário não encontrado"
+        });
+      }
+      await prisma.$transaction(async (tx) => {
+        await tx.transaction.deleteMany({
+          where: { tenantId: user.tenantId }
+        });
+        await tx.tenant.delete({
+          where: { id: user.tenantId }
+        });
+      });
+
+      res.clearCookie("token");
+
+      return res.status(200).json({
+        message: "Conta excluída com sucesso"
+      });
+    } catch (error) {
+      console.error("Erro no DeleteAccount:", error);
+      return res.status(500).json({
+        message: "Erro interno ao excluir conta"
       });
     }
   }
