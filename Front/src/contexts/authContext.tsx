@@ -10,6 +10,7 @@ export interface User {
     phone?: string;
     birthdate?: string;
     address?: string;
+    twoFactorEnabled?: boolean;
 }
 
 interface AuthContextType {
