@@ -6,11 +6,13 @@ import {
   EyeOff,
   Globe,
   Smartphone,
+  Loader2,
 } from "lucide-react";
 
 import { themes } from "../themes/themes";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { useToast } from "../contexts/ToastContext";
+import { api } from "../services/api";
 
 type AccentColor = "purple" | "blue" | "emerald" | "pink";
 
@@ -177,6 +179,8 @@ export const Security = () => {
     }));
   }
 
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
+
   function confirmAction(config: Omit<ModalConfig, "isOpen">) {
     setModalConfig({
       ...config,
@@ -184,7 +188,7 @@ export const Security = () => {
     });
   }
 
-  function handleSavePassword(e: React.FormEvent) {
+  async function handleSavePassword(e: React.FormEvent) {
     e.preventDefault();
 
     if (
@@ -206,8 +210,23 @@ export const Security = () => {
       return;
     }
 
-    showToast("Senha alterada com sucesso!", "success");
-    setPasswords(initialPasswords);
+    try {
+      setIsSavingPassword(true);
+      const response = await api.put("/users/password", {
+        currentPassword: passwords.current,
+        newPassword: passwords.new,
+      });
+
+      showToast(response.data?.message || "Senha alterada com sucesso!", "success");
+      setPasswords(initialPasswords);
+    } catch (err: any) {
+      const msg =
+        err.response?.data?.message ||
+        "Não foi possível alterar a senha. Verifique seus dados.";
+      showToast(msg, "error");
+    } finally {
+      setIsSavingPassword(false);
+    }
   }
 
   function handleToggle2fa() {
@@ -309,9 +328,19 @@ export const Security = () => {
 
             <button
               type="submit"
-              className={`${styles.primaryBtn} w-full sm:w-auto`}
+              disabled={isSavingPassword}
+              className={`${styles.primaryBtn} w-full sm:w-auto flex items-center justify-center gap-2 ${
+                isSavingPassword ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Atualizar Senha
+              {isSavingPassword ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Atualizando...</span>
+                </>
+              ) : (
+                "Atualizar Senha"
+              )}
             </button>
           </form>
         </div>

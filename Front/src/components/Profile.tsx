@@ -102,7 +102,6 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
           const ctx = canvas.getContext("2d");
           ctx?.drawImage(img, 0, 0, width, height);
 
-          // Gera imagem leve comprimida em JPEG
           const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.82);
           resolve(compressedDataUrl);
         };
@@ -343,7 +342,7 @@ export const Profile = ({ onPhotoChange, maxSizeMB = 5, acceptTypes = TypesPhoto
         <div className="relative overflow-hidden rounded-2xl border border-white/10 backdrop-blur-sm bg-gradient-to-br from-white/5 to-white/[0.02]">
           <div className={`h-32 bg-gradient-to-r ${theme.primary} relative`} />
           <div className="px-6 pb-6">
-            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-5 -mt-10 text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-5 -mt-5 text-center sm:text-left">
               <div className="relative">
                 {previewUrl || User?.avatar ? (
                   <img
