@@ -504,4 +504,79 @@ export class UserController {
     }
   }
 
+
+  static async ChangePassword(req: Request, res: Response) {
+    try {
+      const userId = (req as Request & { user?: { id: string } }).user?.id;
+
+      if (!userId) {
+        return res.status(401).json({
+          message: "Não autorizado",
+        });
+      }
+
+      const { currentPassword, newPassword } = req.body;
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+          message: "Senha atual e nova senha são obrigatórias.",
+        });
+      }
+
+      if (typeof newPassword !== "string" || newPassword.length < 6) {
+        return res.status(400).json({
+          message: "A nova senha deve ter no mínimo 6 caracteres.",
+        });
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "Usuário não encontrado.",
+        });
+      }
+
+      if (!user.password) {
+        return res.status(400).json({
+          message: "Conta vinculada a login social não possui senha cadastrada.",
+        });
+      }
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({
+          message: "Senha atual incorreta.",
+        });
+      }
+
+      const isSamePassword = await bcrypt.compare(newPassword, user.password);
+      if (isSamePassword) {
+        return res.status(400).json({
+          message: "A nova senha não pode ser igual à senha atual.",
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          password: hashedPassword,
+        },
+      });
+
+      return res.status(200).json({
+        message: "Senha alterada com sucesso!",
+      });
+    } catch (error) {
+      console.error("Erro no ChangePassword:", error);
+      return res.status(500).json({
+        message: "Erro interno ao alterar a senha.",
+      });
+    }
+  }
+
 }
