@@ -19,18 +19,34 @@ model Tenant {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String
-  phone     String?
-  birthdate DateTime?
-  address   String?
-  avatarUrl String?
-  tenantId  String
-  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id               String    @id @default(uuid())
+  name             String
+  email            String    @unique
+  password         String
+  phone            String?
+  birthdate        DateTime?
+  address          String?
+  avatarUrl        String?
+  twoFactorEnabled Boolean   @default(false)
+  twoFactorSecret  String?
+  sessions         Session[]
+  tenantId         String
+  tenant           Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Session {
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash    String    @unique
+  device       String    @default("Desconhecido")
+  browser      String?
+  os           String?
+  ipAddress    String?
+  lastActiveAt DateTime  @default(now())
+  createdAt    DateTime  @default(now())
 }
 
 model Transaction {

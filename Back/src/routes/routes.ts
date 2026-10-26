@@ -1,3 +1,5 @@
+import { SessionController } from '../controllers/SessionController'
+import { TwoFactorController } from '../controllers/TwoFactorController'
 import { Router } from 'express'
 import { LoginUserMiddleware, SignUpUserMiddleware } from '../middlewares/UserMiddleware'
 import { TransactionController } from '../controllers/TransactionController'
@@ -41,3 +43,14 @@ routes.put('/savings-goals/edit/:id', AuthTenantId, SavingGoalsController.EditGo
 
 routes.post('/process_payment', PaymentController.processPayment)
 
+
+// Sessões Ativas
+routes.get('/users/sessions', AuthMiddleware, SessionController.listSessions)
+routes.delete('/users/sessions/other', AuthMiddleware, SessionController.revokeOtherSessions)
+routes.delete('/users/sessions/:id', AuthMiddleware, SessionController.revokeSession)
+
+// Autenticação de Dois Fatores (2FA)
+routes.post('/users/2fa/generate', AuthMiddleware, TwoFactorController.generate)
+routes.post('/users/2fa/enable', AuthMiddleware, TwoFactorController.enable)
+routes.post('/users/2fa/disable', AuthMiddleware, TwoFactorController.disable)
+routes.post('/auth/2fa/verify', TwoFactorController.verifyLogin)

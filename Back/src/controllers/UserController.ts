@@ -1,3 +1,4 @@
+import { parseDevice, hashToken } from './SessionController';
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
@@ -101,22 +102,51 @@ export class UserController {
         })
       }
 
+      if (userLogin.twoFactorEnabled && userLogin.twoFactorSecret) {
+        const tempToken = jwt.sign(
+          { sub: userLogin.id, is2faPending: true },
+          secret,
+          { expiresIn: "10m" }
+        );
+        return res.status(200).json({
+          require2fa: true,
+          tempToken,
+          message: "Autenticação em duas etapas necessária",
+        });
+      }
+
       const token = jwt.sign(
         { sub: userLogin.id, id: userLogin.id, tenantId: userLogin.tenantId },
         secret,
         { expiresIn: "7d" }
-      )
+      );
+
+      const userAgent = req.headers["user-agent"];
+      const { device, browser, os } = parseDevice(userAgent);
+      const ip = (req.headers["x-forwarded-for"] as string) || req.socket.remoteAddress || null;
+
+      const session = await prisma.session.create({
+        data: {
+          userId: userLogin.id,
+          tokenHash: hashToken(token),
+          device,
+          browser,
+          os,
+          ipAddress: typeof ip === "string" ? ip.split(",")[0].trim() : ip,
+        },
+      });
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000
-      })
+      });
 
       return res.status(200).json({
         message: "Login realizado com sucesso!",
         token,
+        sessionId: session.id,
         user: {
           id: userLogin.id,
           name: userLogin.name,
@@ -408,9 +438,7 @@ export class UserController {
       console.error("Erro no GitHubLoginController:", error);
       return res.status(401).json({ message: "Token inválido ou expirado" });
     }
-  }
-
-  
+  }  
 
   static async UpdateUser(req: Request, res: Response) {
     try {
