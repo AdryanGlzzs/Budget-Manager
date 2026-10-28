@@ -28,8 +28,10 @@ import { api } from "../services/api";
 import type { TransactionProps } from "../components/TransactionModal";
 import type { BudgetsProps } from "../components/BudgetModal";
 import { formatCurrency } from "../utils/formatCurrency";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
@@ -54,7 +56,6 @@ const Dashboard = () => {
       const response = await api.get('/budgets');
       if (response?.data?.data) {
         setBudgets(response.data.data);
-        console.log(response.data)
       }
     } catch (error) {
       console.error("Erro ao buscar orçamentos:", error);
@@ -68,11 +69,11 @@ const Dashboard = () => {
 
   const chartData = (() => {
     const grouped = cash.reduce(
-      (acc, transaction) => {
-        const rawDate = transaction.date;
-        const date = new Date(transaction.date).toLocaleDateString("pt-BR");
+      (acc, item) => {
+        const rawDate = item.date;
+        const date = new Date(item.date).toLocaleDateString("pt-BR");
 
-        let existing = acc.find((item) => item.date === date);
+        let existing = acc.find((entry) => entry.date === date);
 
         if (!existing) {
           existing = {
@@ -84,12 +85,12 @@ const Dashboard = () => {
           acc.push(existing);
         }
 
-        if (transaction.type === "revenue" || transaction.type === "expense") {
-          existing.revenue += Number(transaction.amount);
+        if (item.type === "revenue" || item.type === "expense") {
+          existing.revenue += Number(item.amount);
         }
 
-        if (transaction.type === "expense") {
-          existing.expense += Number(transaction.amount);
+        if (item.type === "expense") {
+          existing.expense += Number(item.amount);
         }
 
         return acc;
@@ -124,7 +125,7 @@ const Dashboard = () => {
 
     const startPoint = {
       rawDate: accumulated[0].rawDate,
-      date: "Início",
+      date: t("dashboard.cashFlow.start"),
       revenue: 0,
       expense: 0,
     };
@@ -133,49 +134,56 @@ const Dashboard = () => {
   })();
 
   const expensesCategory = transaction
-    .filter((t) => t.type === "expense")
-    .reduce((acc, t) => {
-      const existing = acc.find(
-        (item) => item.name === t.category
-      );
+    .filter((tr) => tr.type === "expense")
+    .reduce((acc, tr) => {
+      const existing = acc.find((item) => item.name === tr.category);
 
       if (existing) {
-        existing.value += Number(t.amount);
+        existing.value += Number(tr.amount);
       } else {
         acc.push({
-          name: t.category,
-          value: Number(t.amount),
-          color: t.color
+          name: tr.category,
+          value: Number(tr.amount),
+          color: tr.color,
         });
       }
 
       return acc;
     }, [] as { name: string; value: number; color: string }[]);
 
+  const TotalRevenue = transaction
+    .filter((tr) => tr.type === "revenue")
+    .reduce((acc, tr) => acc + Number(tr.amount || 0), 0);
 
-  const TotalRevenue = transaction.filter((t) => t.type === 'revenue').reduce((acc, t) => acc + Number(t.amount || 0), 0)
+  const TotalExpense = transaction
+    .filter((tr) => tr.type === "expense")
+    .reduce((acc, tr) => acc + Number(tr.amount || 0), 0);
 
-  const TotalExpense = transaction.filter((t) => t.type === "expense").reduce((acc, t) => acc + Number(t.amount || 0), 0)
+  const revenues = transaction.filter((tr) => tr.type === "revenue");
+  const expense = transaction.filter((tr) => tr.type === "expense");
+  const TotalR = transaction.reduce((acc, tr) => acc + Number(tr.amount || 0), 0);
 
-  const revenues = transaction.filter((t) => t.type === "revenue")
-
-  const expense = transaction.filter((t) => t.type === 'expense')
-
-  const TotalR = transaction.reduce((acc, t) => acc + Number(t.amount || 0), 0)
-
-  const avarageR = revenues.length > 0 ? TotalR / revenues.length : 0
-
-  const avarageE = expense.length > 0 ? TotalExpense / expense.length : 0
-
-
-  const Total = TotalRevenue - TotalExpense
-
-
+  const avarageR = revenues.length > 0 ? TotalR / revenues.length : 0;
+  const avarageE = expense.length > 0 ? TotalExpense / expense.length : 0;
+  const Total = TotalRevenue - TotalExpense;
   const totalFlow = TotalExpense + TotalRevenue;
 
-
-
-
+  const getPeriodLabel = (period: string) => {
+    switch (period) {
+      case "monthly":
+        return t("dashboard.budgets.periods.monthly");
+      case "next-month":
+        return t("dashboard.budgets.periods.nextMonth");
+      case "quarterly":
+        return t("dashboard.budgets.periods.quarterly");
+      case "yearly":
+        return t("dashboard.budgets.periods.yearly");
+      case "custom":
+        return t("dashboard.budgets.periods.custom");
+      default:
+        return period;
+    }
+  };
 
   const insights = [
     {
@@ -204,6 +212,7 @@ const Dashboard = () => {
           </div>
 
           <main className="sm:flex-1 p-4 max-w-350 z-10">
+            {/* Total Balance & Cards */}
             <section className="mb-8 mt-20">
               <div className="relative group">
                 <div className={`absolute -inset-4 bg-linear-to-br ${theme.glow} rounded-[40px] blur-[60px] opacity-80 transition-all duration-700`}></div>
@@ -212,7 +221,7 @@ const Dashboard = () => {
                     <div>
                       <div className="text-[14px] text-gray-400 mb-2 flex items-center gap-2">
                         <DollarSign className="w-4 h-4" />
-                        Saldo Total
+                        {t("dashboard.totalBalance")}
                       </div>
                       <div className="mt-5 text-[45px] font-bold leading-none bg-linear-to-r from-white via-white to-gray-300 bg-clip-text text-transparent mb-3">
                         {formatCurrency(Total)}
@@ -222,18 +231,18 @@ const Dashboard = () => {
                           <ArrowUpRight className="w-4 h-4" />
                           +5.2%
                         </span>
-                        <span className="text-gray-500">vs mês anterior</span>
+                        <span className="text-gray-500">{t("dashboard.vsLastMonth")}</span>
                       </div>
                     </div>
 
                     <section className="absolute top-5 right-5 sm:top-10">
                       <select
-                        defaultValue="Este Mês"
+                        defaultValue={t("dashboard.periods.thisMonth")}
                         className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer"
                       >
-                        <option>Este Mês</option>
-                        <option>Mês Passado</option>
-                        <option>Este Ano</option>
+                        <option>{t("dashboard.periods.thisMonth")}</option>
+                        <option>{t("dashboard.periods.lastMonth")}</option>
+                        <option>{t("dashboard.periods.thisYear")}</option>
                       </select>
                     </section>
                   </div>
@@ -248,14 +257,14 @@ const Dashboard = () => {
                           </div>
                           <div className="flex-1">
                             <div className="text-[13px] text-gray-400 mb-1">
-                              Receita
+                              {t("dashboard.revenue")}
                             </div>
                             <div className="text-[32px] font-bold leading-none mb-2">
                               {formatCurrency(TotalRevenue)}
                             </div>
                             <div className="text-[13px] text-green-400 flex items-center gap-1">
                               <ArrowUpRight className="w-3 h-3" />
-                              +12.5% desde o mês passado
+                              +12.5% {t("dashboard.sinceLastMonth")}
                             </div>
                           </div>
                         </div>
@@ -271,14 +280,14 @@ const Dashboard = () => {
                           </div>
                           <div className="flex-1">
                             <div className="text-[13px] text-gray-400 mb-1">
-                              Despesas
+                              {t("dashboard.expenses")}
                             </div>
                             <div className="text-[32px] font-bold leading-none mb-2">
                               {formatCurrency(TotalExpense)}
                             </div>
                             <div className="text-[13px] text-red-400 flex items-center gap-1">
                               <ArrowDownRight className="w-3 h-3" />
-                              -2.4% desde o mês passado
+                              -2.4% {t("dashboard.sinceLastMonth")}
                             </div>
                           </div>
                         </div>
@@ -289,6 +298,7 @@ const Dashboard = () => {
               </div>
             </section>
 
+            {/* Charts section */}
             <section className="sm:grid sm:grid-cols-2 sm:gap-6 sm:mb-8 sm:items-stretch">
               <div className="relative group min-w-0">
                 <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-cyan-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
@@ -296,16 +306,16 @@ const Dashboard = () => {
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <div className="text-[18px] font-semibold mb-2">
-                        Visão Geral de Fluxo de Caixa
+                        {t("dashboard.cashFlow.title")}
                       </div>
                       <div className="flex items-center gap-4 text-[13px]">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-1 bg-purple-500 rounded-full shadow-sm shadow-purple-500/50"></div>
-                          <span className="text-gray-400">Receita</span>
+                          <span className="text-gray-400">{t("dashboard.cashFlow.revenue")}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-1 bg-cyan-500 rounded-full shadow-sm shadow-cyan-500/50"></div>
-                          <span className="text-gray-400">Despesa</span>
+                          <span className="text-gray-400">{t("dashboard.cashFlow.expense")}</span>
                         </div>
                       </div>
                     </div>
@@ -349,7 +359,9 @@ const Dashboard = () => {
                         }}
                         formatter={(val: any, name: any) => [
                           formatCurrency(val),
-                          name === "revenue" ? "Receita Acumulada" : "Despesa Acumulada",
+                          name === "revenue"
+                            ? t("dashboard.cashFlow.accRevenue")
+                            : t("dashboard.cashFlow.accExpense"),
                         ]}
                       />
                       <Line
@@ -373,10 +385,10 @@ const Dashboard = () => {
                     </LineChart>
                   </ResponsiveContainer>
 
-                  <div className="m t-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
+                  <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
                     <div>
                       <div className="text-[12px] text-gray-500 mb-1">
-                        Receita Média
+                        {t("dashboard.cashFlow.avgRevenue")}
                       </div>
                       <div className="text-[20px] font-bold text-purple-400">
                         {formatCurrency(avarageR)}
@@ -384,7 +396,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <div className="text-[12px] text-gray-500 mb-1">
-                        Despesa Média
+                        {t("dashboard.cashFlow.avgExpense")}
                       </div>
                       <div className="text-[20px] font-bold text-cyan-400">
                         {formatCurrency(avarageE)}
@@ -394,12 +406,13 @@ const Dashboard = () => {
                 </div>
               </div>
 
+              {/* Categorias */}
               <div className="relative group min-w-0">
                 <div className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
                     <div className="text-[18px] font-semibold">
-                      Gastos por Categoria
+                      {t("dashboard.expensesByCategory.title")}
                     </div>
                     <div className="text-[28px] font-bold">{formatCurrency(TotalExpense)}</div>
                   </div>
@@ -423,7 +436,7 @@ const Dashboard = () => {
                       </PieChart>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <div className="text-[13px] text-gray-500">
-                          Total Gasto
+                          {t("dashboard.expensesByCategory.totalSpent")}
                         </div>
                       </div>
                     </div>
@@ -458,32 +471,31 @@ const Dashboard = () => {
                           </div>
 
                           <span className="text-sm font-medium text-gray-400">
-                            Nenhuma categoria encontrada
+                            {t("dashboard.expensesByCategory.noCategory")}
                           </span>
 
                           <span className="text-xs text-gray-600 mt-1">
-                            Não há gastos registrados por categoria.
+                            {t("dashboard.expensesByCategory.noCategoryDesc")}
                           </span>
                         </div>
                       )}
-
                     </div>
                   </div>
-
                 </div>
               </div>
             </section>
 
+            {/* Transações Recentes */}
             <section className="mb-8 mt-5">
               <div className="relative group">
                 <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-blue-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-linear-to-br from-white/10 to-white/2 p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-[20px] font-semibold">
-                      Transações Recentes
+                      {t("dashboard.recentTransactions.title")}
                     </h2>
                     <button className="text-[14px] text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1 font-medium">
-                      Ver Tudo
+                      {t("dashboard.recentTransactions.viewAll")}
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -491,7 +503,7 @@ const Dashboard = () => {
                   <div className="space-y-2">
                     {transaction.length === 0 ? (
                       <div className="text-[14px] text-gray-500 py-4 text-center">
-                        Nenhuma transação encontrada.
+                        {t("dashboard.recentTransactions.empty")}
                       </div>
                     ) : (
                       transaction.slice(0, 3).map((item) => {
@@ -532,8 +544,9 @@ const Dashboard = () => {
 
                             <div className="text-right">
                               <div
-                                className={`text-[18px] font-bold ${isRevenue ? "text-green-400" : "text-red-400"
-                                  }`}
+                                className={`text-[18px] font-bold ${
+                                  isRevenue ? "text-green-400" : "text-red-400"
+                                }`}
                               >
                                 {isRevenue ? "+" : "-"} {formatCurrency(amountNumber)}
                               </div>
@@ -547,17 +560,21 @@ const Dashboard = () => {
               </div>
             </section>
 
+            {/* Orçamentos */}
             <section className="mb-8">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-[20px] font-semibold">Orçamentos</h2>
+                <h2 className="text-[20px] font-semibold">{t("dashboard.budgets.title")}</h2>
                 <span className="text-[13px] text-gray-400">
-                  Mostrando {Math.min(3, budgets.length)} de {budgets.length}
+                  {t("dashboard.budgets.showing", {
+                    current: Math.min(3, budgets.length),
+                    total: budgets.length,
+                  })}
                 </span>
               </div>
 
               {budgets.length === 0 ? (
                 <div className="bg-linear-to-br from-white/10 to-white/2 p-8 rounded-2xl border border-white/10 text-center text-gray-400">
-                  Nenhum orçamento cadastrado.
+                  {t("dashboard.budgets.empty")}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -594,7 +611,7 @@ const Dashboard = () => {
                                   {budget.name}
                                 </h3>
                                 <span className="text-[12px] text-gray-500">
-                                  {budget.period === "monthly" ? "Mensal" : budget.period === "next-month" ? "Próximo mês" : budget.period === "quarterly" ? "Trimestral" : budget.period === "yearly" ? "Anual" : budget.period === "custom" ? "Personalizado" : budget.period}
+                                  {getPeriodLabel(budget.period)}
                                 </span>
                               </div>
                             </div>
@@ -615,11 +632,11 @@ const Dashboard = () => {
                                 {formatCurrency(spent)}
                               </span>
                               <span className="text-[13px] text-gray-500">
-                                de {formatCurrency(limit)}
+                                {t("dashboard.budgets.of")} {formatCurrency(limit)}
                               </span>
                             </div>
                             <div className="text-[12px] text-gray-400">
-                              {formatCurrency(remaining)} restante
+                              {formatCurrency(remaining)} {t("dashboard.budgets.remaining")}
                             </div>
                           </div>
 
@@ -641,6 +658,7 @@ const Dashboard = () => {
               )}
             </section>
 
+            {/* Insights com IA */}
             <section>
               <div className="relative group">
                 <div className="absolute inset-0 bg-linear-to-br from-yellow-500/20 via-transparent to-orange-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
@@ -651,10 +669,10 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <h2 className="text-[20px] font-semibold">
-                        Insights com IA
+                        {t("dashboard.aiInsights.title")}
                       </h2>
                       <p className="text-[13px] text-gray-400">
-                        Recomendações inteligentes baseadas nos seus gastos
+                        {t("dashboard.aiInsights.subtitle")}
                       </p>
                     </div>
                   </div>
@@ -666,12 +684,13 @@ const Dashboard = () => {
                         className="flex items-start gap-3 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all"
                       >
                         <div
-                          className={`w-2 h-2 rounded-full mt-2 ${insight.type === "positive"
-                            ? "bg-green-400 shadow-sm shadow-green-400/50"
-                            : insight.type === "warning"
+                          className={`w-2 h-2 rounded-full mt-2 ${
+                            insight.type === "positive"
+                              ? "bg-green-400 shadow-sm shadow-green-400/50"
+                              : insight.type === "warning"
                               ? "bg-yellow-400 shadow-sm shadow-yellow-400/50"
                               : "bg-red-400 shadow-sm shadow-red-400/50"
-                            }`}
+                          }`}
                         ></div>
                         <p className="text-[14px] text-gray-300 leading-relaxed">
                           {insight.text}
@@ -681,7 +700,7 @@ const Dashboard = () => {
                   </div>
 
                   <button className="w-full bg-linear-to-r from-purple-600 to-purple-500 py-3 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
-                    Ver Mais Insights
+                    {t("dashboard.aiInsights.viewMore")}
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>

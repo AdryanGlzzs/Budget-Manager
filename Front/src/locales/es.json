@@ -1,0 +1,112 @@
+{
+  "common": {
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "preferences": {
+    "title": "Preferencias Generales",
+    "theme": "Color de Acento",
+    "localCurrency": "Moneda Local",
+    "interfaceLanguage": "Idioma de la Interfaz",
+    "timezone": "Zona Horaria",
+    "dateFormat": "Formato de Fecha",
+    "saveButton": "Guardar Preferencias",
+    "saveSuccess": "¡Preferencias generales guardadas con éxito!",
+    "themes": {
+      "purple": "Púrpura",
+      "blue": "Azul",
+      "emerald": "Esmeralda",
+      "pink": "Rosa"
+    },
+    "languages": {
+      "pt": "Português (BR)",
+      "en": "English (US)",
+      "es": "Español"
+    }
+  },
+  "notifications": {
+    "title": "Preferencias de Notificación",
+    "loading": "Cargando preferencias...",
+    "saveButton": "Guardar Preferencias",
+    "savingButton": "Guardando...",
+    "saveSuccess": "¡Preferencias de notificación guardadas con éxito!",
+    "saveError": "Error al guardar las preferencias. Inténtelo de nuevo.",
+    "items": {
+      "transactions": {
+        "title": "Transacciones",
+        "description": "Recibe notificaciones por cada transacción realizada"
+      },
+      "budgetAlerts": {
+        "title": "Alertas de Presupuesto",
+        "description": "Alertas al acercarte a los límites de tu presupuesto"
+      },
+      "savingsGoals": {
+        "title": "Metas de Ahorro",
+        "description": "Actualizaciones sobre el progreso de tus ahorros"
+      },
+      "monthlyReports": {
+        "title": "Informes Mensuales",
+        "description": "Informes mensuales detallados de tu resumen financiero"
+      },
+      "marketing": {
+        "title": "Novedades y Producto",
+        "description": "Noticias, consejos y actualizaciones de nuevas funciones"
+      }
+    }
+  },
+  "dashboard": {
+    "totalBalance": "Saldo Total",
+    "vsLastMonth": "vs mes anterior",
+    "periods": {
+      "thisMonth": "Este Mes",
+      "lastMonth": "Mes Pasado",
+      "thisYear": "Este Año"
+    },
+    "revenue": "Ingresos",
+    "sinceLastMonth": "desde el mes pasado",
+    "expenses": "Gastos",
+    "cashFlow": {
+      "title": "Resumen del Flujo de Caja",
+      "revenue": "Ingresos",
+      "expense": "Gastos",
+      "accRevenue": "Ingresos Acumulados",
+      "accExpense": "Gastos Acumulados",
+      "avgRevenue": "Ingreso Promedio",
+      "avgExpense": "Gasto Promedio",
+      "start": "Inicio"
+    },
+    "expensesByCategory": {
+      "title": "Gastos por Categoría",
+      "totalSpent": "Total Gastado",
+      "noCategory": "No se encontraron categorías",
+      "noCategoryDesc": "No hay gastos registrados por categoría."
+    },
+    "recentTransactions": {
+      "title": "Transacciones Recientes",
+      "viewAll": "Ver Todo",
+      "empty": "No se encontraron transacciones."
+    },
+    "budgets": {
+      "title": "Presupuestos",
+      "showing": "Mostrando {{current}} de {{total}}",
+      "empty": "No hay presupuestos registrados.",
+      "remaining": "restante",
+      "of": "de",
+      "periods": {
+        "monthly": "Mensual",
+        "nextMonth": "Próximo mes",
+        "quarterly": "Trimestral",
+        "yearly": "Anual",
+        "custom": "Personalizado"
+      }
+    },
+    "aiInsights": {
+      "title": "Insights con IA",
+      "subtitle": "Recomendaciones inteligentes basadas en tus gastos",
+      "viewMore": "Ver Más Insights"
+    }
+  }
+}

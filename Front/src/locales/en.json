@@ -1,0 +1,112 @@
+{
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "preferences": {
+    "title": "General Preferences",
+    "theme": "Accent Color",
+    "localCurrency": "Local Currency",
+    "interfaceLanguage": "Interface Language",
+    "timezone": "Timezone",
+    "dateFormat": "Date Format",
+    "saveButton": "Save Preferences",
+    "saveSuccess": "General preferences saved successfully!",
+    "themes": {
+      "purple": "Purple",
+      "blue": "Blue",
+      "emerald": "Emerald",
+      "pink": "Pink"
+    },
+    "languages": {
+      "pt": "Português (BR)",
+      "en": "English (US)",
+      "es": "Español"
+    }
+  },
+  "notifications": {
+    "title": "Notification Preferences",
+    "loading": "Loading preferences...",
+    "saveButton": "Save Preferences",
+    "savingButton": "Saving...",
+    "saveSuccess": "Notification preferences saved successfully!",
+    "saveError": "Error saving preferences. Please try again.",
+    "items": {
+      "transactions": {
+        "title": "Transactions",
+        "description": "Receive notifications for every completed transaction"
+      },
+      "budgetAlerts": {
+        "title": "Budget Alerts",
+        "description": "Alerts when approaching your budget limits"
+      },
+      "savingsGoals": {
+        "title": "Savings Goals",
+        "description": "Updates on your savings progress"
+      },
+      "monthlyReports": {
+        "title": "Monthly Reports",
+        "description": "Detailed monthly reports of your financial summary"
+      },
+      "marketing": {
+        "title": "News & Product",
+        "description": "News, tips, and feature updates"
+      }
+    }
+  },
+  "dashboard": {
+    "totalBalance": "Total Balance",
+    "vsLastMonth": "vs last month",
+    "periods": {
+      "thisMonth": "This Month",
+      "lastMonth": "Last Month",
+      "thisYear": "This Year"
+    },
+    "revenue": "Revenue",
+    "sinceLastMonth": "since last month",
+    "expenses": "Expenses",
+    "cashFlow": {
+      "title": "Cash Flow Overview",
+      "revenue": "Revenue",
+      "expense": "Expense",
+      "accRevenue": "Accumulated Revenue",
+      "accExpense": "Accumulated Expense",
+      "avgRevenue": "Average Revenue",
+      "avgExpense": "Average Expense",
+      "start": "Start"
+    },
+    "expensesByCategory": {
+      "title": "Expenses by Category",
+      "totalSpent": "Total Spent",
+      "noCategory": "No category found",
+      "noCategoryDesc": "No expenses registered by category."
+    },
+    "recentTransactions": {
+      "title": "Recent Transactions",
+      "viewAll": "View All",
+      "empty": "No transactions found."
+    },
+    "budgets": {
+      "title": "Budgets",
+      "showing": "Showing {{current}} of {{total}}",
+      "empty": "No budgets found.",
+      "remaining": "remaining",
+      "of": "of",
+      "periods": {
+        "monthly": "Monthly",
+        "nextMonth": "Next month",
+        "quarterly": "Quarterly",
+        "yearly": "Yearly",
+        "custom": "Custom"
+      }
+    },
+    "aiInsights": {
+      "title": "AI Insights",
+      "subtitle": "Smart recommendations based on your spending",
+      "viewMore": "View More Insights"
+    }
+  }
+}
