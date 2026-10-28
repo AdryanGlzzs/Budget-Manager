@@ -29,6 +29,7 @@ model User {
   avatarUrl        String?
   twoFactorEnabled Boolean   @default(false)
   twoFactorSecret  String?
+  notificationPreferences NotificationPreference?
   sessions         Session[]
   tenantId         String
   tenant           Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -89,4 +90,17 @@ model SavingGoal {
   tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model NotificationPreference {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions   Boolean  @default(true)
+  budgetAlerts   Boolean  @default(true)
+  savingsGoals   Boolean  @default(true)
+  monthlyReports Boolean  @default(false)
+  marketing      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
