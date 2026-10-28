@@ -108,5 +108,34 @@
       "subtitle": "Smart recommendations based on your spending",
       "viewMore": "View More Insights"
     }
+  },
+  "transactions": {
+    "title": "Transactions",
+    "subtitle": "Track and manage all your financial transactions",
+    "newTransaction": "New Transaction",
+    "totalRevenue": "Total Revenue",
+    "totalExpenses": "Total Expenses",
+    "balance": "Balance",
+    "thisMonth": "This month",
+    "allCategories": "All Categories",
+    "export": "Export",
+    "filters": {
+      "all": "All",
+      "revenue": "Revenue",
+      "expenses": "Expenses",
+      "pending": "Pending"
+    },
+    "table": {
+      "transaction": "Transaction",
+      "category": "Category",
+      "dateTime": "Date & Time",
+      "status": "Status",
+      "amount": "Amount",
+      "actions": "Actions",
+      "completed": "Completed",
+      "pending": "Pending",
+      "emptyTitle": "No transactions found",
+      "emptySubtitle": "Try adjusting your filters"
+    }
   }
 }

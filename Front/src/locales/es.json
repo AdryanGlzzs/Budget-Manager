@@ -108,5 +108,34 @@
       "subtitle": "Recomendaciones inteligentes basadas en tus gastos",
       "viewMore": "Ver Más Insights"
     }
+  },
+  "transactions": {
+    "title": "Transacciones",
+    "subtitle": "Monitorea y administra todas tus transacciones financieras",
+    "newTransaction": "Nueva Transacción",
+    "totalRevenue": "Ingresos Totales",
+    "totalExpenses": "Gastos Totales",
+    "balance": "Saldo",
+    "thisMonth": "Este mes",
+    "allCategories": "Todas las Categorías",
+    "export": "Exportar",
+    "filters": {
+      "all": "Todo",
+      "revenue": "Ingresos",
+      "expenses": "Gastos",
+      "pending": "Pendiente"
+    },
+    "table": {
+      "transaction": "Transacción",
+      "category": "Categoría",
+      "dateTime": "Fecha y Hora",
+      "status": "Estado",
+      "amount": "Monto",
+      "actions": "Acciones",
+      "completed": "Completado",
+      "pending": "Pendiente",
+      "emptyTitle": "No se encontraron transacciones",
+      "emptySubtitle": "Intenta ajustar tus filtros"
+    }
   }
 }

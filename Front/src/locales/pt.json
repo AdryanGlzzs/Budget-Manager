@@ -108,5 +108,34 @@
       "subtitle": "Recomendações inteligentes baseadas nos seus gastos",
       "viewMore": "Ver Mais Insights"
     }
+  },
+  "transactions": {
+    "title": "Transações",
+    "subtitle": "Acompanhe e gerencie todas as suas transações financeiras",
+    "newTransaction": "Nova Transação",
+    "totalRevenue": "Receita Total",
+    "totalExpenses": "Despesas Totais",
+    "balance": "Saldo",
+    "thisMonth": "Este mês",
+    "allCategories": "Todas as Categorias",
+    "export": "Exportar",
+    "filters": {
+      "all": "Tudo",
+      "revenue": "Receita",
+      "expenses": "Despesas",
+      "pending": "Pendente"
+    },
+    "table": {
+      "transaction": "Transação",
+      "category": "Categoria",
+      "dateTime": "Data e Hora",
+      "status": "Status",
+      "amount": "Valor",
+      "actions": "Ações",
+      "completed": "Concluído",
+      "pending": "Pendente",
+      "emptyTitle": "Nenhuma transação encontrada",
+      "emptySubtitle": "Tente ajustar seus filtros"
+    }
   }
 }
