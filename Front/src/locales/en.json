@@ -137,5 +137,31 @@
       "emptyTitle": "No transactions found",
       "emptySubtitle": "Try adjusting your filters"
     }
+  },
+  "budgetsPage": {
+    "title": "Budget Manager",
+    "subtitle": "Create and track budgets for different spending categories",
+    "createBudget": "Create Budget",
+    "cards": {
+      "totalBudget": "Total Budget",
+      "allCategories": "Across all categories",
+      "totalSpent": "Total Spent",
+      "ofBudget": "of budget",
+      "remaining": "Remaining",
+      "available": "available"
+    },
+    "categories": {
+      "title": "Budgets Categories",
+      "periods": {
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "thisYear": "This Year"
+      },
+      "emptyTitle": "No budgets found",
+      "emptySubtitle": "Try adjusting your filters",
+      "of": "of",
+      "remaining": "remaining",
+      "overBudget": "over budget"
+    }
   }
 }

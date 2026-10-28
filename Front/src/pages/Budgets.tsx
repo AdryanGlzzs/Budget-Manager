@@ -11,13 +11,15 @@ import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import BudgetModal from "../components/BudgetModal";
 import type { BudgetsProps } from "../../src/components/BudgetModal";
-import { DeductModal, } from "../components/deductModal";
-import type { PropsModalDeduct } from '../components/deductModal'
+import { DeductModal } from "../components/deductModal";
+import type { PropsModalDeduct } from '../components/deductModal';
 import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
+import { useTranslation } from "react-i18next";
 
 const Budgets = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
@@ -27,62 +29,41 @@ const Budgets = () => {
   const [selected, setSelected] = useState<BudgetsProps | null>(null);
   const [editingBudget, setEditingBudget] = useState<BudgetsProps | null>(null);
 
-
   const [budgets, setBudgets] = useState<BudgetsProps[]>([]);
 
   const getBudgets = async () => {
     try {
-      const response = await api.get('/budgets')
-
-      if (!response) {
-        throw new Error("Falha ao buscar os dados do servidor")
+      const response = await api.get('/budgets');
+      if (response?.data?.data) {
+        setBudgets(response.data.data);
       }
-
-      setBudgets(response.data.data)
-
-      console.log(response)
     } catch (error) {
-
+      console.error("Erro ao buscar orçamentos:", error);
     }
-  }
+  };
 
   useEffect(() => {
-    getBudgets()
-  }, [])
-
-
+    getBudgets();
+  }, []);
 
   const HandleSaveBudget = (newBudget: BudgetsProps) => {
-    getBudgets()
+    getBudgets();
   };
 
-  const HandleSaveDeduct = (data: PropsModalDeduct) => {
-
-  };
-
-
+  const HandleSaveDeduct = (data: PropsModalDeduct) => {};
 
   const handleRemove = async (id: string) => {
     try {
-      const removeBudget = await api.delete(`/budgets/delete/${id}`)
-      console.log(removeBudget)
-
-      getBudgets()
+      await api.delete(`/budgets/delete/${id}`);
+      getBudgets();
     } catch (error) {
-      console.log(error)
+      console.error("Erro ao excluir orçamento:", error);
     }
   };
 
-
-
   const handleEdit = (budget: BudgetsProps) => {
-
     setEditingBudget(budget);
     setBudgetOpen(true);
-
-    console.log("=== EDITAR BUDGET ===");
-    console.log("Budget recebido:", budget);
-    console.log("ID recebido:", budget.id);
   };
 
   const handleClose = () => {
@@ -96,7 +77,6 @@ const Budgets = () => {
   const totalSpent = budgets.reduce((sum, b) => sum + Number(b.spent || 0), 0);
   const totalPercentage =
     totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
-
 
   return (
     <div className={`min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
@@ -121,11 +101,10 @@ const Budgets = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
               <div>
                 <h1 className="text-[28px] sm:text-[34px] md:text-[42px] font-bold mb-2 md:mb-3">
-                  Gerenciador de Orçamento
+                  {t("budgetsPage.title")}
                 </h1>
                 <p className="text-[14px] md:text-[16px] text-gray-400">
-                  Crie e acompanhe orçamentos para diferentes categorias de
-                  gastos
+                  {t("budgetsPage.subtitle")}
                 </p>
               </div>
 
@@ -137,11 +116,13 @@ const Budgets = () => {
                 }}
               >
                 <Plus className="w-5 h-5" />
-                Criar Orçamento
+                {t("budgetsPage.createBudget")}
               </button>
             </div>
 
+            {/* Cards de Resumo */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+              {/* Orçamento Total */}
               <div className="relative group">
                 <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity`}></div>
                 <div className="relative bg-linear-to-br from-purple-600/20 to-purple-800/10 p-5 md:p-6 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
@@ -150,18 +131,19 @@ const Budgets = () => {
                       <Target className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
                     </div>
                     <div className="text-[13px] md:text-[14px] text-gray-400">
-                      Orçamento Total
+                      {t("budgetsPage.cards.totalBudget")}
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
                     {formatCurrency(totalBudget)}
                   </div>
                   <div className="text-[12px] md:text-[13px] text-gray-400">
-                    Em todas as categorias
+                    {t("budgetsPage.cards.allCategories")}
                   </div>
                 </div>
               </div>
 
+              {/* Total Gasto */}
               <div className="relative group">
                 <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity`}></div>
                 <div className="relative bg-linear-to-br from-cyan-600/20 to-cyan-800/10 p-5 md:p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-sm">
@@ -170,7 +152,7 @@ const Budgets = () => {
                       <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-cyan-400" />
                     </div>
                     <div className="text-[13px] md:text-[14px] text-gray-400">
-                      Total Gasto
+                      {t("budgetsPage.cards.totalSpent")}
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
@@ -178,12 +160,13 @@ const Budgets = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="text-[12px] md:text-[13px] text-cyan-400">
-                      {totalPercentage}% do orçamento
+                      {totalPercentage}% {t("budgetsPage.cards.ofBudget")}
                     </div>
                   </div>
                 </div>
               </div>
 
+              {/* Restante */}
               <div className="relative group">
                 <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity`}></div>
                 <div className="relative bg-linear-to-br from-green-600/20 to-green-800/10 p-5 md:p-6 rounded-2xl border border-green-500/30 backdrop-blur-sm">
@@ -192,35 +175,34 @@ const Budgets = () => {
                       <Target className="w-5 h-5 md:w-6 md:h-6 text-green-400" />
                     </div>
                     <div className="text-[13px] md:text-[14px] text-gray-400">
-                      Restante
+                      {t("budgetsPage.cards.remaining")}
                     </div>
                   </div>
                   <div className="text-[28px] md:text-[36px] font-bold mb-1 md:mb-2">
                     {formatCurrency(totalBudget - totalSpent)}
                   </div>
                   <div className="text-[12px] md:text-[13px] text-green-400">
-                    {100 - totalPercentage}% disponível
+                    {100 - totalPercentage}% {t("budgetsPage.cards.available")}
                   </div>
                 </div>
               </div>
             </div>
 
-
-
+            {/* Lista de Categorias de Orçamento */}
             <div className="relative group">
               <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
               <div className="relative bg-linear-to-br from-white/10 to-white/2 p-4 md:p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 md:mb-6">
                   <h2 className="text-[18px] md:text-[20px] font-semibold">
-                    Categorias de Orçamento
+                    {t("budgetsPage.categories.title")}
                   </h2>
                   <select
-                    defaultValue="Este Mês"
+                    defaultValue={t("budgetsPage.categories.periods.thisMonth")}
                     className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[13px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer w-full sm:w-auto"
                   >
-                    <option>Este Mês</option>
-                    <option>Mês Passado</option>
-                    <option>Este Ano</option>
+                    <option>{t("budgetsPage.categories.periods.thisMonth")}</option>
+                    <option>{t("budgetsPage.categories.periods.lastMonth")}</option>
+                    <option>{t("budgetsPage.categories.periods.thisYear")}</option>
                   </select>
                 </div>
 
@@ -230,10 +212,10 @@ const Budgets = () => {
                       <Search className="w-10 h-10 text-gray-500" />
                     </div>
                     <div className="text-[18px] font-semibold mb-2">
-                      Nenhum orçamento encontrado
+                      {t("budgetsPage.categories.emptyTitle")}
                     </div>
                     <div className="text-[14px] text-gray-500">
-                      Tente ajustar seus filtros
+                      {t("budgetsPage.categories.emptySubtitle")}
                     </div>
                   </div>
                 ) : (
@@ -253,7 +235,6 @@ const Budgets = () => {
                         >
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">
-
                               <div>
                                 <h3 className="font-semibold text-lg">
                                   {item.name}
@@ -289,21 +270,23 @@ const Budgets = () => {
                           <div className="space-y-2">
                             <div className="flex items-baseline gap-2 mb-3">
                               <span
-                                className={`text-[22px] md:text-[28px] font-bold ${isOverBudget ? "text-red-400" : "text-white"
-                                  }`}
+                                className={`text-[22px] md:text-[28px] font-bold ${
+                                  isOverBudget ? "text-red-400" : "text-white"
+                                }`}
                               >
                                 {formatCurrency(item.spent)}
                               </span>
                               <span className="text-[14px] md:text-[16px] text-gray-500">
-                                de {formatCurrency(item.limit)}
+                                {t("budgetsPage.categories.of")} {formatCurrency(item.limit)}
                               </span>
                               <span
-                                className={`text-[13px] md:text-[14px] ml-auto font-medium ${isOverBudget
-                                  ? "text-red-400"
-                                  : isWarning
-                                    ? "text-yellow-400"
-                                    : "text-green-400"
-                                  }`}
+                                className={`text-[13px] md:text-[14px] ml-auto font-medium ${
+                                  isOverBudget
+                                    ? "text-red-400"
+                                    : isWarning
+                                      ? "text-yellow-400"
+                                      : "text-green-400"
+                                }`}
                               >
                                 {percentage}%
                               </span>
@@ -311,12 +294,13 @@ const Budgets = () => {
 
                             <div className="w-full bg-white/5 rounded-full h-2.5 md:h-3 overflow-hidden">
                               <div
-                                className={`h-full rounded-full shadow-lg transition-all ${isOverBudget
-                                  ? "bg-linear-to-r from-red-600 to-red-500 shadow-red-600/50"
-                                  : isWarning
-                                    ? "bg-linear-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
-                                    : "bg-linear-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
-                                  }`}
+                                className={`h-full rounded-full shadow-lg transition-all ${
+                                  isOverBudget
+                                    ? "bg-linear-to-r from-red-600 to-red-500 shadow-red-600/50"
+                                    : isWarning
+                                      ? "bg-linear-to-r from-yellow-600 to-yellow-500 shadow-yellow-600/50"
+                                      : "bg-linear-to-r from-purple-600 to-purple-500 shadow-purple-600/50"
+                                }`}
                                 style={{
                                   width: `${Math.min(percentage, 100)}%`,
                                 }}
@@ -325,11 +309,10 @@ const Budgets = () => {
 
                             <div className="mt-2.5 md:mt-3 text-[12px] md:text-[13px] text-gray-400">
                               {formatCurrency(item.limit - item.spent > 0 ? item.limit - item.spent : 0)}{" "}
-                              restante
+                              {t("budgetsPage.categories.remaining")}
                               {isOverBudget && (
                                 <span className="text-red-400 ml-2">
-                                  • {formatCurrency(item.spent - item.limit)} acima do
-                                  orçamento
+                                  • {formatCurrency(item.spent - item.limit)} {t("budgetsPage.categories.overBudget")}
                                 </span>
                               )}
                             </div>

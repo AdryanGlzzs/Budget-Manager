@@ -137,5 +137,31 @@
       "emptyTitle": "No se encontraron transacciones",
       "emptySubtitle": "Intenta ajustar tus filtros"
     }
+  },
+  "budgetsPage": {
+    "title": "Gestor de Presupuesto",
+    "subtitle": "Crea y administra presupuestos para diferentes categorías de gastos",
+    "createBudget": "Crear Presupuesto",
+    "cards": {
+      "totalBudget": "Presupuesto Total",
+      "allCategories": "En todas las categorías",
+      "totalSpent": "Total Gastado",
+      "ofBudget": "del presupuesto",
+      "remaining": "Restante",
+      "available": "disponible"
+    },
+    "categories": {
+      "title": "Categorías de Presupuesto",
+      "periods": {
+        "thisMonth": "Este Mes",
+        "lastMonth": "Mes Pasado",
+        "thisYear": "Este Año"
+      },
+      "emptyTitle": "No se encontraron presupuestos",
+      "emptySubtitle": "Intenta ajustar tus filtros",
+      "of": "de",
+      "remaining": "restante",
+      "overBudget": "sobre el presupuesto"
+    }
   }
 }
