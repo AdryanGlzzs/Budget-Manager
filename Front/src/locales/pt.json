@@ -163,5 +163,38 @@
       "remaining": "restante",
       "overBudget": "acima do orçamento"
     }
+  },
+  "savingsGoalsPage": {
+    "title": "Metas de Economia",
+    "subtitle": "Visualize e gerencie seus objetivos financeiros de longo prazo.",
+    "actions": {
+      "depositWithdraw": "Guardar / Resgatar",
+      "newGoal": "Nova Meta",
+      "deposit": "Guardar",
+      "withdraw": "Resgatar",
+      "moveBalance": "Movimentar Saldo",
+      "editGoal": "Editar meta",
+      "removeGoal": "Remover meta"
+    },
+    "tooltips": {
+      "createGoalFirst": "Crie uma meta primeiro",
+      "manageSavedFunds": "Adicionar ou remover valores guardados",
+      "addSavedAmount": "Adicionar valor salvo",
+      "withdrawSavedAmount": "Resgatar valor salvo"
+    },
+    "cards": {
+      "totalSaved": "Total Economizado",
+      "activeGoals": "Metas Ativas",
+      "averageProgress": "Progresso Médio"
+    },
+    "sectionTitle": "Suas Metas",
+    "goalCard": {
+      "of": "de",
+      "progress": "Progresso"
+    },
+    "empty": {
+      "title": "Nenhuma meta encontrada",
+      "subtitle": "Crie uma meta para começar a economizar"
+    }
   }
 }

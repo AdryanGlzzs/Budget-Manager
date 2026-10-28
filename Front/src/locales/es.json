@@ -163,5 +163,38 @@
       "remaining": "restante",
       "overBudget": "sobre el presupuesto"
     }
+  },
+  "savingsGoalsPage": {
+    "title": "Metas de Ahorro",
+    "subtitle": "Visualiza y administra tus objetivos financieros a largo plazo.",
+    "actions": {
+      "depositWithdraw": "Depositar / Retirar",
+      "newGoal": "Nueva Meta",
+      "deposit": "Depositar",
+      "withdraw": "Retirar",
+      "moveBalance": "Movilizar Saldo",
+      "editGoal": "Editar meta",
+      "removeGoal": "Eliminar meta"
+    },
+    "tooltips": {
+      "createGoalFirst": "Crea una meta primero",
+      "manageSavedFunds": "Agregar o retirar fondos guardados",
+      "addSavedAmount": "Agregar fondos ahorrados",
+      "withdrawSavedAmount": "Retirar fondos ahorrados"
+    },
+    "cards": {
+      "totalSaved": "Total Ahorrado",
+      "activeGoals": "Metas Activas",
+      "averageProgress": "Progreso Promedio"
+    },
+    "sectionTitle": "Tus Metas",
+    "goalCard": {
+      "of": "de",
+      "progress": "Progreso"
+    },
+    "empty": {
+      "title": "No se encontraron metas",
+      "subtitle": "Crea una meta para comenzar a ahorrar"
+    }
   }
 }

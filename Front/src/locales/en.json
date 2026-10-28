@@ -163,5 +163,38 @@
       "remaining": "remaining",
       "overBudget": "over budget"
     }
+  },
+  "savingsGoalsPage": {
+    "title": "Savings Goals",
+    "subtitle": "View and manage your long-term financial goals.",
+    "actions": {
+      "depositWithdraw": "Deposit / Withdraw",
+      "newGoal": "New Goal",
+      "deposit": "Deposit",
+      "withdraw": "Withdraw",
+      "moveBalance": "Transfer Balance",
+      "editGoal": "Edit goal",
+      "removeGoal": "Remove goal"
+    },
+    "tooltips": {
+      "createGoalFirst": "Create a goal first",
+      "manageSavedFunds": "Add or withdraw saved funds",
+      "addSavedAmount": "Add saved funds",
+      "withdrawSavedAmount": "Withdraw saved funds"
+    },
+    "cards": {
+      "totalSaved": "Total Saved",
+      "activeGoals": "Active Goals",
+      "averageProgress": "Average Progress"
+    },
+    "sectionTitle": "Your Goals",
+    "goalCard": {
+      "of": "of",
+      "progress": "Progress"
+    },
+    "empty": {
+      "title": "No goals found",
+      "subtitle": "Create a goal to start saving"
+    }
   }
 }
