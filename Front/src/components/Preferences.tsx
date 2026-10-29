@@ -4,13 +4,15 @@ import { ChevronDown, Save } from "lucide-react";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { useToast } from "../contexts/ToastContext";
 import { useTranslation } from "react-i18next";
+import { useCurrency, CURRENCY_CONFIGS } from "../contexts/CurrencyContext";
+import type { SupportedCurrency } from "../contexts/CurrencyContext";
 
 export const Preferences = () => {
   const { accentColor, setAccentColor, themeAccentColors } = useThemeColors();
   const { showToast } = useToast();
   const { t, i18n } = useTranslation();
+  const { currency, setCurrency } = useCurrency();
 
-  const [currency, setCurrency] = useState("USD - Dólar Americano");
   const [language, setLanguage] = useState(i18n.language || "pt");
   const [timezone, setTimezone] = useState("GMT-3 (Horário de Brasília)");
   const [dateFormat, setDateFormat] = useState("DD/MM/YYYY");
@@ -58,13 +60,14 @@ export const Preferences = () => {
             <div className="relative">
               <select
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
+                onChange={(e) => setCurrency(e.target.value as SupportedCurrency)}
                 className={`${inputBase} appearance-none pr-10`}
               >
-                <option className="bg-[#050510] text-white">USD - Dólar Americano</option>
-                <option className="bg-[#050510] text-white">BRL - Real Brasileiro</option>
-                <option className="bg-[#050510] text-white">EUR - Euro</option>
-                <option className="bg-[#050510] text-white">GBP - Libra Esterlina</option>
+                {(Object.keys(CURRENCY_CONFIGS) as SupportedCurrency[]).map((curKey) => (
+                  <option key={curKey} value={curKey} className="bg-[#050510] text-white">
+                    {CURRENCY_CONFIGS[curKey].label}
+                  </option>
+                ))}
               </select>
               <ChevronDown className="w-4 h-4 text-zinc-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
