@@ -6,16 +6,25 @@ import { useToast } from "../contexts/ToastContext";
 import { useTranslation } from "react-i18next";
 import { useCurrency, CURRENCY_CONFIGS } from "../contexts/CurrencyContext";
 import type { SupportedCurrency } from "../contexts/CurrencyContext";
+import {
+  useDatePreferences,
+  TIMEZONE_CONFIGS,
+  DATE_FORMAT_CONFIGS,
+} from "../contexts/DatePreferencesContext";
+import type {
+  SupportedTimezone,
+  SupportedDateFormat,
+} from "../contexts/DatePreferencesContext";
 
 export const Preferences = () => {
   const { accentColor, setAccentColor, themeAccentColors } = useThemeColors();
   const { showToast } = useToast();
   const { t, i18n } = useTranslation();
   const { currency, setCurrency } = useCurrency();
+  const { timezone, setTimezone, dateFormat, setDateFormat } =
+    useDatePreferences();
 
   const [language, setLanguage] = useState(i18n.language || "pt");
-  const [timezone, setTimezone] = useState("GMT-3 (Horário de Brasília)");
-  const [dateFormat, setDateFormat] = useState("DD/MM/YYYY");
 
   const handleLanguageChange = (newLang: string) => {
     setLanguage(newLang);
@@ -102,13 +111,14 @@ export const Preferences = () => {
             <div className="relative">
               <select
                 value={timezone}
-                onChange={(e) => setTimezone(e.target.value)}
+                onChange={(e) => setTimezone(e.target.value as SupportedTimezone)}
                 className={`${inputBase} appearance-none pr-10`}
               >
-                <option className="bg-[#050510] text-white">GMT-3 (Horário de Brasília)</option>
-                <option className="bg-[#050510] text-white">PST - Pacific Standard Time</option>
-                <option className="bg-[#050510] text-white">EST - Eastern Standard Time</option>
-                <option className="bg-[#050510] text-white">GMT+0 - Greenwich Mean Time</option>
+                {(Object.keys(TIMEZONE_CONFIGS) as SupportedTimezone[]).map((tzKey) => (
+                  <option key={tzKey} value={tzKey} className="bg-[#050510] text-white">
+                    {TIMEZONE_CONFIGS[tzKey].label}
+                  </option>
+                ))}
               </select>
               <ChevronDown className="w-4 h-4 text-zinc-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
@@ -120,12 +130,14 @@ export const Preferences = () => {
             <div className="relative">
               <select
                 value={dateFormat}
-                onChange={(e) => setDateFormat(e.target.value)}
+                onChange={(e) => setDateFormat(e.target.value as SupportedDateFormat)}
                 className={`${inputBase} appearance-none pr-10`}
               >
-                <option className="bg-[#050510] text-white">DD/MM/YYYY</option>
-                <option className="bg-[#050510] text-white">MM/DD/YYYY</option>
-                <option className="bg-[#050510] text-white">YYYY-MM-DD</option>
+                {(Object.keys(DATE_FORMAT_CONFIGS) as SupportedDateFormat[]).map((fmtKey) => (
+                  <option key={fmtKey} value={fmtKey} className="bg-[#050510] text-white">
+                    {DATE_FORMAT_CONFIGS[fmtKey].label}
+                  </option>
+                ))}
               </select>
               <ChevronDown className="w-4 h-4 text-zinc-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>

@@ -19,6 +19,7 @@ import { useThemeColors } from "../contexts/ThemeContext";
 import { useToast } from "../contexts/ToastContext";
 import { useAuth } from "../contexts/authContext";
 import { api } from "../services/api";
+import { formatDate } from "../utils/formatDate";
 
 type PasswordState = {
   current: string;
@@ -347,7 +348,7 @@ export const Security = () => {
     if (diffMin < 60) return `Há ${diffMin} min`;
     const diffHours = Math.floor(diffMin / 60);
     if (diffHours < 24) return `Há ${diffHours} h`;
-    return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+    return formatDate(date, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
   }
 
   return (

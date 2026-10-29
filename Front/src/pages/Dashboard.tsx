@@ -28,6 +28,7 @@ import { api } from "../services/api";
 import type { TransactionProps } from "../components/TransactionModal";
 import type { BudgetsProps } from "../components/BudgetModal";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatDate } from "../utils/formatDate";
 import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
@@ -71,7 +72,7 @@ const Dashboard = () => {
     const grouped = cash.reduce(
       (acc, item) => {
         const rawDate = item.date;
-        const date = new Date(item.date).toLocaleDateString("pt-BR");
+        const date = formatDate(item.date);
 
         let existing = acc.find((entry) => entry.date === date);
 
@@ -509,7 +510,7 @@ const Dashboard = () => {
                       transaction.slice(0, 3).map((item) => {
                         const isRevenue = item.type === "revenue";
                         const amountNumber = Number(item.amount);
-                        const displayDate = new Date(item.date).toLocaleDateString("pt-BR", {
+                        const displayDate = formatDate(item.date, {
                           day: "numeric",
                           month: "short",
                         });

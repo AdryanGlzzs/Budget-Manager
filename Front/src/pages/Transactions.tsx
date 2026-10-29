@@ -18,6 +18,7 @@ import type { TransactionProps } from "../components/TransactionModal";
 import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatDate } from "../utils/formatDate";
 import { useTranslation } from "react-i18next";
 
 const Transactions = () => {
@@ -271,7 +272,7 @@ const Transactions = () => {
                               {tr.category}
                             </div>
                             <div className="text-[12px] text-gray-400 flex-1 text-center px-2">
-                              {tr.date?.split('T')[0]}
+                              {formatDate(tr.date)}
                             </div>
                             <span
                               className={`px-2 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap ${tr.status === true
@@ -313,7 +314,7 @@ const Transactions = () => {
                           </div>
 
                           <div className="col-span-2 text-[14px] text-gray-400">
-                            {tr.date.split("T")[0]}
+                            {formatDate(tr.date)}
                           </div>
 
                           <div className="col-span-2 flex justify-center">

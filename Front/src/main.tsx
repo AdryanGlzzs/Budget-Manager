@@ -8,6 +8,7 @@ import { initMercadoPago } from '@mercadopago/sdk-react'
 import { ThemeContextProvider } from './contexts/ThemeContext'
 import { ToastContextProvider } from './contexts/ToastContext'
 import { CurrencyContextProvider } from './contexts/CurrencyContext'
+import { DatePreferencesProvider } from './contexts/DatePreferencesContext'
 
 initMercadoPago(import.meta.env.VITE_MARKET_PAID_PUBLIC_KEY, {
   locale: "pt-BR"
@@ -15,14 +16,16 @@ initMercadoPago(import.meta.env.VITE_MARKET_PAID_PUBLIC_KEY, {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <CurrencyContextProvider>
-      <ThemeContextProvider>
-        <ToastContextProvider>
-          <AuthContextProvider>
-              <AppRoutes />
-          </AuthContextProvider>
-        </ToastContextProvider>
-      </ThemeContextProvider>
-    </CurrencyContextProvider>
+    <DatePreferencesProvider>
+      <CurrencyContextProvider>
+        <ThemeContextProvider>
+          <ToastContextProvider>
+            <AuthContextProvider>
+                <AppRoutes />
+            </AuthContextProvider>
+          </ToastContextProvider>
+        </ThemeContextProvider>
+      </CurrencyContextProvider>
+    </DatePreferencesProvider>
   </StrictMode>,
 )
