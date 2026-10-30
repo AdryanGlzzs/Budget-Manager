@@ -19,22 +19,23 @@ model Tenant {
 }
 
 model User {
-  id               String    @id @default(uuid())
-  name             String
-  email            String    @unique
-  password         String
-  phone            String?
-  birthdate        DateTime?
-  address          String?
-  avatarUrl        String?
-  twoFactorEnabled Boolean   @default(false)
-  twoFactorSecret  String?
+  id                      String                  @id @default(uuid())
+  name                    String
+  email                   String                  @unique
+  password                String
+  phone                   String?
+  birthdate               DateTime?
+  address                 String?
+  avatarUrl               String?
+  twoFactorEnabled        Boolean                 @default(false)
+  twoFactorSecret         String?
   notificationPreferences NotificationPreference?
-  sessions         Session[]
-  tenantId         String
-  tenant           Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  subscription            Subscription?
+  sessions                Session[]
+  tenantId                String
+  tenant                  Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
 }
 
 model Session {
@@ -51,45 +52,45 @@ model Session {
 }
 
 model Transaction {
-  id         String   @id @default(uuid())
-  name       String
-  category   String
-  date       DateTime
-  amount     Decimal  @db.Decimal(10,2)
-  color      String
-  type       String
-  status     Boolean
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(uuid())
+  name      String
+  category  String
+  date      DateTime
+  amount    Decimal  @db.Decimal(10, 2)
+  color     String
+  type      String
+  status    Boolean
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Budget {
-  id         String   @id @default(uuid())
-  name       String
-  color      String
-  spent      Decimal  @db.Decimal(10,2)
-  limit      Decimal  @db.Decimal(10,2)
+  id          String   @id @default(uuid())
+  name        String
+  color       String
+  spent       Decimal  @db.Decimal(10, 2)
+  limit       Decimal  @db.Decimal(10, 2)
   description String
-  period     String   @default("monthly")
+  period      String   @default("monthly")
   tenantId    String
   tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model SavingGoal {
-  id String  @id @default(uuid())
-  name String
-  target  Decimal  @db.Decimal(10,2)
-  current Decimal  @db.Decimal(10,2)
-  color  String
+  id        String    @id @default(uuid())
+  name      String
+  target    Decimal   @db.Decimal(10, 2)
+  current   Decimal   @db.Decimal(10, 2)
+  color     String
   deadline  DateTime?
-  tenantId    String
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  tenantId  String
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model NotificationPreference {
@@ -103,4 +104,33 @@ model NotificationPreference {
   marketing      Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Subscription {
+  id                   String    @id @default(uuid())
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                 String    @default("Free")
+  status               String    @default("active")
+  price                Decimal   @default(0.00) @db.Decimal(10, 2)
+  billingCycle         String    @default("monthly")
+  currentPeriodStart   DateTime  @default(now())
+  currentPeriodEnd     DateTime?
+  cardLastFour         String?
+  cardBrand            String?
+  mercadoPagoPaymentId String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  invoices             Invoice[]
+}
+
+model Invoice {
+  id             String       @id @default(uuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  amount         Decimal      @db.Decimal(10, 2)
+  status         String       @default("paid")
+  date           DateTime     @default(now())
+  pdfUrl         String?
+  createdAt      DateTime     @default(now())
 }

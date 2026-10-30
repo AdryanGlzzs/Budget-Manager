@@ -1,4 +1,5 @@
 import { NotificationPreferenceController } from '../controllers/NotificationPreferenceController';
+import { BillingController } from '../controllers/BillingController';
 import { SessionController } from '../controllers/SessionController'
 import { TwoFactorController } from '../controllers/TwoFactorController'
 import { Router } from 'express'
@@ -44,7 +45,6 @@ routes.put('/savings-goals/edit/:id', AuthTenantId, SavingGoalsController.EditGo
 
 routes.post('/process_payment', PaymentController.processPayment)
 
-
 routes.get('/users/sessions', AuthMiddleware, SessionController.listSessions)
 routes.delete('/users/sessions/other', AuthMiddleware, SessionController.revokeOtherSessions)
 routes.delete('/users/sessions/:id', AuthMiddleware, SessionController.revokeSession)
@@ -56,3 +56,7 @@ routes.post('/auth/2fa/verify', TwoFactorController.verifyLogin)
 
 routes.get('/users/notifications/preferences', AuthMiddleware, NotificationPreferenceController.getPreferences);
 routes.put('/users/notifications/preferences', AuthMiddleware, NotificationPreferenceController.updatePreferences);
+
+routes.get('/users/billing', AuthMiddleware, BillingController.getBilling);
+routes.post('/users/billing/cancel', AuthMiddleware, BillingController.cancelSubscription);
+routes.post('/webhooks/mercadopago', BillingController.handleWebhook);
