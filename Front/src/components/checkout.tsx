@@ -1,4 +1,4 @@
-import { X, CreditCard } from "lucide-react";
+﻿import { X, CreditCard } from "lucide-react";
 import { getIdentificationTypes } from "@mercadopago/sdk-react";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -7,7 +7,8 @@ import { api } from "../services/api";
 interface MarkedPaid {
     isOpen: boolean;
     onClose?: () => void;
-    planName: string | null
+    planName: string | null;
+    billingCycle?: "monthly" | "yearly";
 }
 
 interface IdentificationType {
@@ -15,7 +16,7 @@ interface IdentificationType {
     name: string,
 }
 
-export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) => {
+export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "monthly" }: MarkedPaid) => {
     const [identificationTypes, setIdentificationTypes] = useState<IdentificationType[]>([]);
     const [selectedDocType, setSelectedDocType] = useState<string>('');
 
@@ -47,6 +48,7 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
 
         const PaymentData = {
             planName: formData.get("planName"),
+            billingCycle,
             payerFirstName: formData.get("payerFirstName"),
             payerLastName: formData.get("payerLastName"),
             email: formData.get("email"),
@@ -54,16 +56,10 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
             identificationNumber: formData.get("identificationNumber"),
         }
 
-        console.log(PaymentData)
-
         try {
-
-
             const response = await api.post("/process_payment", PaymentData)
 
-            console.log("Pagamento processado", response.data)
-
-            const checkoutUrl = response.data.payment.sandbox_init_point || response.data.payment.init_point;
+            const checkoutUrl = response.data.payment?.sandbox_init_point || response.data.payment?.init_point;
             if (checkoutUrl) {
                 window.location.href = checkoutUrl;
             }
@@ -90,7 +86,10 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
                             <h2 className="text-xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">
                                 Checkout de Pagamento
                             </h2>
-                            <p className="text-xs text-gray-400">Preencha os dados abaixo para continuar</p>
+                            <p className="text-xs text-gray-400">
+                                Plano <span className="text-purple-400 font-semibold">{planName}</span>
+                                {" "}({billingCycle === "monthly" ? "Mensal" : "Anual"})
+                            </p>
                         </div>
                     </div>
                     {onClose && (
@@ -114,7 +113,6 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
                                 id="form-checkout__payerFirstName"
                                 name="payerFirstName"
                                 type="text"
-                                defaultValue="Test"
                                 placeholder="Seu nome"
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                             />
@@ -127,7 +125,6 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
                                 id="form-checkout__payerLastName"
                                 name="payerLastName"
                                 type="text"
-                                defaultValue="User"
                                 placeholder="Seu sobrenome"
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                             />
@@ -142,10 +139,9 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
                             id="form-checkout__email"
                             name="email"
                             type="email"
-                            placeholder="Insira o e-mail (ex: user@testuser.com)"
+                            placeholder="seu@email.com"
                             className="w-full px-4 py-3 bg-white/5 border border-purple-500/40 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                         />
-
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -167,7 +163,7 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
                         </div>
                         <div>
                             <label htmlFor="identificationNumber" className="block text-xs font-medium text-gray-300 mb-1.5">
-                                Número do documento
+                                Numero do documento
                             </label>
                             <input
                                 id="form-checkout__identificationNumber"
@@ -180,7 +176,6 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
                     </div>
 
                     <input type="hidden" name="planName" value={planName || "Free"} />
-                    <input type="hidden" name="description" id="description" value="Nome do Produto" />
 
                     <div className="pt-4 flex items-center gap-3">
                         {onClose && (
@@ -206,4 +201,3 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName }: MarkedPaid) =>
 };
 
 export default MarketPaidCheckout;
-
