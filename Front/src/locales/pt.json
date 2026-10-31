@@ -126,6 +126,8 @@
     },
     "allCategories": "Todas as Categorias",
     "export": "Exportar",
+    "exportSuccess": "Transações exportadas com sucesso!",
+    "exportEmpty": "Nenhuma transação para exportar.",
     "filters": {
       "all": "Tudo",
       "revenue": "Receita",

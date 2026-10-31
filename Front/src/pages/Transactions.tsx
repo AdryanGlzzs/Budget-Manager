@@ -21,9 +21,11 @@ import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { formatDate } from "../utils/formatDate";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../contexts/ToastContext";
 
 const Transactions = () => {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
@@ -146,6 +148,48 @@ const Transactions = () => {
 
     return true;
   });
+
+  const handleExportCSV = () => {
+    if (filteredTransactions.length === 0) {
+      showToast(t("transactions.exportEmpty"), "warning");
+      return;
+    }
+
+    const headers = [
+      t("transactions.table.transaction"),
+      t("transactions.table.category"),
+      t("transactions.table.dateTime"),
+      t("transactions.table.status"),
+      "Tipo",
+      t("transactions.table.amount"),
+    ];
+
+    const rows = filteredTransactions.map((tr) => {
+      const typeLabel = tr.type === "revenue" ? t("transactions.filters.revenue") : t("transactions.filters.expenses");
+      const statusLabel = tr.status ? t("transactions.table.completed") : t("transactions.table.pending");
+      const safeName = `"${(tr.name || "").replace(/"/g, '""')}"`;
+      const safeCategory = `"${(tr.category || "").replace(/"/g, '""')}"`;
+      const safeDate = `"${formatDate(tr.date)}"`;
+      const safeAmount = `"${tr.type === "revenue" ? "+" : "-"}${Number(tr.amount || 0).toFixed(2)}"`;
+
+      return [safeName, safeCategory, safeDate, `"${statusLabel}"`, `"${typeLabel}"`, safeAmount].join(",");
+    });
+
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const timestamp = new Date().toISOString().split("T")[0];
+
+    link.setAttribute("href", url);
+    link.setAttribute("download", `transacoes_${selectedPeriod}_${timestamp}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showToast(t("transactions.exportSuccess"), "success");
+  };
 
   return (
     <div className={`min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
@@ -309,7 +353,10 @@ const Transactions = () => {
                       )}
                     </div>
 
-                    <button className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 ${theme.activeBg} rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all hover:scale-[1.02]`}>
+                    <button
+                      onClick={handleExportCSV}
+                      className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 ${theme.activeBg} rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all hover:scale-[1.02] cursor-pointer`}
+                    >
                       <Download className="w-4 h-4 sm:ml-1" />
                       {t("transactions.export")}
                     </button>
