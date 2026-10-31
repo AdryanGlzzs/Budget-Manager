@@ -118,6 +118,12 @@
     "balance": "Balance",
     "thisMonth": "This month",
     "searchPlaceholder": "Search by name or category...",
+    "periods": {
+      "all": "All Time",
+      "thisMonth": "This Month",
+      "lastMonth": "Last Month",
+      "thisYear": "This Year"
+    },
     "allCategories": "All Categories",
     "export": "Export",
     "filters": {

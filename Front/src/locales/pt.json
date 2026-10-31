@@ -118,6 +118,12 @@
     "balance": "Saldo",
     "thisMonth": "Este mês",
     "searchPlaceholder": "Buscar por nome ou categoria...",
+    "periods": {
+      "all": "Todos os Períodos",
+      "thisMonth": "Este Mês",
+      "lastMonth": "Mês Passado",
+      "thisYear": "Este Ano"
+    },
     "allCategories": "Todas as Categorias",
     "export": "Exportar",
     "filters": {

@@ -9,10 +9,11 @@ import {
   ChevronDown,
   Plus,
   Trash2,
+  Check,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { TransactionModal } from "../components/TransactionModal";
 import type { TransactionProps } from "../components/TransactionModal";
 import { api } from "../services/api";
@@ -44,16 +45,6 @@ const Transactions = () => {
     getTransactions();
   }, []);
 
-  const TotalRevenue = transaction
-    .filter((tr) => tr.type === "revenue")
-    .reduce((sun, tr) => sun + Number(tr.amount || 0), 0);
-
-  const TotalExpense = transaction
-    .filter((tr) => tr.type === "expense")
-    .reduce((decrease, tr) => decrease + Number(tr.amount || 0), 0);
-
-  const TotalBalance = TotalRevenue - TotalExpense;
-
   const HandleSaveTransaction = (NewTransaction: TransactionProps) => {
     setTransactions((prev) => [...prev, NewTransaction]);
     setOpenModal(false);
@@ -71,6 +62,22 @@ const Transactions = () => {
 
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedPeriod, setSelectedPeriod] = useState<"all" | "thisMonth" | "lastMonth" | "thisYear">("thisMonth");
+  const [periodDropdownOpen, setPeriodDropdownOpen] = useState(false);
+  const periodDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        periodDropdownRef.current &&
+        !periodDropdownRef.current.contains(event.target as Node)
+      ) {
+        setPeriodDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const filterOptions = [
     { key: "all", label: t("transactions.filters.all") },
@@ -79,7 +86,52 @@ const Transactions = () => {
     { key: "pending", label: t("transactions.filters.pending") },
   ];
 
-  const filteredTransactions = transaction.filter((tr) => {
+  const periodOptions: { key: "all" | "thisMonth" | "lastMonth" | "thisYear"; label: string }[] = [
+    { key: "thisMonth", label: t("transactions.periods.thisMonth") },
+    { key: "lastMonth", label: t("transactions.periods.lastMonth") },
+    { key: "thisYear", label: t("transactions.periods.thisYear") },
+    { key: "all", label: t("transactions.periods.all") },
+  ];
+
+  const isDateInPeriod = (dateStr?: string) => {
+    if (!dateStr || selectedPeriod === "all") return true;
+
+    const [year, month] = dateStr.split("T")[0].split("-").map(Number);
+    if (!year || !month) return true;
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+
+    if (selectedPeriod === "thisMonth") {
+      return year === currentYear && month === currentMonth;
+    }
+
+    if (selectedPeriod === "lastMonth") {
+      const prevDate = new Date(currentYear, currentMonth - 2, 1);
+      return year === prevDate.getFullYear() && month === prevDate.getMonth() + 1;
+    }
+
+    if (selectedPeriod === "thisYear") {
+      return year === currentYear;
+    }
+
+    return true;
+  };
+
+  const periodTransactions = transaction.filter((tr) => isDateInPeriod(tr.date));
+
+  const TotalRevenue = periodTransactions
+    .filter((tr) => tr.type === "revenue")
+    .reduce((sun, tr) => sun + Number(tr.amount || 0), 0);
+
+  const TotalExpense = periodTransactions
+    .filter((tr) => tr.type === "expense")
+    .reduce((decrease, tr) => decrease + Number(tr.amount || 0), 0);
+
+  const TotalBalance = TotalRevenue - TotalExpense;
+
+  const filteredTransactions = periodTransactions.filter((tr) => {
     if (selectedFilter === "revenue" && tr.type !== "revenue") return false;
     if (selectedFilter === "expenses" && tr.type !== "expense") return false;
     if (selectedFilter === "pending" && tr.status !== false) return false;
@@ -147,7 +199,9 @@ const Transactions = () => {
                       </div>
                     </div>
                     <div className="text-[32px] font-bold mb-1">{formatCurrency(TotalRevenue)}</div>
-                    <div className="text-[13px] text-green-400">{t("transactions.thisMonth")}</div>
+                    <div className="text-[13px] text-green-400">
+                      {periodOptions.find((p) => p.key === selectedPeriod)?.label || t("transactions.periods.thisMonth")}
+                    </div>
                   </div>
                 </div>
 
@@ -163,7 +217,9 @@ const Transactions = () => {
                       </div>
                     </div>
                     <div className="text-[32px] font-bold mb-1">{formatCurrency(TotalExpense)}</div>
-                    <div className="text-[13px] text-red-400">{t("transactions.thisMonth")}</div>
+                    <div className="text-[13px] text-red-400">
+                      {periodOptions.find((p) => p.key === selectedPeriod)?.label || t("transactions.periods.thisMonth")}
+                    </div>
                   </div>
                 </div>
 
@@ -177,13 +233,15 @@ const Transactions = () => {
                       <div className="text-[14px] text-gray-400">{t("transactions.balance")}</div>
                     </div>
                     <div className="text-[32px] font-bold mb-1">{formatCurrency(TotalBalance)}</div>
-                    <div className="text-[13px] text-green-400">{t("transactions.thisMonth")}</div>
+                    <div className="text-[13px] text-green-400">
+                      {periodOptions.find((p) => p.key === selectedPeriod)?.label || t("transactions.periods.thisMonth")}
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
 
-            <div className="relative group mb-6">
+            <div className="relative group mb-6 z-30">
               <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex flex-wrap items-center justify-between gap-4">
@@ -214,19 +272,42 @@ const Transactions = () => {
                       ))}
                     </div>
 
-                    <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[13px] sm:text-[14px] hover:bg-white/10 transition-all">
-                      <Filter className="w-4 h-4" />
-                      {t("transactions.allCategories")}
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
+                   
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
-                    <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[13px] sm:text-[14px] hover:bg-white/10 transition-all">
-                      <Calendar className="w-4 h-4" />
-                      {t("transactions.thisMonth")}
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
+                    <div className="relative flex-1 sm:flex-none z-30" ref={periodDropdownRef}>
+                      <button
+                        onClick={() => setPeriodDropdownOpen((prev) => !prev)}
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[13px] sm:text-[14px] hover:bg-white/10 transition-all text-white"
+                      >
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        {periodOptions.find((p) => p.key === selectedPeriod)?.label || t("transactions.periods.thisMonth")}
+                        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${periodDropdownOpen ? "rotate-180" : ""}`} />
+                      </button>
+
+                      {periodDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-[#0e0e1e] border border-white/10 rounded-xl shadow-2xl py-1 z-50 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
+                          {periodOptions.map((period) => (
+                            <button
+                              key={period.key}
+                              onClick={() => {
+                                setSelectedPeriod(period.key);
+                                setPeriodDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center justify-between px-4 py-2 text-left text-[13px] transition-colors ${
+                                selectedPeriod === period.key
+                                  ? `${theme.text} bg-white/10 font-semibold`
+                                  : "text-gray-300 hover:bg-white/5 hover:text-white"
+                              }`}
+                            >
+                              <span>{period.label}</span>
+                              {selectedPeriod === period.key && <Check className="w-4 h-4" />}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
 
                     <button className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 ${theme.activeBg} rounded-xl text-[13px] sm:text-[14px] font-semibold transition-all hover:scale-[1.02]`}>
                       <Download className="w-4 h-4 sm:ml-1" />
@@ -236,7 +317,7 @@ const Transactions = () => {
                 </div>
               </div>
             </div>
-            <div className="relative group">
+            <div className="relative group z-10">
               <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] rounded-2xl border border-white/10 backdrop-blur-sm overflow-hidden">
                 <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 bg-white/5 text-[13px] text-gray-400 font-medium">
