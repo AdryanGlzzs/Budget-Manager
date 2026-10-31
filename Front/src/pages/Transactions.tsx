@@ -69,7 +69,8 @@ const Transactions = () => {
     }
   };
 
-  const selectedFilter = "all";
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const filterOptions = [
     { key: "all", label: t("transactions.filters.all") },
@@ -78,7 +79,21 @@ const Transactions = () => {
     { key: "pending", label: t("transactions.filters.pending") },
   ];
 
-  const filteredTransactions = transaction;
+  const filteredTransactions = transaction.filter((tr) => {
+    if (selectedFilter === "revenue" && tr.type !== "revenue") return false;
+    if (selectedFilter === "expenses" && tr.type !== "expense") return false;
+    if (selectedFilter === "pending" && tr.status !== false) return false;
+
+    if (searchTerm.trim() !== "") {
+      const search = searchTerm.toLowerCase();
+      const matchName = tr.name?.toLowerCase().includes(search);
+      const matchCategory = tr.category?.toLowerCase().includes(search);
+      const matchAmount = String(tr.amount).includes(search);
+      return matchName || matchCategory || matchAmount;
+    }
+
+    return true;
+  });
 
   return (
     <div className={`min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
@@ -173,10 +188,22 @@ const Transactions = () => {
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-5 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+                    <div className="relative flex-1 sm:w-64">
+                      <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder={t("transactions.searchPlaceholder")}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 py-2 text-[13px] sm:text-[14px] text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-all"
+                      />
+                    </div>
+
                     <div className="flex flex-wrap items-center gap-1 bg-white/5 p-1 rounded-xl w-full sm:w-auto">
                       {filterOptions.map((filter) => (
                         <button
                           key={filter.key}
+                          onClick={() => setSelectedFilter(filter.key)}
                           className={`flex-1 sm:flex-none px-3 py-1.5 rounded-lg text-[13px] sm:text-[14px] font-medium transition-all ${selectedFilter === filter.key
                             ? theme.activeBg
                             : "text-gray-400 hover:text-white hover:bg-white/5"

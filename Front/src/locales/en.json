@@ -117,6 +117,7 @@
     "totalExpenses": "Total Expenses",
     "balance": "Balance",
     "thisMonth": "This month",
+    "searchPlaceholder": "Search by name or category...",
     "allCategories": "All Categories",
     "export": "Export",
     "filters": {

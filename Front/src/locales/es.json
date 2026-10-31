@@ -117,6 +117,7 @@
     "totalExpenses": "Gastos Totales",
     "balance": "Saldo",
     "thisMonth": "Este mes",
+    "searchPlaceholder": "Buscar por nombre o categoría...",
     "allCategories": "Todas las Categorías",
     "export": "Exportar",
     "filters": {
