@@ -170,7 +170,10 @@
       "emptySubtitle": "Try adjusting your filters",
       "of": "of",
       "remaining": "remaining",
-      "overBudget": "over budget"
+      "overBudget": "over budget",
+      "deduct": "Deduct Expense",
+      "deductSuccess": "Expense deducted successfully!",
+      "deductError": "Error recording budget deduction."
     }
   },
   "savingsGoalsPage": {

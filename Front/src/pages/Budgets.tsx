@@ -5,6 +5,7 @@ import {
   Edit,
   Trash2,
   Search,
+  MinusCircle,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
@@ -17,9 +18,11 @@ import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../contexts/ToastContext";
 
 const Budgets = () => {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
@@ -50,7 +53,47 @@ const Budgets = () => {
     getBudgets();
   };
 
-  const HandleSaveDeduct = (data: PropsModalDeduct) => {};
+  const handleOpenDeduct = (budget: BudgetsProps) => {
+    setSelected(budget);
+    setDeductModalOpen(true);
+  };
+
+  const HandleSaveDeduct = async (data: PropsModalDeduct) => {
+    if (!selected) return;
+
+    try {
+      const newSpent = Number(selected.spent || 0) + Number(data.value || 0);
+
+      // 1. Atualizar o valor gasto do orçamento selecionado
+      await api.put(`/budgets/edit/${selected.id}`, {
+        ...selected,
+        spent: newSpent,
+      });
+
+      // 2. Registrar a transação correspondente à despesa realizada
+      try {
+        await api.post("/transactions", {
+          name: data.description?.trim() ? data.description : `${selected.name} (Dedução)`,
+          category: data.category || selected.name,
+          date: data.datestring || new Date().toISOString().split("T")[0],
+          amount: Number(data.value),
+          color: selected.color || "#EF4444",
+          type: "expense",
+          status: true,
+        });
+      } catch (txError) {
+        console.warn("Aviso ao gerar transação vinculada à dedução:", txError);
+      }
+
+      showToast(t("budgetsPage.categories.deductSuccess"), "success");
+      getBudgets();
+      setDeductModalOpen(false);
+      setSelected(null);
+    } catch (error) {
+      console.error("Erro ao salvar dedução:", error);
+      showToast(t("budgetsPage.categories.deductError"), "error");
+    }
+  };
 
   const handleRemove = async (id: string) => {
     try {
@@ -247,23 +290,27 @@ const Budgets = () => {
                               </div>
                             </div>
 
-                            <div className="flex">
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={() => handleEdit(item)}
-                                  className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white"
-                                >
-                                  <Edit className="w-4 h-4" />
-                                </button>
-                              </div>
-                              <div className="gap-2">
-                                <button
-                                  onClick={() => handleRemove(item.id)}
-                                  className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </div>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                onClick={() => handleOpenDeduct(item)}
+                                title={t("budgetsPage.categories.deduct")}
+                                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-medium transition-all"
+                              >
+                                <MinusCircle className="w-3.5 h-3.5" />
+                                <span>{t("budgetsPage.categories.deduct")}</span>
+                              </button>
+                              <button
+                                onClick={() => handleEdit(item)}
+                                className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleRemove(item.id)}
+                                className="p-1.5 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
                             </div>
                           </div>
 

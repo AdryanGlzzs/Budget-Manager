@@ -170,7 +170,10 @@
       "emptySubtitle": "Intenta ajustar tus filtros",
       "of": "de",
       "remaining": "restante",
-      "overBudget": "sobre el presupuesto"
+      "overBudget": "sobre el presupuesto",
+      "deduct": "Deducir Gasto",
+      "deductSuccess": "¡Gasto deducido con éxito!",
+      "deductError": "Error al registrar la deducción del presupuesto."
     }
   },
   "savingsGoalsPage": {
