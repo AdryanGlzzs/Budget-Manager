@@ -23,6 +23,7 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { api } from "../services/api";
 import type { TransactionProps } from "../components/TransactionModal";
@@ -33,6 +34,7 @@ import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
@@ -86,7 +88,7 @@ const Dashboard = () => {
           acc.push(existing);
         }
 
-        if (item.type === "revenue" || item.type === "expense") {
+        if (item.type === "revenue") {
           existing.revenue += Number(item.amount);
         }
 
@@ -186,12 +188,58 @@ const Dashboard = () => {
     }
   };
 
-  const insights = [
-    {
-      text: "Você gastou 20% a menos em alimentação este mês! Continue assim! 🎉",
-      type: "positive",
-    },
-  ];
+  const insights = (() => {
+    const list: { text: string; type: "positive" | "warning" | "danger" }[] = [];
+
+    if (TotalRevenue > 0 && TotalExpense > 0) {
+      const savingsRate = ((TotalRevenue - TotalExpense) / TotalRevenue) * 100;
+      if (savingsRate >= 20) {
+        list.push({
+          text: `Excelente taxa de economia! Você está poupando ${savingsRate.toFixed(0)}% da sua receita neste período.`,
+          type: "positive",
+        });
+      } else if (savingsRate > 0) {
+        list.push({
+          text: `Você está poupando ${savingsRate.toFixed(0)}% da sua renda. Tente alcançar 20% criando metas de economia.`,
+          type: "warning",
+        });
+      } else {
+        list.push({
+          text: "Suas despesas ultrapassaram as receitas no período. Revise seus orçamentos para equilibrar as contas.",
+          type: "danger",
+        });
+      }
+    }
+
+    if (expensesCategory.length > 0) {
+      const sorted = [...expensesCategory].sort((a, b) => b.value - a.value);
+      const top = sorted[0];
+      const topPercent = TotalExpense > 0 ? ((top.value / TotalExpense) * 100).toFixed(0) : 0;
+      list.push({
+        text: `Maior concentração de gastos: "${top.name}" representa ${topPercent}% (${formatCurrency(top.value)}) das suas saídas.`,
+        type: Number(topPercent) > 40 ? "warning" : "positive",
+      });
+    }
+
+    if (budgets.length > 0) {
+      const overBudgets = budgets.filter((b) => Number(b.limit) > 0 && Number(b.spent) > Number(b.limit));
+      if (overBudgets.length > 0) {
+        list.push({
+          text: `Atenção: Você tem ${overBudgets.length} orçamento(s) estourado(s) (${overBudgets.map(b => b.name).join(", ")}).`,
+          type: "danger",
+        });
+      }
+    }
+
+    if (list.length === 0) {
+      list.push({
+        text: "Comece registrando suas receitas e despesas para gerar insights inteligentes automaticamente!",
+        type: "positive",
+      });
+    }
+
+    return list;
+  })();
 
   return (
     <div className={`min-h-screen ${theme.bg} text-white overflow-hidden transition-colors duration-500`}>
@@ -700,7 +748,10 @@ const Dashboard = () => {
                     ))}
                   </div>
 
-                  <button className="w-full bg-linear-to-r from-purple-600 to-purple-500 py-3 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => navigate("/analytics")}
+                    className="w-full bg-linear-to-r from-purple-600 to-purple-500 py-3 rounded-xl text-[14px] font-semibold hover:shadow-lg hover:shadow-purple-600/50 transition-all hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
+                  >
                     {t("dashboard.aiInsights.viewMore")}
                     <ChevronRight className="w-4 h-4" />
                   </button>
