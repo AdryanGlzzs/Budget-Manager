@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+﻿import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 
 export class BudgetController {
@@ -60,7 +60,7 @@ export class BudgetController {
     }
 
     static async EditBudget(req: Request, res: Response) {
-        const id = req.body.id;
+        const id = req.params.id || req.body.id;
         const { name, color, spent, limit, description, period } = req.body;
 
         if (!id) {

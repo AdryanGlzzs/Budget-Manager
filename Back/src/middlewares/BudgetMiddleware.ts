@@ -1,4 +1,4 @@
-import z, { string } from "zod";
+﻿import z, { string } from "zod";
 import { Request, Response, NextFunction } from "express";
 
 const schemaBudget = z.object({
@@ -15,7 +15,7 @@ const schemaDeleteBudget = z.object({
 })
 
 const editBudgetSchema = z.object({
-    id: z.string(),
+    id: z.string().optional(),
     name: z.string().min(2, 'O nome deve ter no mínimo 2 caracteres').optional(),
     color: z.string().optional(),
     spent: z.coerce.number().min(0, 'O valor gasto não pode ser negativo').optional(),
