@@ -35,8 +35,8 @@ const Analytics = () => {
   const [transaction, setTransaction] = useState<TransactionProps[]>([])
   const [savings, setSavings] = useState<Goalsprops[]>([])
 
-  const [selectedPeriod, setSelectedPeriod] = useState("Últimos 6 Meses");
-  const [selectedView, setSelectedView] = useState("visão geral");
+  const [selectedPeriod, setSelectedPeriod] = useState<"6months" | "12months" | "thisYear" | "all">("6months");
+  const [selectedView, setSelectedView] = useState<"visão geral" | "receita" | "despesas">("visão geral");
   const [selectedWeeklyMonth, setSelectedWeeklyMonth] = useState<string>("");
 
   const getTransactions = async () => {
@@ -67,18 +67,40 @@ const Analytics = () => {
     getSavingGoals();
   }, []);
 
-  const revenues = transaction.filter((t) => t.type === 'revenue')
-  const expenses = transaction.filter((t) => t.type === 'expense')
+  const isDateInPeriod = (dateStr?: string) => {
+    if (!dateStr) return false;
+    const [tYear, tMonth] = dateStr.split("T")[0].split("-").map(Number);
+    if (!tYear || !tMonth) return false;
 
-  console.log(revenues)
-  console.log(expenses)
+    const now = new Date();
+    const curYear = now.getFullYear();
+    const curMonth = now.getMonth();
 
-  const totalRevenue = revenues.reduce((acc, item) => acc + Number(item.amount), 0)
-  const totalExpense = expenses.reduce((acc, item) => acc + Number(item.amount), 0)
+    if (selectedPeriod === "6months") {
+      const transDate = new Date(tYear, tMonth - 1, 1);
+      const sixMonthsAgo = new Date(curYear, curMonth - 5, 1);
+      return transDate >= sixMonthsAgo && transDate <= now;
+    }
+    if (selectedPeriod === "12months") {
+      const transDate = new Date(tYear, tMonth - 1, 1);
+      const twelveMonthsAgo = new Date(curYear, curMonth - 11, 1);
+      return transDate >= twelveMonthsAgo && transDate <= now;
+    }
+    if (selectedPeriod === "thisYear") {
+      return tYear === curYear;
+    }
+    return true;
+  };
 
+  const periodTransactions = transaction.filter((t) => isDateInPeriod(t.date));
 
+  const revenues = periodTransactions.filter((t) => t.type === 'revenue');
+  const expenses = periodTransactions.filter((t) => t.type === 'expense');
 
-  const savingRate = totalRevenue > 0 ? (((totalRevenue - totalExpense) / totalRevenue) * 100).toFixed(1) : "0.0"
+  const totalRevenue = revenues.reduce((acc, item) => acc + Number(item.amount), 0);
+  const totalExpense = expenses.reduce((acc, item) => acc + Number(item.amount), 0);
+
+  const savingRate = totalRevenue > 0 ? (((totalRevenue - totalExpense) / totalRevenue) * 100).toFixed(1) : "0.0";
 
   const topCategory = expenses.reduce((acc, t) => {
     const sum = (acc.totals[t.category] || 0) + Number(t.amount);
@@ -87,24 +109,31 @@ const Analytics = () => {
     return acc;
   }, { name: "-", amount: 0, totals: {} as Record<string, number> });
 
-  const topCategoryPercent = totalExpense > 0 ? ((topCategory.amount / totalExpense) * 100).toFixed(0) : "0"
-
-  console.log(revenues)
-  console.log(expenses)
-
+  const topCategoryPercent = totalExpense > 0 ? ((topCategory.amount / totalExpense) * 100).toFixed(0) : "0";
 
   const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-  const monthlyData = Array.from({ length: 6 }).map((_, index) => {
+  const getMonthCount = () => {
+    if (selectedPeriod === "6months") return 6;
+    if (selectedPeriod === "12months") return 12;
+    if (selectedPeriod === "thisYear") {
+      return new Date().getMonth() + 1;
+    }
+    return 12;
+  };
+
+  const monthCount = getMonthCount();
+
+  const monthlyData = Array.from({ length: monthCount }).map((_, index) => {
     const date = new Date();
     date.setDate(1);
-    date.setMonth(date.getMonth() - (5 - index));
+    date.setMonth(date.getMonth() - (monthCount - 1 - index));
     const month = date.getMonth();
     const year = date.getFullYear();
 
     const monthTransactions = transaction.filter((t) => {
       if (!t.date) return false;
-      const [tYear, tMonth] = t.date.split("-").map(Number);
+      const [tYear, tMonth] = t.date.split("T")[0].split("-").map(Number);
       return tMonth - 1 === month && tYear === year;
     });
 
@@ -392,17 +421,17 @@ const Analytics = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
                 <select
                   value={selectedPeriod}
-                  onChange={(e) => setSelectedPeriod(e.target.value)}
+                  onChange={(e) => setSelectedPeriod(e.target.value as any)}
                   className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer w-full sm:w-auto"
                 >
-                  <option value="Últimos 6 Meses">Últimos 6 Meses</option>
-                  <option value="Últimos 12 Meses">Últimos 12 Meses</option>
-                  <option value="Este Ano">Este Ano</option>
-                  <option value="Todo o Tempo">Todo o Tempo</option>
+                  <option value="6months" className="bg-[#0a0a14] text-white">Últimos 6 Meses</option>
+                  <option value="12months" className="bg-[#0a0a14] text-white">Últimos 12 Meses</option>
+                  <option value="thisYear" className="bg-[#0a0a14] text-white">Este Ano</option>
+                  <option value="all" className="bg-[#0a0a14] text-white">Todo o Tempo</option>
                 </select>
 
                 <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl w-full sm:w-auto">
-                  {["visão geral", "receita", "despesas"].map((view) => (
+                  {(["visão geral", "receita", "despesas"] as const).map((view) => (
                     <button
                       key={view}
                       onClick={() => setSelectedView(view)}
@@ -410,6 +439,7 @@ const Analytics = () => {
                         ? theme.activeBg
                         : "text-gray-400 hover:text-white hover:bg-white/5"
                         }`}
+
                     >
                       {view}
                     </button>
