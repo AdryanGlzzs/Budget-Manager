@@ -1,55 +1,38 @@
-import { themes } from "../themes/themes";
+﻿import { themes } from "../themes/themes";
 import { useEffect, useState } from "react";
 import { Save, Loader2 } from "lucide-react";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { useToast } from "../contexts/ToastContext";
+import { useTranslation } from "react-i18next";
 import { api } from "../services/api";
 
 interface NotificationItem {
   key: string;
-  title: string;
-  description: string;
   enabled: boolean;
 }
+
+const DEFAULT_NOTIFICATION_KEYS = [
+  "transactions",
+  "budgetAlerts",
+  "savingsGoals",
+  "monthlyReports",
+  "marketing",
+];
 
 export const Notifications = () => {
   const { accentColor } = useThemeColors();
   const { showToast } = useToast();
+  const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
   const [notifications, setNotifications] = useState<NotificationItem[]>([
-    {
-      key: "transactions",
-      title: "Transações",
-      description: "Receba notificações para cada transação realizada",
-      enabled: true,
-    },
-    {
-      key: "budgetAlerts",
-      title: "Alertas de Orçamento",
-      description: "Alertas ao se aproximar dos limites do seu orçamento",
-      enabled: true,
-    },
-    {
-      key: "savingsGoals",
-      title: "Metas de Economia",
-      description: "Atualizações sobre o progresso das suas economias",
-      enabled: true,
-    },
-    {
-      key: "monthlyReports",
-      title: "Relatórios Mensais",
-      description: "Relatórios mensais detalhados do seu resumo financeiro",
-      enabled: false,
-    },
-    {
-      key: "marketing",
-      title: "Novidades e Produto",
-      description: "Notícias, dicas e atualizações de novos recursos",
-      enabled: false,
-    },
+    { key: "transactions", enabled: true },
+    { key: "budgetAlerts", enabled: true },
+    { key: "savingsGoals", enabled: true },
+    { key: "monthlyReports", enabled: false },
+    { key: "marketing", enabled: false },
   ]);
 
   useEffect(() => {
@@ -103,10 +86,10 @@ export const Notifications = () => {
       );
 
       await api.put("/users/notifications/preferences", payload);
-      showToast("Preferências de notificação salvas com sucesso!", "success");
+      showToast(t("notifications.saveSuccess"), "success");
     } catch (error) {
       console.error("Erro ao salvar preferências:", error);
-      showToast("Erro ao salvar preferências. Tente novamente.", "error");
+      showToast(t("notifications.saveError"), "error");
     } finally {
       setIsSaving(false);
     }
@@ -117,13 +100,13 @@ export const Notifications = () => {
       <div className={cardGlow} />
       <div className={cardBase}>
         <h2 className="text-lg font-bold tracking-tight mb-6">
-          Preferências de Notificação
+          {t("notifications.title")}
         </h2>
 
         {isLoading ? (
           <div className="flex items-center justify-center py-12 text-zinc-400 gap-3">
             <Loader2 className="w-5 h-5 animate-spin" />
-            <span className="text-sm">Carregando preferências...</span>
+            <span className="text-sm">{t("notifications.loading")}</span>
           </div>
         ) : (
           <div className="space-y-4">
@@ -134,9 +117,11 @@ export const Notifications = () => {
               >
                 <div>
                   <div className="text-sm font-semibold text-zinc-200 mb-0.5">
-                    {item.title}
+                    {t(`notifications.items.${item.key}.title`)}
                   </div>
-                  <div className="text-xs text-zinc-400">{item.description}</div>
+                  <div className="text-xs text-zinc-400">
+                    {t(`notifications.items.${item.key}.description`)}
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -166,11 +151,11 @@ export const Notifications = () => {
           >
             {isSaving ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" /> Salvando...
+                <Loader2 className="w-4 h-4 animate-spin" /> {t("notifications.savingButton")}
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" /> Salvar Preferências
+                <Save className="w-4 h-4" /> {t("notifications.saveButton")}
               </>
             )}
           </button>

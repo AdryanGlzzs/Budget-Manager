@@ -1,8 +1,8 @@
 ﻿import { X, CreditCard } from "lucide-react";
 import { getIdentificationTypes } from "@mercadopago/sdk-react";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../services/api";
+import { useAuth } from "../contexts/authContext";
 
 interface MarkedPaid {
     isOpen: boolean;
@@ -12,16 +12,36 @@ interface MarkedPaid {
 }
 
 interface IdentificationType {
-    id: string,
-    name: string,
+    id: string;
+    name: string;
 }
 
 export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "monthly" }: MarkedPaid) => {
+    const { User } = useAuth();
     const [identificationTypes, setIdentificationTypes] = useState<IdentificationType[]>([]);
     const [selectedDocType, setSelectedDocType] = useState<string>('');
+    const [firstName, setFirstName] = useState<string>('');
+    const [lastName, setLastName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [docNumber, setDocNumber] = useState<string>('');
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     useEffect(() => {
         if (!isOpen) return;
+
+        if (User?.name) {
+            const parts = User.name.trim().split(" ");
+            setFirstName(parts[0] || "");
+            setLastName(parts.slice(1).join(" ") || "");
+        } else {
+            setFirstName("");
+            setLastName("");
+        }
+
+        setEmail(User?.email || "");
+        setDocNumber("");
+        setIsSubmitting(false);
+
         const fetchDocTypes = async () => {
             try {
                 const types = await getIdentificationTypes();
@@ -30,45 +50,44 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "
                     setSelectedDocType(types[0].id);
                 }
             } catch (error) {
-                console.error("Error ao buscar tipos de documento", error);
+                console.error("Erro ao buscar tipos de documento:", error);
             }
         };
         fetchDocTypes();
-    }, [isOpen]);
-
+    }, [isOpen, User]);
 
     if (!isOpen) return null;
 
-
     const HandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
-        e.preventDefault()
-
-        const formData = new FormData(e.currentTarget)
+        e.preventDefault();
 
         const PaymentData = {
-            planName: formData.get("planName"),
+            planName: planName || "Free",
             billingCycle,
-            payerFirstName: formData.get("payerFirstName"),
-            payerLastName: formData.get("payerLastName"),
-            email: formData.get("email"),
+            payerFirstName: firstName.trim(),
+            payerLastName: lastName.trim(),
+            email: email.trim(),
             identificationType: selectedDocType,
-            identificationNumber: formData.get("identificationNumber"),
-        }
+            identificationNumber: docNumber.trim(),
+        };
 
         try {
-            const response = await api.post("/process_payment", PaymentData)
+            setIsSubmitting(true);
+            const response = await api.post("/process_payment", PaymentData);
 
             const checkoutUrl = response.data.payment?.sandbox_init_point || response.data.payment?.init_point;
             if (checkoutUrl) {
                 window.location.href = checkoutUrl;
             }
 
-            if (onClose) onClose()
+            if (onClose) onClose();
         } catch (error: any) {
-            console.error("Erro detalhado:", error.response?.data);
+            console.error("Erro ao processar pagamento:", error.response?.data || error);
+            alert(error.response?.data?.message || "Erro ao gerar checkout de pagamento.");
+        } finally {
+            setIsSubmitting(false);
         }
-    }
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
@@ -96,7 +115,7 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "
                         <button
                             onClick={onClose}
                             type="button"
-                            className="p-2 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-all"
+                            className="p-2 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-all cursor-pointer"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -106,25 +125,31 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "
                 <form className="space-y-4" onSubmit={HandleSubmit}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label htmlFor="payerFirstName" className="block text-xs font-medium text-gray-300 mb-1.5">
-                                Nome
+                            <label htmlFor="form-checkout__payerFirstName" className="block text-xs font-medium text-gray-300 mb-1.5">
+                                Nome *
                             </label>
                             <input
                                 id="form-checkout__payerFirstName"
                                 name="payerFirstName"
                                 type="text"
+                                required
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
                                 placeholder="Seu nome"
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                             />
                         </div>
                         <div>
-                            <label htmlFor="payerLastName" className="block text-xs font-medium text-gray-300 mb-1.5">
-                                Sobrenome
+                            <label htmlFor="form-checkout__payerLastName" className="block text-xs font-medium text-gray-300 mb-1.5">
+                                Sobrenome *
                             </label>
                             <input
                                 id="form-checkout__payerLastName"
                                 name="payerLastName"
                                 type="text"
+                                required
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
                                 placeholder="Seu sobrenome"
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                             />
@@ -132,13 +157,16 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-xs font-medium text-gray-300 mb-1.5">
-                            E-mail
+                        <label htmlFor="form-checkout__email" className="block text-xs font-medium text-gray-300 mb-1.5">
+                            E-mail *
                         </label>
                         <input
                             id="form-checkout__email"
                             name="email"
                             type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder="seu@email.com"
                             className="w-full px-4 py-3 bg-white/5 border border-purple-500/40 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                         />
@@ -146,7 +174,7 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label htmlFor="identificationType" className="block text-xs font-medium text-gray-300 mb-1.5">
+                            <label htmlFor="form-checkout__identificationType" className="block text-xs font-medium text-gray-300 mb-1.5">
                                 Tipo de documento
                             </label>
                             <select
@@ -157,41 +185,44 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "
                                 className="w-full px-4 py-3 bg-[#0d0d1a] border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                             >
                                 {identificationTypes.map((type) => (
-                                    <option key={type.id} value={type.id}> {type.name}</option>
+                                    <option key={type.id} value={type.id}>{type.name}</option>
                                 ))}
                             </select>
                         </div>
                         <div>
-                            <label htmlFor="identificationNumber" className="block text-xs font-medium text-gray-300 mb-1.5">
-                                Numero do documento
+                            <label htmlFor="form-checkout__identificationNumber" className="block text-xs font-medium text-gray-300 mb-1.5">
+                                Número do documento *
                             </label>
                             <input
                                 id="form-checkout__identificationNumber"
                                 name="identificationNumber"
                                 type="text"
+                                required
+                                value={docNumber}
+                                onChange={(e) => setDocNumber(e.target.value)}
                                 placeholder="000.000.000-00"
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/50 transition-all"
                             />
                         </div>
                     </div>
 
-                    <input type="hidden" name="planName" value={planName || "Free"} />
-
                     <div className="pt-4 flex items-center gap-3">
                         {onClose && (
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="w-1/3 py-3.5 rounded-xl text-sm font-semibold text-gray-400 bg-white/5 hover:bg-white/10 hover:text-white transition-all"
+                                disabled={isSubmitting}
+                                className="w-1/3 py-3.5 rounded-xl text-sm font-semibold text-gray-400 bg-white/5 hover:bg-white/10 hover:text-white transition-all cursor-pointer disabled:opacity-50"
                             >
                                 Cancelar
                             </button>
                         )}
                         <button
                             type="submit"
-                            className="flex-1 py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:shadow-lg hover:shadow-purple-600/40 hover:scale-[1.01] active:scale-[0.99] transition-all"
+                            disabled={isSubmitting}
+                            className="flex-1 py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-purple-500 text-white hover:shadow-lg hover:shadow-purple-600/40 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50"
                         >
-                            Finalizar Pagamento
+                            {isSubmitting ? "Processando..." : "Finalizar Pagamento"}
                         </button>
                     </div>
                 </form>

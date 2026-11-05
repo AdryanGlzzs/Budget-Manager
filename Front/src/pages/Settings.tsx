@@ -20,6 +20,7 @@ import { Security } from "../components/Security";
 
 import { themes } from "../themes/themes";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 type TabId =
   | "profile"
@@ -28,19 +29,18 @@ type TabId =
   | "preferences"
   | "billing";
 
-
 type TabItem = {
   id: TabId;
-  label: string;
+  labelKey: string;
   icon: LucideIcon;
 };
 
 const tabs: TabItem[] = [
-  { id: "profile", label: "Perfil", icon: User },
-  { id: "security", label: "Segurança", icon: Lock },
-  { id: "notifications", label: "Notificações", icon: Bell },
-  { id: "preferences", label: "Preferências", icon: Globe },
-  { id: "billing", label: "Faturamento", icon: CreditCard },
+  { id: "profile", labelKey: "settingsPage.tabs.profile", icon: User },
+  { id: "security", labelKey: "settingsPage.tabs.security", icon: Lock },
+  { id: "notifications", labelKey: "settingsPage.tabs.notifications", icon: Bell },
+  { id: "preferences", labelKey: "settingsPage.tabs.preferences", icon: Globe },
+  { id: "billing", labelKey: "settingsPage.tabs.billing", icon: CreditCard },
 ];
 
 const glowColors = {
@@ -66,6 +66,7 @@ const glowColors = {
 };
 
 const Settings = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>("profile");
   const [fadeKey, setFadeKey] = useState(0);
@@ -159,11 +160,11 @@ const Settings = () => {
            
             <section className="mb-8">
               <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-                Configurações
+                {t("settingsPage.title")}
               </h1>
 
               <p className="text-sm sm:text-base text-zinc-400">
-                Gerencie seu perfil, segurança e preferências financeiras
+                {t("settingsPage.subtitle")}
               </p>
             </section>
 
@@ -195,7 +196,7 @@ const Settings = () => {
                       >
                         <Icon className="w-4 h-4 shrink-0" />
 
-                        {tab.label}
+                        {t(tab.labelKey)}
                       </button>
                     );
                   })}
