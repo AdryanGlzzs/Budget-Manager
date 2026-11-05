@@ -22,6 +22,7 @@ import {
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { api } from "../services/api";
@@ -29,11 +30,12 @@ import type { TransactionProps } from "../components/TransactionModal";
 import type { Goalsprops } from "../components/SavingGoalsModal";
 
 const Analytics = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
-  const [transaction, setTransaction] = useState<TransactionProps[]>([])
-  const [savings, setSavings] = useState<Goalsprops[]>([])
+  const [transaction, setTransaction] = useState<TransactionProps[]>([]);
+  const [, setSavings] = useState<Goalsprops[]>([]);
 
   const [selectedPeriod, setSelectedPeriod] = useState<"6months" | "12months" | "thisYear" | "all">("6months");
   const [selectedView, setSelectedView] = useState<"visão geral" | "receita" | "despesas">("visão geral");
@@ -55,7 +57,6 @@ const Analytics = () => {
       const response = await api.get('/savings-goals');
       if (response?.data?.data) {
         setSavings(response.data.data);
-        console.log(response)
       }
     } catch (error) {
       console.error("Erro ao carregar metas no Analytics:", error);
@@ -111,7 +112,9 @@ const Analytics = () => {
 
   const topCategoryPercent = totalExpense > 0 ? ((topCategory.amount / totalExpense) * 100).toFixed(0) : "0";
 
-  const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+  const months: string[] = (t("analytics.monthsShort", { returnObjects: true }) as string[]) || [
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+  ];
 
   const getMonthCount = () => {
     if (selectedPeriod === "6months") return 6;
@@ -146,7 +149,7 @@ const Analytics = () => {
       .reduce((acc, t) => acc + Number(t.amount || 0), 0);
 
     return {
-      month: months[month],
+      month: months[month] || String(month + 1),
       income,
       expense,
       savings: Math.max(0, income - expense),
@@ -213,19 +216,9 @@ const Analytics = () => {
     }))
     .sort((a, b) => b.value - a.value);
 
-  const fullMonths = [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
+  const fullMonths: string[] = (t("analytics.monthsFull", { returnObjects: true }) as string[]) || [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
   ];
 
   const availableExpenseMonths = Array.from(
@@ -299,16 +292,17 @@ const Analytics = () => {
     }
   });
 
+  const weekLabel = t("analytics.weeklyPattern.week", "Semana");
   const weeklySpending: { week: string; spending: number; range: string }[] = [
-    { week: "Semana 1", spending: week1, range: "01 a 07" },
-    { week: "Semana 2", spending: week2, range: "08 a 14" },
-    { week: "Semana 3", spending: week3, range: "15 a 21" },
-    { week: "Semana 4", spending: week4, range: "22 a 28" },
+    { week: `${weekLabel} 1`, spending: week1, range: "01 a 07" },
+    { week: `${weekLabel} 2`, spending: week2, range: "08 a 14" },
+    { week: `${weekLabel} 3`, spending: week3, range: "15 a 21" },
+    { week: `${weekLabel} 4`, spending: week4, range: "22 a 28" },
   ];
 
   if (week5 > 0) {
     weeklySpending.push({
-      week: "Semana 5",
+      week: `${weekLabel} 5`,
       spending: week5,
       range: `29 a ${daysInTargetMonth}`,
     });
@@ -359,32 +353,37 @@ const Analytics = () => {
     }))
     .sort((a, b) => b.amount - a.amount);
 
-
   const stats = [
     {
-      label: "Receita Mensal Média",
+      label: t("analytics.stats.avgMonthlyRevenue"),
       value: formatCurrency(totalRevenue),
       change: "+8.2%",
       trend: "up",
     },
     {
-      label: "Despesa Mensal Média",
+      label: t("analytics.stats.avgMonthlyExpense"),
       value: formatCurrency(totalExpense),
       change: "-3.1%",
       trend: "down",
     },
     {
-      label: "Taxa de Economia",
+      label: t("analytics.stats.savingRate"),
       value: `${savingRate} %`,
       change: "+5.3%",
       trend: "up",
     },
     {
-      label: "Maior Categoria de Gastos",
+      label: t("analytics.stats.topExpenseCategory"),
       value: `${topCategory.name}`,
       change: `${topCategoryPercent}%`,
       trend: "neutral",
     },
+  ];
+
+  const viewOptions: { key: "visão geral" | "receita" | "despesas"; label: string }[] = [
+    { key: "visão geral", label: t("analytics.views.overview") },
+    { key: "receita", label: t("analytics.views.revenue") },
+    { key: "despesas", label: t("analytics.views.expenses") },
   ];
 
   return (
@@ -409,11 +408,10 @@ const Analytics = () => {
           <main className="flex-1 p-4 md:p-8 max-w-350 mt-20">
             <div className="mb-8">
               <h1 className="text-[24px] md:text-[35px] font-bold mb-3">
-                Análise Financeira
+                {t("analytics.title")}
               </h1>
               <p className="text-[14px] md:text-[16px] text-gray-400 w-full md:w-[50%]">
-                Insights detalhados sobre seus padrões de gastos e saúde
-                financeira
+                {t("analytics.subtitle")}
               </p>
             </div>
 
@@ -424,24 +422,32 @@ const Analytics = () => {
                   onChange={(e) => setSelectedPeriod(e.target.value as any)}
                   className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-[14px] focus:outline-none backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer w-full sm:w-auto"
                 >
-                  <option value="6months" className="bg-[#0a0a14] text-white">Últimos 6 Meses</option>
-                  <option value="12months" className="bg-[#0a0a14] text-white">Últimos 12 Meses</option>
-                  <option value="thisYear" className="bg-[#0a0a14] text-white">Este Ano</option>
-                  <option value="all" className="bg-[#0a0a14] text-white">Todo o Tempo</option>
+                  <option value="6months" className="bg-[#0a0a14] text-white">
+                    {t("analytics.periods.sixMonths")}
+                  </option>
+                  <option value="12months" className="bg-[#0a0a14] text-white">
+                    {t("analytics.periods.twelveMonths")}
+                  </option>
+                  <option value="thisYear" className="bg-[#0a0a14] text-white">
+                    {t("analytics.periods.thisYear")}
+                  </option>
+                  <option value="all" className="bg-[#0a0a14] text-white">
+                    {t("analytics.periods.all")}
+                  </option>
                 </select>
 
                 <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl w-full sm:w-auto">
-                  {(["visão geral", "receita", "despesas"] as const).map((view) => (
+                  {viewOptions.map((view) => (
                     <button
-                      key={view}
-                      onClick={() => setSelectedView(view)}
-                      className={`px-3 md:px-4 py-2 rounded-lg text-[13px] md:text-[14px] font-medium capitalize transition-all flex-1 sm:flex-none cursor-pointer ${selectedView === view
-                        ? theme.activeBg
-                        : "text-gray-400 hover:text-white hover:bg-white/5"
-                        }`}
-
+                      key={view.key}
+                      onClick={() => setSelectedView(view.key)}
+                      className={`px-3 md:px-4 py-2 rounded-lg text-[13px] md:text-[14px] font-medium capitalize transition-all flex-1 sm:flex-none cursor-pointer ${
+                        selectedView === view.key
+                          ? theme.activeBg
+                          : "text-gray-400 hover:text-white hover:bg-white/5"
+                      }`}
                     >
-                      {view}
+                      {view.label}
                     </button>
                   ))}
                 </div>
@@ -449,7 +455,7 @@ const Analytics = () => {
 
               <button className={`flex items-center justify-center gap-2 px-5 py-2.5 ${theme.activeBg} rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] w-full sm:w-auto`}>
                 <Download className="w-4 h-4" />
-                Exportar Relatório
+                {t("analytics.exportReport")}
               </button>
             </div>
 
@@ -465,12 +471,13 @@ const Analytics = () => {
                       {stat.value}
                     </div>
                     <div
-                      className={`text-[13px] flex items-center gap-1 ${stat.trend === "up"
-                        ? "text-green-400"
-                        : stat.trend === "down"
-                          ? "text-red-400"
-                          : "text-gray-400"
-                        }`}
+                      className={`text-[13px] flex items-center gap-1 ${
+                        stat.trend === "up"
+                          ? "text-green-400"
+                          : stat.trend === "down"
+                            ? "text-red-400"
+                            : "text-gray-400"
+                      }`}
                     >
                       {stat.trend === "up" ? (
                         <ArrowUpRight className="w-3 h-3" />
@@ -491,25 +498,25 @@ const Analytics = () => {
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h2 className="text-[20px] font-semibold mb-2">
-                        Tendência de Receitas vs Despesas
+                        {t("analytics.trendChart.title")}
                       </h2>
                       <div className="flex items-center gap-4 text-[13px]">
                         {(selectedView === "visão geral" || selectedView === "receita") && (
                           <div className="flex items-center gap-2">
                             <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-                            <span className="text-gray-400">Receita</span>
+                            <span className="text-gray-400">{t("analytics.trendChart.income")}</span>
                           </div>
                         )}
                         {(selectedView === "visão geral" || selectedView === "despesas") && (
                           <div className="flex items-center gap-2">
                             <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
-                            <span className="text-gray-400">Despesas</span>
+                            <span className="text-gray-400">{t("analytics.trendChart.expense")}</span>
                           </div>
                         )}
                         {selectedView === "visão geral" && (
                           <div className="flex items-center gap-2">
                             <div className="w-3 h-3 bg-purple-500 rounded-sm"></div>
-                            <span className="text-gray-400">Economias</span>
+                            <span className="text-gray-400">{t("analytics.trendChart.savings")}</span>
                           </div>
                         )}
                       </div>
@@ -576,11 +583,11 @@ const Analytics = () => {
                         formatter={(value: any, name: any) => [
                           formatCurrency(Number(value) || 0),
                           name === "income"
-                            ? "Receita"
+                            ? t("analytics.trendChart.income")
                             : name === "expense"
-                              ? "Despesas"
+                              ? t("analytics.trendChart.expense")
                               : name === "savings"
-                                ? "Economias"
+                                ? t("analytics.trendChart.savings")
                                 : name,
                         ]}
                       />
@@ -588,7 +595,7 @@ const Analytics = () => {
                         <Area
                           type="monotone"
                           dataKey="income"
-                          name="Receita"
+                          name="income"
                           stroke="#10B981"
                           strokeWidth={2}
                           fillOpacity={1}
@@ -599,7 +606,7 @@ const Analytics = () => {
                         <Area
                           type="monotone"
                           dataKey="expense"
-                          name="Despesas"
+                          name="expense"
                           stroke="#EF4444"
                           strokeWidth={2}
                           fillOpacity={1}
@@ -610,7 +617,7 @@ const Analytics = () => {
                         <Line
                           type="monotone"
                           dataKey="savings"
-                          name="Economias"
+                          name="savings"
                           stroke="#6366F1"
                           strokeWidth={2}
                           dot={false}
@@ -625,12 +632,12 @@ const Analytics = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <h2 className="text-[20px] font-semibold mb-6">
-                    Gastos por Categoria
+                    {t("analytics.categoryChart.title")}
                   </h2>
 
                   {categorySpending.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                      <p className="text-[14px]">Nenhum gasto registrado ainda.</p>
+                      <p className="text-[14px]">{t("analytics.categoryChart.empty")}</p>
                     </div>
                   ) : (
                     <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -658,7 +665,7 @@ const Analytics = () => {
                               }}
                               formatter={(value: any) => [
                                 formatCurrency(Number(value) || 0),
-                                "Gasto",
+                                t("analytics.categoryChart.spent"),
                               ]}
                             />
                           </PieChart>
@@ -705,10 +712,10 @@ const Analytics = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                     <div>
                       <h2 className="text-[20px] font-semibold">
-                        Padrão de Gastos Semanal
+                        {t("analytics.weeklyPattern.title")}
                       </h2>
                       <p className="text-[12px] text-gray-400 mt-0.5">
-                        {fullMonths[targetMonth]} de {targetYear}
+                        {fullMonths[targetMonth] || String(targetMonth + 1)} de {targetYear}
                       </p>
                     </div>
 
@@ -722,7 +729,7 @@ const Analytics = () => {
                           const [y, m] = ym.split("-").map(Number);
                           return (
                             <option key={ym} value={ym} className="bg-[#0a0a14] text-white">
-                              {fullMonths[m - 1]} {y}
+                              {fullMonths[m - 1] || String(m)} {y}
                             </option>
                           );
                         })}
@@ -732,7 +739,7 @@ const Analytics = () => {
 
                   {weeklyTargetExpenses.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-[240px] text-gray-400">
-                      <p className="text-[14px]">Nenhum gasto registrado neste mês.</p>
+                      <p className="text-[14px]">{t("analytics.weeklyPattern.empty")}</p>
                     </div>
                   ) : (
                     <ResponsiveContainer width="100%" height={240}>
@@ -756,11 +763,11 @@ const Analytics = () => {
                           }}
                           formatter={(value: any) => [
                             formatCurrency(Number(value) || 0),
-                            "Gastos",
+                            t("analytics.weeklyPattern.spending"),
                           ]}
                           labelFormatter={(label: any, payload: any) => {
                             const item = payload?.[0]?.payload;
-                            return item?.range ? `${label} (Dias ${item.range})` : label;
+                            return item?.range ? `${label} (${t("analytics.weeklyPattern.days")} ${item.range})` : label;
                           }}
                         />
                         <Bar
@@ -791,18 +798,18 @@ const Analytics = () => {
                 <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-[20px] font-semibold">
-                      Detalhamento de Receitas
+                      {t("analytics.incomeBreakdown.title")}
                     </h2>
                     {totalRevenue > 0 && (
                       <span className="text-[13px] text-gray-400">
-                        Total: <strong className="text-emerald-400">{formatCurrency(totalRevenue)}</strong>
+                        {t("analytics.incomeBreakdown.total")}: <strong className="text-emerald-400">{formatCurrency(totalRevenue)}</strong>
                       </span>
                     )}
                   </div>
 
                   {incomeBreakdown.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                      <p className="text-[14px]">Nenhuma receita registrada ainda.</p>
+                      <p className="text-[14px]">{t("analytics.incomeBreakdown.empty")}</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
@@ -854,7 +861,7 @@ const Analytics = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-orange-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
               <div className="relative bg-gradient-to-br from-white/10 to-white/[0.02] p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
                 <h2 className="text-[20px] font-semibold mb-6">
-                  Principais Insights Financeiros
+                  {t("analytics.insights.title")}
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
@@ -865,10 +872,13 @@ const Analytics = () => {
                           <div className="w-2 h-2 bg-green-400 rounded-full mt-2 shrink-0"></div>
                           <div>
                             <div className="text-[15px] font-medium mb-2">
-                              Forte Disciplina de Economia
+                              {t("analytics.insights.strongSavingsTitle")}
                             </div>
                             <div className="text-[13px] text-gray-400 leading-relaxed">
-                              Sua taxa de poupança está em {savingRate}%, gerando uma sobra de {formatCurrency(totalRevenue - totalExpense)}. Você está acima da meta recomendada de 20%!
+                              {t("analytics.insights.strongSavingsDesc", {
+                                rate: savingRate,
+                                surplus: formatCurrency(totalRevenue - totalExpense),
+                              })}
                             </div>
                           </div>
                         </>
@@ -877,10 +887,13 @@ const Analytics = () => {
                           <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 shrink-0"></div>
                           <div>
                             <div className="text-[15px] font-medium mb-2">
-                              Economia Moderada ({savingRate}%)
+                              {t("analytics.insights.moderateSavingsTitle", { rate: savingRate })}
                             </div>
                             <div className="text-[13px] text-gray-400 leading-relaxed">
-                              Você poupou {savingRate}% ({formatCurrency(totalRevenue - totalExpense)}) até agora. Pequenos ajustes em supérfluos ajudarão a atingir a meta de 20%.
+                              {t("analytics.insights.moderateSavingsDesc", {
+                                rate: savingRate,
+                                surplus: formatCurrency(totalRevenue - totalExpense),
+                              })}
                             </div>
                           </div>
                         </>
@@ -889,10 +902,12 @@ const Analytics = () => {
                           <div className="w-2 h-2 bg-red-400 rounded-full mt-2 shrink-0"></div>
                           <div>
                             <div className="text-[15px] font-medium mb-2">
-                              Atenção ao Déficit
+                              {t("analytics.insights.deficitTitle")}
                             </div>
                             <div className="text-[13px] text-gray-400 leading-relaxed">
-                              Suas despesas superaram sua receita em {formatCurrency(totalExpense - totalRevenue)}. Evite compras não essenciais para reequilibrar o orçamento.
+                              {t("analytics.insights.deficitDesc", {
+                                deficit: formatCurrency(totalExpense - totalRevenue),
+                              })}
                             </div>
                           </div>
                         </>
@@ -901,10 +916,10 @@ const Analytics = () => {
                           <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 shrink-0"></div>
                           <div>
                             <div className="text-[15px] font-medium mb-2">
-                              Taxa de Economia
+                              {t("analytics.insights.savingsEmptyTitle")}
                             </div>
                             <div className="text-[13px] text-gray-400 leading-relaxed">
-                              Cadastre suas receitas e despesas para acompanhar sua taxa de economia em tempo real.
+                              {t("analytics.insights.savingsEmptyDesc")}
                             </div>
                           </div>
                         </>
@@ -919,10 +934,14 @@ const Analytics = () => {
                           <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 shrink-0"></div>
                           <div>
                             <div className="text-[15px] font-medium mb-2">
-                              Maior Gasto: {topCategory.name}
+                              {t("analytics.insights.topCategoryTitle", { category: topCategory.name })}
                             </div>
                             <div className="text-[13px] text-gray-400 leading-relaxed">
-                              {topCategory.name} representa {topCategoryPercent}% das suas despesas totais ({formatCurrency(topCategory.amount)}). Estipular um teto para essa categoria pode trazer economia imediata.
+                              {t("analytics.insights.topCategoryDesc", {
+                                category: topCategory.name,
+                                percent: topCategoryPercent,
+                                amount: formatCurrency(topCategory.amount),
+                              })}
                             </div>
                           </div>
                         </>
@@ -931,10 +950,10 @@ const Analytics = () => {
                           <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 shrink-0"></div>
                           <div>
                             <div className="text-[15px] font-medium mb-2">
-                              Concentração de Gastos
+                              {t("analytics.insights.topCategoryEmptyTitle")}
                             </div>
                             <div className="text-[13px] text-gray-400 leading-relaxed">
-                              Nenhuma despesa registrada ainda para avaliar a categoria de maior impacto.
+                              {t("analytics.insights.topCategoryEmptyDesc")}
                             </div>
                           </div>
                         </>
@@ -947,14 +966,22 @@ const Analytics = () => {
                       <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 shrink-0"></div>
                       <div>
                         <div className="text-[15px] font-medium mb-2">
-                          {incomeBreakdown.length > 1 ? "Receita Diversificada" : "Fonte de Renda"}
+                          {incomeBreakdown.length > 1
+                            ? t("analytics.insights.diversifiedIncomeTitle")
+                            : t("analytics.insights.singleIncomeTitle")}
                         </div>
                         <div className="text-[13px] text-gray-400 leading-relaxed">
                           {incomeBreakdown.length > 1
-                            ? `Você possui ${incomeBreakdown.length} fontes de receita ativas, totalizando ${formatCurrency(totalRevenue)}. Essa diversificação garante boa segurança financeira.`
+                            ? t("analytics.insights.diversifiedIncomeDesc", {
+                                count: incomeBreakdown.length,
+                                total: formatCurrency(totalRevenue),
+                              })
                             : incomeBreakdown.length === 1
-                              ? `Você possui 1 fonte principal de receita (${incomeBreakdown[0].source} - ${formatCurrency(incomeBreakdown[0].amount)}). Diversificar no futuro aumentará sua proteção.`
-                              : "Nenhuma receita registrada ainda para analisar a diversificação do seu fluxo."}
+                              ? t("analytics.insights.singleIncomeDesc", {
+                                  source: incomeBreakdown[0].source,
+                                  amount: formatCurrency(incomeBreakdown[0].amount),
+                                })
+                              : t("analytics.insights.incomeEmptyDesc")}
                         </div>
                       </div>
                     </div>
@@ -968,10 +995,16 @@ const Analytics = () => {
                             <div className="w-2 h-2 bg-green-400 rounded-full mt-2 shrink-0"></div>
                             <div>
                               <div className="text-[15px] font-medium mb-2">
-                                Redução de Despesas (-{Math.abs(Number(expenseMoMChange))}%)
+                                {t("analytics.insights.expenseReductionTitle", {
+                                  change: Math.abs(Number(expenseMoMChange)),
+                                })}
                               </div>
                               <div className="text-[13px] text-gray-400 leading-relaxed">
-                                Suas despesas caíram {Math.abs(Number(expenseMoMChange))}% em relação ao mês anterior ({formatCurrency(currentMonthExpense)} vs {formatCurrency(prevMonthExpense)}). Parabéns pela disciplina!
+                                {t("analytics.insights.expenseReductionDesc", {
+                                  change: Math.abs(Number(expenseMoMChange)),
+                                  current: formatCurrency(currentMonthExpense),
+                                  prev: formatCurrency(prevMonthExpense),
+                                })}
                               </div>
                             </div>
                           </>
@@ -980,10 +1013,16 @@ const Analytics = () => {
                             <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 shrink-0"></div>
                             <div>
                               <div className="text-[15px] font-medium mb-2">
-                                Aumento nos Gastos (+{expenseMoMChange}%)
+                                {t("analytics.insights.expenseIncreaseTitle", {
+                                  change: expenseMoMChange,
+                                })}
                               </div>
                               <div className="text-[13px] text-gray-400 leading-relaxed">
-                                Seus gastos subiram {expenseMoMChange}% em relação ao mês anterior ({formatCurrency(currentMonthExpense)} vs {formatCurrency(prevMonthExpense)}). Atenção às saídas até o fechamento.
+                                {t("analytics.insights.expenseIncreaseDesc", {
+                                  change: expenseMoMChange,
+                                  current: formatCurrency(currentMonthExpense),
+                                  prev: formatCurrency(prevMonthExpense),
+                                })}
                               </div>
                             </div>
                           </>
@@ -993,10 +1032,10 @@ const Analytics = () => {
                           <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2 shrink-0"></div>
                           <div>
                             <div className="text-[15px] font-medium mb-2">
-                              Controle Mensal
+                              {t("analytics.insights.expenseComparisonEmptyTitle")}
                             </div>
                             <div className="text-[13px] text-gray-400 leading-relaxed">
-                              Registre gastos em meses consecutivos para visualizar a comparação da sua disciplina financeira mês a mês.
+                              {t("analytics.insights.expenseComparisonEmptyDesc")}
                             </div>
                           </div>
                         </>
@@ -1009,8 +1048,6 @@ const Analytics = () => {
           </main>
         </div>
       </div>
-
-
     </div>
   );
 };

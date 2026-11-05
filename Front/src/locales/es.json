@@ -1,268 +1,368 @@
-﻿{
-    "common":  {
-                   "save":  "Guardar",
-                   "saving":  "Guardando...",
-                   "cancel":  "Cancelar",
-                   "edit":  "Editar",
-                   "delete":  "Eliminar"
-               },
-    "preferences":  {
-                        "title":  "Preferencias Generales",
-                        "theme":  "Color de Acento",
-                        "localCurrency":  "Moneda Local",
-                        "interfaceLanguage":  "Idioma de la Interfaz",
-                        "timezone":  "Zona Horaria",
-                        "dateFormat":  "Formato de Fecha",
-                        "saveButton":  "Guardar Preferencias",
-                        "saveSuccess":  "Â¡Preferencias generales guardadas con Ã©xito!",
-                        "themes":  {
-                                       "purple":  "PÃºrpura",
-                                       "blue":  "Azul",
-                                       "emerald":  "Esmeralda",
-                                       "pink":  "Rosa"
-                                   },
-                        "languages":  {
-                                          "pt":  "PortuguÃªs (BR)",
-                                          "en":  "English (US)",
-                                          "es":  "EspaÃ±ol"
-                                      }
-                    },
-    "notifications":  {
-                          "title":  "Preferencias de NotificaciÃ³n",
-                          "loading":  "Cargando preferencias...",
-                          "saveButton":  "Guardar Preferencias",
-                          "savingButton":  "Guardando...",
-                          "saveSuccess":  "Â¡Preferencias de notificaciÃ³n guardadas con Ã©xito!",
-                          "saveError":  "Error al guardar las preferencias. IntÃ©ntelo de nuevo.",
-                          "items":  {
-                                        "transactions":  {
-                                                             "title":  "Transacciones",
-                                                             "description":  "Recibe notificaciones por cada transacciÃ³n realizada"
-                                                         },
-                                        "budgetAlerts":  {
-                                                             "title":  "Alertas de Presupuesto",
-                                                             "description":  "Alertas al acercarte a los lÃ­mites de tu presupuesto"
-                                                         },
-                                        "savingsGoals":  {
-                                                             "title":  "Metas de Ahorro",
-                                                             "description":  "Actualizaciones sobre el progreso de tus ahorros"
-                                                         },
-                                        "monthlyReports":  {
-                                                               "title":  "Informes Mensuales",
-                                                               "description":  "Informes mensuales detallados de tu resumen financiero"
-                                                           },
-                                        "marketing":  {
-                                                          "title":  "Novedades y Producto",
-                                                          "description":  "Noticias, consejos y actualizaciones de nuevas funciones"
-                                                      }
-                                    }
-                      },
-    "dashboard":  {
-                      "totalBalance":  "Saldo Total",
-                      "vsLastMonth":  "vs mes anterior",
-                      "periods":  {
-                                      "thisMonth":  "Este Mes",
-                                      "lastMonth":  "Mes Pasado",
-                                      "thisYear":  "Este AÃ±o"
-                                  },
-                      "revenue":  "Ingresos",
-                      "sinceLastMonth":  "desde el mes pasado",
-                      "expenses":  "Gastos",
-                      "cashFlow":  {
-                                       "title":  "Resumen del Flujo de Caja",
-                                       "revenue":  "Ingresos",
-                                       "expense":  "Gastos",
-                                       "accRevenue":  "Ingresos Acumulados",
-                                       "accExpense":  "Gastos Acumulados",
-                                       "avgRevenue":  "Ingreso Promedio",
-                                       "avgExpense":  "Gasto Promedio",
-                                       "start":  "Inicio"
-                                   },
-                      "expensesByCategory":  {
-                                                 "title":  "Gastos por CategorÃ­a",
-                                                 "totalSpent":  "Total Gastado",
-                                                 "noCategory":  "No se encontraron categorÃ­as",
-                                                 "noCategoryDesc":  "No hay gastos registrados por categorÃ­a."
-                                             },
-                      "recentTransactions":  {
-                                                 "title":  "Transacciones Recientes",
-                                                 "viewAll":  "Ver Todo",
-                                                 "empty":  "No se encontraron transacciones."
-                                             },
-                      "budgets":  {
-                                      "title":  "Presupuestos",
-                                      "showing":  "Mostrando {{current}} de {{total}}",
-                                      "empty":  "No hay presupuestos registrados.",
-                                      "remaining":  "restante",
-                                      "of":  "de",
-                                      "periods":  {
-                                                      "monthly":  "Mensual",
-                                                      "nextMonth":  "PrÃ³ximo mes",
-                                                      "quarterly":  "Trimestral",
-                                                      "yearly":  "Anual",
-                                                      "custom":  "Personalizado"
-                                                  }
-                                  },
-                      "aiInsights":  {
-                                         "title":  "Insights con IA",
-                                         "subtitle":  "Recomendaciones inteligentes basadas en tus gastos",
-                                         "viewMore":  "Ver MÃ¡s Insights"
-                                     }
-                  },
-    "transactions":  {
-                         "title":  "Transacciones",
-                         "subtitle":  "Monitorea y administra todas tus transacciones financieras",
-                         "newTransaction":  "Nueva TransacciÃ³n",
-                         "totalRevenue":  "Ingresos Totales",
-                         "totalExpenses":  "Gastos Totales",
-                         "balance":  "Saldo",
-                         "thisMonth":  "Este mes",
-                         "searchPlaceholder":  "Buscar por nombre o categorÃ­a...",
-                         "periods":  {
-                                         "all":  "Todos los PerÃ­odos",
-                                         "thisMonth":  "Este Mes",
-                                         "lastMonth":  "Mes Pasado",
-                                         "thisYear":  "Este AÃ±o"
-                                     },
-                         "allCategories":  "Todas las CategorÃ­as",
-                         "export":  "Exportar",
-                         "exportSuccess":  "Â¡Transacciones exportadas con Ã©xito!",
-                         "exportEmpty":  "No hay transacciones para exportar.",
-                         "filters":  {
-                                         "all":  "Todo",
-                                         "revenue":  "Ingresos",
-                                         "expenses":  "Gastos",
-                                         "pending":  "Pendiente"
-                                     },
-                         "table":  {
-                                       "transaction":  "TransacciÃ³n",
-                                       "category":  "CategorÃ­a",
-                                       "dateTime":  "Fecha y Hora",
-                                       "status":  "Estado",
-                                       "amount":  "Monto",
-                                       "actions":  "Acciones",
-                                       "completed":  "Completado",
-                                       "pending":  "Pendiente",
-                                       "emptyTitle":  "No se encontraron transacciones",
-                                       "emptySubtitle":  "Intenta ajustar tus filtros"
-                                   }
-                     },
-    "budgetsPage":  {
-                        "title":  "Gestor de Presupuesto",
-                        "subtitle":  "Crea y administra presupuestos para diferentes categorÃ­as de gastos",
-                        "createBudget":  "Crear Presupuesto",
-                        "cards":  {
-                                      "totalBudget":  "Presupuesto Total",
-                                      "allCategories":  "En todas las categorÃ­as",
-                                      "totalSpent":  "Total Gastado",
-                                      "ofBudget":  "del presupuesto",
-                                      "remaining":  "Restante",
-                                      "available":  "disponible"
-                                  },
-                        "categories":  {
-                                           "title":  "CategorÃ­as de Presupuesto",
-                                           "periods":  {
-                                                           "thisMonth":  "Este Mes",
-                                                           "lastMonth":  "Mes Pasado",
-                                                           "thisYear":  "Este AÃ±o"
-                                                       },
-                                           "emptyTitle":  "No se encontraron presupuestos",
-                                           "emptySubtitle":  "Intenta ajustar tus filtros",
-                                           "of":  "de",
-                                           "remaining":  "restante",
-                                           "overBudget":  "sobre el presupuesto",
-                                           "deduct":  "Deducir Gasto",
-                                           "deductSuccess":  "Â¡Gasto deducido con Ã©xito!",
-                                           "deductError":  "Error al registrar la deducciÃ³n del presupuesto."
-                                       }
-                    },
-    "savingsGoalsPage":  {
-                             "title":  "Metas de Ahorro",
-                             "subtitle":  "Visualiza y administra tus objetivos financieros a largo plazo.",
-                             "actions":  {
-                                             "depositWithdraw":  "Depositar / Retirar",
-                                             "newGoal":  "Nueva Meta",
-                                             "deposit":  "Depositar",
-                                             "withdraw":  "Retirar",
-                                             "moveBalance":  "Movilizar Saldo",
-                                             "editGoal":  "Editar meta",
-                                             "removeGoal":  "Eliminar meta"
-                                         },
-                             "tooltips":  {
-                                              "createGoalFirst":  "Crea una meta primero",
-                                              "manageSavedFunds":  "Agregar o retirar fondos guardados",
-                                              "addSavedAmount":  "Agregar fondos ahorrados",
-                                              "withdrawSavedAmount":  "Retirar fondos ahorrados"
-                                          },
-                             "cards":  {
-                                           "totalSaved":  "Total Ahorrado",
-                                           "activeGoals":  "Metas Activas",
-                                           "averageProgress":  "Progreso Promedio"
-                                       },
-                             "sectionTitle":  "Tus Metas",
-                             "goalCard":  {
-                                              "of":  "de",
-                                              "progress":  "Progreso"
-                                          },
-                             "empty":  {
-                                           "title":  "No se encontraron metas",
-                                           "subtitle":  "Crea una meta para comenzar a ahorrar"
-                                       }
-                         },
-    "settingsPage":  {
-                         "title":  "Configuración",
-                         "subtitle":  "Administra tu perfil, seguridad y preferencias financieras",
-                         "tabs":  {
-                                      "profile":  "Perfil",
-                                      "security":  "Seguridad",
-                                      "notifications":  "Notificaciones",
-                                      "preferences":  "Preferencias",
-                                      "billing":  "Facturación"
-                                  }
-                     },
-    "billingPage":  {
-                        "title":  "Facturación y Suscripción",
-                        "loading":  "Cargando datos de facturación...",
-                        "errorLoad":  "No se pudo cargar la información de facturación.",
-                        "plans":  {
-                                      "Free":  "Gratuito",
-                                      "Pro":  "Pro",
-                                      "Business":  "Business"
-                                  },
-                        "status":  {
-                                       "active":  "Activo",
-                                       "cancelled":  "Cancelado",
-                                       "pending":  "Pendiente"
-                                   },
-                        "invoiceStatus":  {
-                                              "paid":  "Pagado",
-                                              "pending":  "Pendiente",
-                                              "failed":  "Fallido"
-                                          },
-                        "currentPlan":  "Plan {{plan}}",
-                        "freeDesc":  "Funciones esenciales para tu control financiero",
-                        "proDesc":  "Funciones avanzadas e ilimitadas para tu gestión financiera",
-                        "accessUntil":  "Acceso hasta",
-                        "renewsOn":  "Se renueva el",
-                        "perMonth":  "por mes",
-                        "upgradePro":  "Suscribirse a Pro",
-                        "changePlan":  "Cambiar Plan",
-                        "cancelSub":  "Cancelar Suscripción",
-                        "keepSub":  "Mantener Suscripción",
-                        "cancelTitle":  "¿Cancelar Suscripción?",
-                        "cancelDesc":  "Continuarás teniendo acceso al plan hasta el final del período actual. Después de eso, tu cuenta volverá al plan gratuito.",
-                        "cancelSuccess":  "Suscripción cancelada con éxito.",
-                        "cancelError":  "Error al cancelar la suscripción. Inténtalo de nuevo.",
-                        "paymentMethod":  "Método de Pago",
-                        "cardDefault":  "Predeterminado",
-                        "editCard":  "Editar",
-                        "removeCard":  "Eliminar",
-                        "removeCardTitle":  "¿Eliminar Tarjeta de Crédito?",
-                        "removeCardDesc":  "Deberás agregar otra tarjeta para mantener las suscripciones activas.",
-                        "history":  "Historial de Facturación",
-                        "noInvoices":  "No se encontraron facturas.",
-                        "monthlyInvoice":  "Plan {{plan}} - Mensual",
-                        "downloadSuccess":  "¡Descarga de factura iniciada!",
-                        "redirectCheckout":  "Redirigiendo a los planes..."
-                    }
+{
+  "common": {
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "preferences": {
+    "title": "Preferencias Generales",
+    "theme": "Color de Acento",
+    "localCurrency": "Moneda Local",
+    "interfaceLanguage": "Idioma de la Interfaz",
+    "timezone": "Zona Horaria",
+    "dateFormat": "Formato de Fecha",
+    "saveButton": "Guardar Preferencias",
+    "saveSuccess": "¡Preferencias generales guardadas con éxito!",
+    "themes": {
+      "purple": "Púrpura",
+      "blue": "Azul",
+      "emerald": "Esmeralda",
+      "pink": "Rosa"
+    },
+    "languages": {
+      "pt": "Português (BR)",
+      "en": "English (US)",
+      "es": "Español"
+    }
+  },
+  "notifications": {
+    "title": "Preferencias de Notificación",
+    "loading": "Cargando preferencias...",
+    "saveButton": "Guardar Preferencias",
+    "savingButton": "Guardando...",
+    "saveSuccess": "¡Preferencias de notificación guardadas con éxito!",
+    "saveError": "Error al guardar las preferencias. Inténtelo de nuevo.",
+    "items": {
+      "transactions": {
+        "title": "Transacciones",
+        "description": "Recibe notificaciones por cada transacción realizada"
+      },
+      "budgetAlerts": {
+        "title": "Alertas de Presupuesto",
+        "description": "Alertas al acercarte a los límites de tu presupuesto"
+      },
+      "savingsGoals": {
+        "title": "Metas de Ahorro",
+        "description": "Actualizaciones sobre el progreso de tus ahorros"
+      },
+      "monthlyReports": {
+        "title": "Informes Mensuales",
+        "description": "Informes mensuales detallados de tu resumen financiero"
+      },
+      "marketing": {
+        "title": "Novedades y Producto",
+        "description": "Noticias, consejos y actualizaciones de nuevas funciones"
+      }
+    }
+  },
+  "dashboard": {
+    "totalBalance": "Saldo Total",
+    "vsLastMonth": "vs mes anterior",
+    "periods": {
+      "thisMonth": "Este Mes",
+      "lastMonth": "Mes Pasado",
+      "thisYear": "Este Año"
+    },
+    "revenue": "Ingresos",
+    "sinceLastMonth": "desde el mes pasado",
+    "expenses": "Gastos",
+    "cashFlow": {
+      "title": "Resumen del Flujo de Caja",
+      "revenue": "Ingresos",
+      "expense": "Gastos",
+      "accRevenue": "Ingresos Acumulados",
+      "accExpense": "Gastos Acumulados",
+      "avgRevenue": "Ingreso Promedio",
+      "avgExpense": "Gasto Promedio",
+      "start": "Inicio"
+    },
+    "expensesByCategory": {
+      "title": "Gastos por Categoría",
+      "totalSpent": "Total Gastado",
+      "noCategory": "No se encontraron categorías",
+      "noCategoryDesc": "No hay gastos registrados por categoría."
+    },
+    "recentTransactions": {
+      "title": "Transacciones Recientes",
+      "viewAll": "Ver Todo",
+      "empty": "No se encontraron transacciones."
+    },
+    "budgets": {
+      "title": "Presupuestos",
+      "showing": "Mostrando {{current}} de {{total}}",
+      "empty": "No hay presupuestos registrados.",
+      "remaining": "restante",
+      "of": "de",
+      "periods": {
+        "monthly": "Mensual",
+        "nextMonth": "Próximo mes",
+        "quarterly": "Trimestral",
+        "yearly": "Anual",
+        "custom": "Personalizado"
+      }
+    },
+    "aiInsights": {
+      "title": "Insights con IA",
+      "subtitle": "Recomendaciones inteligentes basadas en tus gastos",
+      "viewMore": "Ver Más Insights"
+    }
+  },
+  "transactions": {
+    "title": "Transacciones",
+    "subtitle": "Monitorea y administra todas tus transacciones financieras",
+    "newTransaction": "Nueva Transacción",
+    "totalRevenue": "Ingresos Totales",
+    "totalExpenses": "Gastos Totales",
+    "balance": "Saldo",
+    "thisMonth": "Este mes",
+    "searchPlaceholder": "Buscar por nombre o categoría...",
+    "periods": {
+      "all": "Todos los Períodos",
+      "thisMonth": "Este Mes",
+      "lastMonth": "Mes Pasado",
+      "thisYear": "Este Año"
+    },
+    "allCategories": "Todas las Categorías",
+    "export": "Exportar",
+    "exportSuccess": "¡Transacciones exportadas con éxito!",
+    "exportEmpty": "No hay transacciones para exportar.",
+    "filters": {
+      "all": "Todo",
+      "revenue": "Ingresos",
+      "expenses": "Gastos",
+      "pending": "Pendiente"
+    },
+    "table": {
+      "transaction": "Transacción",
+      "category": "Categoría",
+      "dateTime": "Fecha y Hora",
+      "status": "Estado",
+      "amount": "Monto",
+      "actions": "Acciones",
+      "completed": "Completado",
+      "pending": "Pendiente",
+      "emptyTitle": "No se encontraron transacciones",
+      "emptySubtitle": "Intenta ajustar tus filtros"
+    }
+  },
+  "budgetsPage": {
+    "title": "Gestor de Presupuesto",
+    "subtitle": "Crea y administra presupuestos para diferentes categorías de gastos",
+    "createBudget": "Crear Presupuesto",
+    "cards": {
+      "totalBudget": "Presupuesto Total",
+      "allCategories": "En todas las categorías",
+      "totalSpent": "Total Gastado",
+      "ofBudget": "del presupuesto",
+      "remaining": "Restante",
+      "available": "disponible"
+    },
+    "categories": {
+      "title": "Categorías de Presupuesto",
+      "periods": {
+        "thisMonth": "Este Mes",
+        "lastMonth": "Mes Pasado",
+        "thisYear": "Este Año"
+      },
+      "emptyTitle": "No se encontraron presupuestos",
+      "emptySubtitle": "Intenta ajustar tus filtros",
+      "of": "de",
+      "remaining": "restante",
+      "overBudget": "sobre el presupuesto",
+      "deduct": "Deducir Gasto",
+      "deductSuccess": "¡Gasto deducido con éxito!",
+      "deductError": "Error al registrar la deducción del presupuesto."
+    }
+  },
+  "savingsGoalsPage": {
+    "title": "Metas de Ahorro",
+    "subtitle": "Visualiza y administra tus objetivos financieros a largo plazo.",
+    "actions": {
+      "depositWithdraw": "Depositar / Retirar",
+      "newGoal": "Nueva Meta",
+      "deposit": "Depositar",
+      "withdraw": "Retirar",
+      "moveBalance": "Movilizar Saldo",
+      "editGoal": "Editar meta",
+      "removeGoal": "Eliminar meta"
+    },
+    "tooltips": {
+      "createGoalFirst": "Crea una meta primero",
+      "manageSavedFunds": "Agregar o retirar fondos guardados",
+      "addSavedAmount": "Agregar fondos ahorrados",
+      "withdrawSavedAmount": "Retirar fondos ahorrados"
+    },
+    "cards": {
+      "totalSaved": "Total Ahorrado",
+      "activeGoals": "Metas Activas",
+      "averageProgress": "Progreso Promedio"
+    },
+    "sectionTitle": "Tus Metas",
+    "goalCard": {
+      "of": "de",
+      "progress": "Progreso"
+    },
+    "empty": {
+      "title": "No se encontraron metas",
+      "subtitle": "Crea una meta para comenzar a ahorrar"
+    }
+  },
+  "settingsPage": {
+    "title": "Configuración",
+    "subtitle": "Administra tu perfil, seguridad y preferencias financieras",
+    "tabs": {
+      "profile": "Perfil",
+      "security": "Seguridad",
+      "notifications": "Notificaciones",
+      "preferences": "Preferencias",
+      "billing": "Facturación"
+    }
+  },
+  "billingPage": {
+    "title": "Facturación y Suscripción",
+    "loading": "Cargando datos de facturación...",
+    "errorLoad": "No se pudo cargar la información de facturación.",
+    "plans": {
+      "Free": "Gratuito",
+      "Pro": "Pro",
+      "Business": "Business"
+    },
+    "status": {
+      "active": "Activo",
+      "cancelled": "Cancelado",
+      "pending": "Pendiente"
+    },
+    "invoiceStatus": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "failed": "Fallido"
+    },
+    "currentPlan": "Plan {{plan}}",
+    "freeDesc": "Funciones esenciales para tu control financiero",
+    "proDesc": "Funciones avanzadas e ilimitadas para tu gestión financiera",
+    "accessUntil": "Acceso hasta",
+    "renewsOn": "Se renueva el",
+    "perMonth": "por mes",
+    "upgradePro": "Suscribirse a Pro",
+    "changePlan": "Cambiar Plan",
+    "cancelSub": "Cancelar Suscripción",
+    "keepSub": "Mantener Suscripción",
+    "cancelTitle": "¿Cancelar Suscripción?",
+    "cancelDesc": "Continuarás teniendo acceso al plan hasta el final del período actual. Después de eso, tu cuenta volverá al plan gratuito.",
+    "cancelSuccess": "Suscripción cancelada con éxito.",
+    "cancelError": "Error al cancelar la suscripción. Inténtalo de nuevo.",
+    "paymentMethod": "Método de Pago",
+    "cardDefault": "Predeterminado",
+    "editCard": "Editar",
+    "removeCard": "Eliminar",
+    "removeCardTitle": "¿Eliminar Tarjeta de Crédito?",
+    "removeCardDesc": "Deberás agregar otra tarjeta para mantener las suscripciones activas.",
+    "history": "Historial de Facturación",
+    "noInvoices": "No se encontraron facturas.",
+    "monthlyInvoice": "Plan {{plan}} - Mensual",
+    "downloadSuccess": "¡Descarga de factura iniciada!",
+    "redirectCheckout": "Redirigiendo a los planes..."
+  },
+  "analytics": {
+    "title": "Análisis Financiero",
+    "subtitle": "Información detallada sobre sus patrones de gasto y salud financiera",
+    "exportReport": "Exportar Informe",
+    "periods": {
+      "sixMonths": "Últimos 6 Meses",
+      "twelveMonths": "Últimos 12 Meses",
+      "thisYear": "Este Año",
+      "all": "Todo el Tiempo"
+    },
+    "views": {
+      "overview": "visión general",
+      "revenue": "ingresos",
+      "expenses": "gastos"
+    },
+    "stats": {
+      "avgMonthlyRevenue": "Ingreso Mensual Promedio",
+      "avgMonthlyExpense": "Gasto Mensual Promedio",
+      "savingRate": "Tasa de Ahorro",
+      "topExpenseCategory": "Mayor Categoría de Gastos"
+    },
+    "trendChart": {
+      "title": "Tendencia de Ingresos vs Gastos",
+      "income": "Ingresos",
+      "expense": "Gastos",
+      "savings": "Ahorros"
+    },
+    "categoryChart": {
+      "title": "Gastos por Categoría",
+      "empty": "No hay gastos registrados todavía.",
+      "spent": "Gasto"
+    },
+    "weeklyPattern": {
+      "title": "Patrón de Gastos Semanal",
+      "empty": "No hay gastos registrados en este mes.",
+      "spending": "Gastos",
+      "days": "Días",
+      "week": "Semana"
+    },
+    "incomeBreakdown": {
+      "title": "Desglose de Ingresos",
+      "total": "Total",
+      "empty": "No hay ingresos registrados todavía."
+    },
+    "insights": {
+      "title": "Principales Perspectivas Financieras",
+      "strongSavingsTitle": "Fuerte Disciplina de Ahorro",
+      "strongSavingsDesc": "Su tasa de ahorro está en {{rate}}%, generando un excedente de {{surplus}}. ¡Está por encima de la meta del 20%!",
+      "moderateSavingsTitle": "Ahorro Moderado ({{rate}}%)",
+      "moderateSavingsDesc": "Ha ahorrado un {{rate}}% ({{surplus}}) hasta ahora. Pequeños ajustes ayudarán a alcanzar la meta del 20%.",
+      "deficitTitle": "Atención al Déficit",
+      "deficitDesc": "Sus gastos superaron sus ingresos en {{deficit}}. Evite compras no esenciales para reequilibrar su presupuesto.",
+      "savingsEmptyTitle": "Tasa de Ahorro",
+      "savingsEmptyDesc": "Registre sus ingresos y gastos para seguir su tasa de ahorro en tiempo real.",
+      "topCategoryTitle": "Mayor Gasto: {{category}}",
+      "topCategoryDesc": "{{category}} representa el {{percent}}% de sus gastos totales ({{amount}}). Establecer un límite puede generar ahorro inmediato.",
+      "topCategoryEmptyTitle": "Concentración de Gastos",
+      "topCategoryEmptyDesc": "Aún no hay gastos registrados para evaluar la categoría de mayor impacto.",
+      "diversifiedIncomeTitle": "Ingresos Diversificados",
+      "diversifiedIncomeDesc": "Tiene {{count}} fuentes de ingresos activas, totalizando {{total}}. Esta diversificación garantiza seguridad financiera.",
+      "singleIncomeTitle": "Fuente de Ingresos",
+      "singleIncomeDesc": "Tiene 1 fuente principal de ingresos ({{source}} - {{amount}}). Diversificar aumentará su protección.",
+      "incomeEmptyTitle": "Fuente de Ingresos",
+      "incomeEmptyDesc": "No hay ingresos registrados para analizar la diversificación de su flujo.",
+      "expenseReductionTitle": "Reducción de Gastos (-{{change}}%)",
+      "expenseReductionDesc": "Sus gastos cayeron un {{change}}% respecto al mes anterior ({{current}} vs {{prev}}). ¡Felicitaciones por la disciplina!",
+      "expenseIncreaseTitle": "Aumento de Gastos (+{{change}}%)",
+      "expenseIncreaseDesc": "Sus gastos aumentaron un {{change}}% respecto al mes anterior ({{current}} vs {{prev}}). Atención a las salidas.",
+      "expenseComparisonEmptyTitle": "Control Mensual",
+      "expenseComparisonEmptyDesc": "Registre gastos en meses consecutivos para visualizar la comparación de disciplina mes a mes."
+    },
+    "monthsShort": [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic"
+    ],
+    "monthsFull": [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ]
+  }
 }
