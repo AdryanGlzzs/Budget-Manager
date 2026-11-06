@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ChevronRight, Eye, EyeOff, User } from "lucide-react";
 import Logo from "../images/logo.png";
 import { api } from "../services/api";
-import { useNavigate } from "react-router-dom";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useAuth } from "../contexts/authContext";
+import { useToast } from "../contexts/ToastContext";
 
 interface UserProps {
   name: string;
@@ -17,7 +17,8 @@ interface UserProps {
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState<string>('')
-  const { Register } = useAuth()
+  const { Register, User: authUser, Loading: authLoading } = useAuth()
+  const { showToast } = useToast();
   const [formData, setFormData] = useState<UserProps>({
     name: "",
     email: "",
@@ -26,17 +27,22 @@ const RegisterPage = () => {
   });
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (!authLoading && authUser) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [authUser, authLoading, navigate]);
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!token) {
-      alert("Por favor conclua o processo do Cloudfare")
-      return
+      showToast("Por favor, conclua a verificação do Cloudflare.", "warning");
+      return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert("As senhas não coincidem!");
+      showToast("As senhas não coincidem!", "error");
       return;
     }
 
@@ -44,8 +50,10 @@ const RegisterPage = () => {
       await Register(formData.name, formData.email, formData.password, token)
 
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro no cadastro:", error);
+      const msg = error?.response?.data?.message || "Erro no cadastro. Tente novamente.";
+      showToast(msg, "error");
     }
   };
 

@@ -13,6 +13,7 @@ import {
 
 } from "../firebase/firebase";
 import { useAuth } from "../contexts/authContext";
+import { useToast } from "../contexts/ToastContext";
 import { api } from "../services/api";
 
 interface User {
@@ -23,28 +24,35 @@ interface User {
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { Login, ValidateToken, setUser: setAuthUser } = useAuth();
+  const { Login, ValidateToken, setUser: setAuthUser, User: authUser, Loading: authLoading } = useAuth();
+  const { showToast } = useToast();
   const [token, setToken] = useState<string>('')
   const [user, setUser] = useState<User>({
     email: "",
     password: ""
   });
 
-
-
+  useEffect(() => {
+    if (!authLoading && authUser) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [authUser, authLoading, navigate]);
 
   const HandleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if(!token){
-      alert("Por favor, Conclua a verificação do Cloudfare")
+    if (!token) {
+      showToast("Por favor, conclua a verificação do Cloudflare.", "warning");
+      return;
     }
 
     try {
       await Login(user.email, user.password, token);
       navigate('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao fazer login:", error);
+      const msg = error?.response?.data?.message || "Erro ao realizar login. Verifique suas credenciais.";
+      showToast(msg, "error");
     }
   };
 
