@@ -15,6 +15,8 @@ import { AuthMiddleware } from '../middlewares/AuthMiddleware'
 import { PaymentController } from '../controllers/PaymentController'
 import { AuthTenantId } from '../middlewares/authTenant'
 import { TurnstileMiddleware } from '../middlewares/TurnstileMiddleware'
+import { checkPlanLimit, PLAN_LIMITS } from '../middlewares/PlanLimitsMiddleware'
+import { prisma } from '../lib/prisma'
 
 export const routes = Router()  
 
@@ -33,15 +35,45 @@ routes.get('/transactions', AuthTenantId, TransactionController.getTransaction)
 routes.post('/transactions', AuthTenantId, TransactionMiddleware, TransactionController.HandleSaveTransaction)
 routes.delete('/transactions/delete/:id', AuthTenantId, TransactionMiddlewareDelete, TransactionController.HandleDeleteTransaction)
 
-routes.post('/budgets', AuthTenantId, BudgetMiddleware, BudgetController.CreateBudget)
+routes.post('/budgets', AuthTenantId, checkPlanLimit('budgets'), BudgetMiddleware, BudgetController.CreateBudget)
 routes.delete('/budgets/delete/:id', AuthTenantId, DeleteBudgetMiddleware, BudgetController.DeleteBudget)
 routes.put('/budgets/edit/:id', AuthTenantId, EditBudget, BudgetController.EditBudget)
 routes.get('/budgets', AuthTenantId, BudgetController.getBudgets)
 
 routes.get('/savings-goals', AuthTenantId, SavingGoalsController.getGoals)
-routes.post('/savings-goals', AuthTenantId, CreateSavingGoalsMiddleware, SavingGoalsController.CreateGoal)
+routes.post('/savings-goals', AuthTenantId, checkPlanLimit('savingGoals'), CreateSavingGoalsMiddleware, SavingGoalsController.CreateGoal)
 routes.delete('/savings-goals/delete/:id', AuthTenantId, SavingGoalsController.deleteGoal)
 routes.put('/savings-goals/edit/:id', AuthTenantId, SavingGoalsController.EditGoal)
+
+routes.get('/users/plan-limits', AuthTenantId, async (req: any, res) => {
+    try {
+        const userId = req.userId;
+        const tenantId = req.tenantId;
+
+        const subscription = userId ? await prisma.subscription.findUnique({ where: { userId } }) : null;
+        const plan = (subscription && subscription.status === 'active') ? subscription.plan : 'Free';
+        const limits = PLAN_LIMITS[plan] || PLAN_LIMITS.Free;
+
+        const [budgetsCount, savingGoalsCount] = await Promise.all([
+            prisma.budget.count({ where: { tenantId } }),
+            prisma.savingGoal.count({ where: { tenantId } }),
+        ]);
+
+        return res.status(200).json({
+            plan,
+            status: subscription?.status || 'active',
+            billingCycle: subscription?.billingCycle || 'monthly',
+            usage: {
+                budgets: { count: budgetsCount, limit: limits.budgets },
+                savingGoals: { count: savingGoalsCount, limit: limits.savingGoals },
+                canExport: limits.export,
+            }
+        });
+    } catch (error) {
+        console.error('[plan-limits error]', error);
+        return res.status(500).json({ message: 'Erro ao consultar limites do plano' });
+    }
+});
 
 routes.get('/plans', PaymentController.getPlans)
 routes.post('/process_payment', AuthMiddleware, PaymentController.processPayment)

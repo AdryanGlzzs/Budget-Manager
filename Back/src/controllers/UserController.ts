@@ -185,7 +185,15 @@ export class UserController {
           birthdate: true,
           address: true,
           avatarUrl: true,
-          createdAt: true
+          createdAt: true,
+          subscription: {
+            select: {
+              plan: true,
+              status: true,
+              billingCycle: true,
+              currentPeriodEnd: true,
+            },
+          },
         }
       });
 
@@ -477,7 +485,15 @@ export class UserController {
           birthdate: true,
           address: true,
           avatarUrl: true,
-          createdAt: true
+          createdAt: true,
+          subscription: {
+            select: {
+              plan: true,
+              status: true,
+              billingCycle: true,
+              currentPeriodEnd: true,
+            },
+          },
         }
       });
 
