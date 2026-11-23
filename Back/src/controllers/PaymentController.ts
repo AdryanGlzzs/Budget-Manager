@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { createPaymentService } from '../services/MarketPaid'
+import { AuthenticatedRequest } from '../middlewares/AuthMiddleware'
+import { prisma } from '../lib/prisma'
 
 export interface PlanConfig {
     priceMonthly: number
@@ -67,8 +69,13 @@ export const PaymentController = {
         return res.status(200).json({ plans })
     },
 
-    async processPayment(req: Request, res: Response) {
+    async processPayment(req: AuthenticatedRequest, res: Response) {
         try {
+            const userId = req.user?.id;
+            if (!userId) {
+                return res.status(401).json({ message: "Usuário não autenticado." });
+            }
+
             const {
                 planName,
                 billingCycle,
@@ -77,6 +84,7 @@ export const PaymentController = {
                 payerLastName,
                 identificationType,
                 identificationNumber,
+                recurring,
             } = req.body
 
             const selectedPlan = PlanPrices[planName]
@@ -90,7 +98,28 @@ export const PaymentController = {
             const isYearly = billingCycle === 'yearly'
             const unitPrice = isYearly ? selectedPlan.priceYearly : selectedPlan.priceMonthly
 
-            if (unitPrice === 0) {
+            if (unitPrice === 0 || planName === 'Free') {
+                await prisma.subscription.upsert({
+                    where: { userId },
+                    update: {
+                        plan: 'Free',
+                        status: 'active',
+                        price: 0,
+                        billingCycle: 'monthly',
+                        currentPeriodStart: new Date(),
+                        currentPeriodEnd: null,
+                    },
+                    create: {
+                        userId,
+                        plan: 'Free',
+                        status: 'active',
+                        price: 0,
+                        billingCycle: 'monthly',
+                        currentPeriodStart: new Date(),
+                        currentPeriodEnd: null,
+                    },
+                });
+
                 return res.status(200).json({
                     message: "Plano gratuito ativado com sucesso",
                     payment: null,
@@ -98,7 +127,9 @@ export const PaymentController = {
             }
 
             const PaymentResult = await createPaymentService({
+                userId,
                 planName,
+                billingCycle: isYearly ? 'yearly' : 'monthly',
                 transactionAmount: unitPrice,
                 description: selectedPlan.description,
                 email,
@@ -106,6 +137,7 @@ export const PaymentController = {
                 payerLastName,
                 identificationType,
                 identificationNumber,
+                recurring: recurring !== undefined ? Boolean(recurring) : true,
             })
 
             return res.status(201).json({
@@ -113,6 +145,7 @@ export const PaymentController = {
                 payment: PaymentResult,
             })
         } catch (error: any) {
+            console.error('[PaymentController.processPayment]', error);
             return res.status(400).json({ error: error.message || 'Erro ao processar pagamento' })
         }
     },

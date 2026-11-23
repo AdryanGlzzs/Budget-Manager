@@ -44,7 +44,7 @@ routes.delete('/savings-goals/delete/:id', AuthTenantId, SavingGoalsController.d
 routes.put('/savings-goals/edit/:id', AuthTenantId, SavingGoalsController.EditGoal)
 
 routes.get('/plans', PaymentController.getPlans)
-routes.post('/process_payment', PaymentController.processPayment)
+routes.post('/process_payment', AuthMiddleware, PaymentController.processPayment)
 
 routes.get('/users/sessions', AuthMiddleware, SessionController.listSessions)
 routes.delete('/users/sessions/other', AuthMiddleware, SessionController.revokeOtherSessions)
