@@ -8,9 +8,12 @@ import {
   Target,
   CreditCard,
   X,
+  Crown,
+  Sparkles,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useThemeColors } from "../contexts/ThemeContext";
+import { useAuth } from "../contexts/authContext";
 
 export interface SidebarMobileMenuProps {
   open: boolean;
@@ -30,7 +33,11 @@ const menuItems = [
 const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
   const { pathname } = useLocation();
   const { accentColor, themeAccentColors } = useThemeColors();
+  const { User } = useAuth();
   const theme = themeAccentColors[accentColor];
+
+  const currentPlan = User?.subscription?.plan || "Free";
+  const isPaid = currentPlan === "Pro" || currentPlan === "Business";
 
   useEffect(() => {
     if (!open) return;
@@ -110,6 +117,42 @@ const Sidebar = ({ open, setOpen }: SidebarMobileMenuProps) => {
             );
           })}
         </nav>  
+
+        {/* Mini Card de Status do Plano / Upgrade */}
+        <div className="relative mt-auto pt-4 border-t border-white/10 z-10">
+          <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-2">
+                <div className={`p-1.5 rounded-lg ${isPaid ? "bg-amber-500/20 text-amber-400" : "bg-purple-500/20 text-purple-400"}`}>
+                  <Crown className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs font-semibold text-white">
+                  Plano {currentPlan}
+                </span>
+              </div>
+              {isPaid ? (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  Ativo
+                </span>
+              ) : (
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-white/10 text-gray-400">
+                  Básico
+                </span>
+              )}
+            </div>
+
+            {!isPaid && (
+              <Link
+                to="/pricing"
+                onClick={() => setOpen(false)}
+                className="w-full mt-2.5 py-2 px-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold transition-all shadow-md shadow-purple-900/30 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-1.5"
+              >
+                <Sparkles className="w-3 h-3 text-yellow-300" />
+                <span>Fazer Upgrade</span>
+              </Link>
+            )}
+          </div>
+        </div>
 
       </aside>
 

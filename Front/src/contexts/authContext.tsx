@@ -1,6 +1,13 @@
 import React, { useState, useContext, useEffect, createContext, type ReactNode } from "react";
 import { api } from "../services/api";
 
+export interface UserSubscription {
+    plan: 'Free' | 'Pro' | 'Business' | string;
+    status: string;
+    billingCycle?: string;
+    currentPeriodEnd?: string | null;
+}
+
 export interface User {
     id: string;
     email?: string;
@@ -11,6 +18,7 @@ export interface User {
     birthdate?: string;
     address?: string;
     twoFactorEnabled?: boolean;
+    subscription?: UserSubscription | null;
 }
 
 interface AuthContextType {

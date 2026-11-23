@@ -23,11 +23,16 @@ import { api } from "../services/api";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { useTranslation } from "react-i18next";
+import { UpgradeModal } from "../components/UpgradeModal";
+import { useAuth } from "../contexts/authContext";
 
 const SavingsGoals = () => {
   const { t } = useTranslation();
   const [SavingModal, setSavingModal] = useState(false);
   const [open, setOpen] = useState(false);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const { User } = useAuth();
+  const isPro = User?.subscription?.plan === "Pro" || User?.subscription?.plan === "Business";
   const [Goals, setGoals] = useState<Goalsprops[]>([]);
   const [editing, setEditing] = useState<Goalsprops | null>();
   const { accentColor, themeAccentColors } = useThemeColors();
@@ -200,6 +205,10 @@ const SavingsGoals = () => {
             </button>
             <button
               onClick={() => {
+                if (!isPro && Goals.length >= 2) {
+                  setUpgradeModalOpen(true);
+                  return;
+                }
                 setEditing(null);
                 setSavingModal(true);
               }}
@@ -433,6 +442,13 @@ const SavingsGoals = () => {
         goal={selectedGoalForAmount}
         onSave={handleSaveAmount}
         initialType={amountInitialMode}
+      />
+
+      <UpgradeModal
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+        featureName="Metas Ilimitadas"
+        description="Você atingiu o limite de 2 metas do plano Gratuito. Faça upgrade para o plano Pro para criar metas ilimitadas e acelerar suas economias!"
       />
     </div>
   );

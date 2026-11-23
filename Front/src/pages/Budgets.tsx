@@ -19,11 +19,16 @@ import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../contexts/ToastContext";
+import { UpgradeModal } from "../components/UpgradeModal";
+import { useAuth } from "../contexts/authContext";
 
 const Budgets = () => {
   const { t } = useTranslation();
   const { showToast } = useToast();
   const [open, setOpen] = useState(false);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const { User } = useAuth();
+  const isPro = User?.subscription?.plan === "Pro" || User?.subscription?.plan === "Business";
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
 
@@ -152,8 +157,12 @@ const Budgets = () => {
               </div>
 
               <button
-                className={`flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 ${theme.activeBg} rounded-xl text-[14px] md:text-[15px] font-semibold transition-all hover:scale-[1.02] w-full sm:w-auto shrink-0`}
+                className={`flex items-center justify-center gap-2 px-5 md:px-6 py-3 md:py-3.5 ${theme.activeBg} rounded-xl text-[14px] md:text-[15px] font-semibold transition-all hover:scale-[1.02] w-full sm:w-auto shrink-0 cursor-pointer`}
                 onClick={() => {
+                  if (!isPro && budgets.length >= 2) {
+                    setUpgradeModalOpen(true);
+                    return;
+                  }
                   setEditingBudget(null);
                   setBudgetOpen(true);
                 }}
@@ -209,7 +218,6 @@ const Budgets = () => {
                 </div>
               </div>
 
-              {/* Restante */}
               <div className="relative group">
                 <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity`}></div>
                 <div className="relative bg-linear-to-br from-green-600/20 to-green-800/10 p-5 md:p-6 rounded-2xl border border-green-500/30 backdrop-blur-sm">
@@ -231,7 +239,6 @@ const Budgets = () => {
               </div>
             </div>
 
-            {/* Lista de Categorias de Orçamento */}
             <div className="relative group">
               <div className={`absolute inset-0 bg-linear-to-br ${theme.glow} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300`}></div>
               <div className="relative bg-linear-to-br from-white/10 to-white/2 p-4 md:p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -388,6 +395,13 @@ const Budgets = () => {
         close={() => setDeductModalOpen(false)}
         selectedBudget={selected}
         saveDeduct={HandleSaveDeduct}
+      />
+
+      <UpgradeModal
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+        featureName="Orçamentos Ilimitados"
+        description="Você atingiu o limite de 2 orçamentos do plano Gratuito. Faça upgrade para o plano Pro para criar orçamentos ilimitados e desbloquear todos os recursos!"
       />
     </div>
   );

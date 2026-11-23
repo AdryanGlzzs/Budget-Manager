@@ -1,4 +1,4 @@
-﻿import { X, CreditCard } from "lucide-react";
+import { X, CreditCard } from "lucide-react";
 import { getIdentificationTypes } from "@mercadopago/sdk-react";
 import React, { useEffect, useState } from "react";
 import { api } from "../services/api";
@@ -78,9 +78,11 @@ export const MarketPaidCheckout = ({ isOpen, onClose, planName, billingCycle = "
             const checkoutUrl = response.data.payment?.sandbox_init_point || response.data.payment?.init_point;
             if (checkoutUrl) {
                 window.location.href = checkoutUrl;
+            } else if (response.data.payment === null) {
+                alert("Plano gratuito ativado com sucesso!");
+                if (onClose) onClose();
+                window.location.href = "/settings?tab=billing";
             }
-
-            if (onClose) onClose();
         } catch (error: any) {
             console.error("Erro ao processar pagamento:", error.response?.data || error);
             alert(error.response?.data?.message || "Erro ao gerar checkout de pagamento.");

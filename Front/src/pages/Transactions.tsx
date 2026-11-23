@@ -22,12 +22,17 @@ import { formatCurrency } from "../utils/formatCurrency";
 import { formatDate } from "../utils/formatDate";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../contexts/ToastContext";
+import { UpgradeModal } from "../components/UpgradeModal";
+import { useAuth } from "../contexts/authContext";
 
 const Transactions = () => {
   const { t } = useTranslation();
   const { showToast } = useToast();
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const { User } = useAuth();
+  const isPro = User?.subscription?.plan === "Pro" || User?.subscription?.plan === "Business";
   const [transaction, setTransactions] = useState<TransactionProps[]>([]);
   const { accentColor, themeAccentColors } = useThemeColors();
   const theme = themeAccentColors[accentColor];
@@ -150,6 +155,11 @@ const Transactions = () => {
   });
 
   const handleExportCSV = () => {
+    if (!isPro) {
+      setUpgradeModalOpen(true);
+      return;
+    }
+
     if (filteredTransactions.length === 0) {
       showToast(t("transactions.exportEmpty"), "warning");
       return;
@@ -537,6 +547,13 @@ const Transactions = () => {
           onSave={HandleSaveTransaction}
         />
       </div>
+
+      <UpgradeModal
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+        featureName="Exportação de Dados (CSV)"
+        description="A exportação de transações em planilha CSV e relatórios são recursos exclusivos dos planos Pro e Business."
+      />
     </div>
   );
 };

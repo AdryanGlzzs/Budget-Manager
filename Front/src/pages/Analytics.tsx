@@ -23,6 +23,8 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { UpgradeModal } from "../components/UpgradeModal";
+import { useAuth } from "../contexts/authContext";
 import { useThemeColors } from "../contexts/ThemeContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { api } from "../services/api";
@@ -40,6 +42,9 @@ const Analytics = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<"6months" | "12months" | "thisYear" | "all">("6months");
   const [selectedView, setSelectedView] = useState<"visão geral" | "receita" | "despesas">("visão geral");
   const [selectedWeeklyMonth, setSelectedWeeklyMonth] = useState<string>("");
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const { User } = useAuth();
+  const isPro = User?.subscription?.plan === "Pro" || User?.subscription?.plan === "Business";
 
   const getTransactions = async () => {
     try {
@@ -453,7 +458,16 @@ const Analytics = () => {
                 </div>
               </div>
 
-              <button className={`flex items-center justify-center gap-2 px-5 py-2.5 ${theme.activeBg} rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] w-full sm:w-auto`}>
+              <button
+                onClick={() => {
+                  if (!isPro) {
+                    setUpgradeModalOpen(true);
+                  } else {
+                    window.print();
+                  }
+                }}
+                className={`flex items-center justify-center gap-2 px-5 py-2.5 ${theme.activeBg} rounded-xl text-[14px] font-semibold transition-all hover:scale-[1.02] w-full sm:w-auto cursor-pointer`}
+              >
                 <Download className="w-4 h-4" />
                 {t("analytics.exportReport")}
               </button>
@@ -1048,6 +1062,13 @@ const Analytics = () => {
           </main>
         </div>
       </div>
+
+      <UpgradeModal
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
+        featureName="Relatórios Avançados"
+        description="A exportação de relatórios analíticos completos (PDF/CSV) e AI Insights são recursos exclusivos dos planos Pro e Business."
+      />
     </div>
   );
 };
